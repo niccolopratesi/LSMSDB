@@ -9,6 +9,7 @@ public class CardsGalleryApplication {
 	public static void main(String[] args) {
 
 		MongoDb.connect();
+		Neo4j.connect();
 		SpringApplication.run(CardsGalleryApplication.class, args);
 
 	}
