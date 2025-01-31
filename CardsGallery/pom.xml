@@ -64,6 +64,18 @@
 			<artifactId>neo4j-java-driver</artifactId>
 			<version>5.27.0</version>
 		</dependency>
+
+		<!-- ROBA IN PIù PER REPOSITORY NOSQL-->
+		<dependency>
+			<!-- For MongoDB connectivity -->
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-mongodb</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-neo4j</artifactId>
+		</dependency>
+
 </dependencies>
 
 	<build>
