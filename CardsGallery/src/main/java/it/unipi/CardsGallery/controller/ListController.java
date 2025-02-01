@@ -1,5 +1,6 @@
 package it.unipi.CardsGallery.controller;
 
+import it.unipi.CardsGallery.model.Card;
 import it.unipi.CardsGallery.model.CardList;
 import org.springframework.web.bind.annotation.*;
 
@@ -9,67 +10,61 @@ public class ListController {
 
     //Repository necessari
 
-    @GetMapping("/{userId}")
-    public CardList listsUser(@PathVariable int userId) {
+    @GetMapping
+    public CardList listsUser(@RequestParam("userId") int userId) {
 
         //...
 
         return null;
     }
 
-    @PostMapping
+    @PostMapping("/{id}")
     @ResponseBody
-    public String createList () {
+    public String createList (@RequestBody CardList list, @PathVariable("id") int id) {
 
-        //prelievo id utente dal body
+        //...
 
-        //prelievo nome lista dal body
-
-        return "Creatin successful";
+        return "Creating successful";
     }
 
-    @DeleteMapping
+    @DeleteMapping("/{id}")
     @ResponseBody
-    public String deleteList () {
+    public String deleteList (@RequestBody CardList list, @PathVariable("id") int id) {
 
         //controllo che l'utente sia il propietario
 
-        //prelievo id utente e id lista dal body
+        //si potrebbe passare solo l'id della lista senza passare tutta la lista
 
         return "Deleting successful";
     }
 
-    @PostMapping("/card")
+    @PostMapping("/card/{idUser}/{idList}")
     @ResponseBody
-    public String addCard () {
+    public String addCard (@RequestBody Card card, @PathVariable("idList") int idList, @PathVariable("idUser") int idUser) {
 
         //controllo che l'utente sia il propietario
-
-        //prelievo id utente, id lista e id carta dal body
 
         return "Adding successful";
     }
 
-    @DeleteMapping("/card")
+    @DeleteMapping("/card/{idUser}/{idList}")
     @ResponseBody
-    public String deleteCard () {
+    public String deleteCard (@RequestBody Card card, @PathVariable("idList") int idList, @PathVariable("idUser") int idUser) {
 
         //controllo che l'utente sia il propietario
 
-        //prelievo id utente, id lista e id carta dal body
+        //basterebbe l'id della carta da eliminare e non tutta la carta....!
 
         return "Deleting successful";
     }
 
-    @PutMapping("/status")
+    @PutMapping("/status/{idUser}")
     @ResponseBody
-    public String updateStatus () {
+    public String updateStatus (@RequestBody CardList list, @PathVariable("idUser") int idUser) {
 
         //controllo che l'utente sia il propietario
 
-        //prelievo id utente, id lista e nuovo status dal body
-
-        //lista.public = nuovo status (true/false);
+        //lista.status = nuovo status (true/false) nel db
 
         return "Updating successful";
     }
