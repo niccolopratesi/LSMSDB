@@ -12,7 +12,7 @@ public class UserController {
 
     @PostMapping("/registration")
     @ResponseBody
-    public String registerUser() {
+    public String registerUser(@RequestBody User user) {
 
         //hash per codificare la password
 
@@ -21,7 +21,7 @@ public class UserController {
 
     @PostMapping("/login")
     @ResponseBody
-    public String loginUser() {
+    public String loginUser(@RequestBody User user) {
 
         //controllo che le codifiche hash siano uguali
 
@@ -40,16 +40,16 @@ public class UserController {
     si può fare anche solo con username per prendere sia il proprio che quello degli altri
     */
 
-    @GetMapping("/{username}")
-    public User profileUser(@PathVariable int username) {
+    @GetMapping
+    public User profileUser(@RequestParam("username") int username) {
 
         //...
 
         return null;
     }
 
-    @GetMapping("/details/{username}")
-    public User detailsUser(@PathVariable int username) {
+    @GetMapping("/details")
+    public User detailsUser(@RequestParam("username") int username) {
 
         //...
 
@@ -58,7 +58,7 @@ public class UserController {
 
     @DeleteMapping
     @ResponseBody
-    public String deleteUser() {
+    public String deleteUser(@RequestBody User user) {
 
         //controllo che l'utente sia il propietario dell'account da eliminare
 
@@ -69,7 +69,7 @@ public class UserController {
 
     @PutMapping
     @ResponseBody
-    public String updateUser() {
+    public String updateUser(@RequestBody User user) {
 
         //controllo che l'utente sia il propietario dell'account da aggiornare
 
