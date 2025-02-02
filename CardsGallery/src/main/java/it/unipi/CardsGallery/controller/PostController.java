@@ -12,8 +12,8 @@ public class PostController {
 
     //Repository necessari
 
-    @GetMapping("/{userId}")
-    public List<Post> postsUser (@PathVariable int userId) {
+    @GetMapping
+    public List<Post> postsUser (@RequestParam("username") int username) {
 
         //...
 
@@ -33,7 +33,7 @@ public class PostController {
 
     @DeleteMapping
     @ResponseBody
-    public String deletePosts () {
+    public String deletePost() {
 
         //controllo che l'utente sia il propietario
 

@@ -1,11 +1,13 @@
 package it.unipi.CardsGallery.model;
 
 import lombok.Data;
+import org.springframework.data.annotation.Id;
 
 import java.util.List;
 
 @Data
 public class Card {
+    @Id
     private int id;
     private String name;
     private String TCG; //enum????
