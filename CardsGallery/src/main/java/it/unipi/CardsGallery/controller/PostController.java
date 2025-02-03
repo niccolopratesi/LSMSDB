@@ -1,6 +1,8 @@
 package it.unipi.CardsGallery.controller;
 
 
+import it.unipi.CardsGallery.DTO.DeletePostDTO;
+import it.unipi.CardsGallery.DTO.PostDTO;
 import it.unipi.CardsGallery.model.Post;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,6 +17,8 @@ public class PostController {
     @GetMapping
     public List<Post> postsUser (@RequestParam("username") int username) {
 
+        //pagine di post?????
+
         //...
 
         return null;
@@ -22,7 +26,7 @@ public class PostController {
 
     @PostMapping
     @ResponseBody
-    public String createPost () {
+    public String createPost (@RequestBody PostDTO postDTO) {
 
         //prelievo id utente dal body
 
@@ -33,7 +37,7 @@ public class PostController {
 
     @DeleteMapping
     @ResponseBody
-    public String deletePost() {
+    public String deletePost(@RequestBody DeletePostDTO deletePostDTO) {
 
         //controllo che l'utente sia il propietario
 

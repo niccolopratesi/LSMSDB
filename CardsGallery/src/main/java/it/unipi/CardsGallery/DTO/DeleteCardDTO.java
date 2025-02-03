@@ -1,6 +1,6 @@
 package it.unipi.CardsGallery.DTO;
 
-import it.unipi.CardsGallery.model.Post;
+import it.unipi.CardsGallery.model.Card;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -8,7 +8,8 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class PostDTO {
+public class DeleteCardDTO {
     private AuthDTO auth;
-    private Post post;
+    private int cardListId;
+    private int cardId;
 }

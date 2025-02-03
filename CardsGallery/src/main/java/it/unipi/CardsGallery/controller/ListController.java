@@ -1,5 +1,6 @@
 package it.unipi.CardsGallery.controller;
 
+import it.unipi.CardsGallery.DTO.*;
 import it.unipi.CardsGallery.model.Card;
 import it.unipi.CardsGallery.model.CardList;
 import org.springframework.web.bind.annotation.*;
@@ -13,23 +14,25 @@ public class ListController {
     @GetMapping
     public CardList listsUser(@RequestParam("userId") int userId) {
 
+        //!!! mettiamo le pagine????? !!!
+
         //...
 
         return null;
     }
 
-    @PostMapping("/{id}")
+    @PostMapping
     @ResponseBody
-    public String createList (@RequestBody CardList list, @PathVariable("id") int id) {
+    public String createList (@RequestBody CardListDTO cardListDTO) {
 
         //...
 
         return "Creating successful";
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping
     @ResponseBody
-    public String deleteList (@RequestBody CardList list, @PathVariable("id") int id) {
+    public String deleteList (@RequestBody DeleteCardListDTO deleteCardListDTO) {
 
         //controllo che l'utente sia il propietario
 
@@ -38,18 +41,18 @@ public class ListController {
         return "Deleting successful";
     }
 
-    @PostMapping("/card/{idUser}/{idList}")
+    @PostMapping("/card")
     @ResponseBody
-    public String addCard (@RequestBody Card card, @PathVariable("idList") int idList, @PathVariable("idUser") int idUser) {
+    public String addCard (@RequestBody CardDTO cardDTO) {
 
         //controllo che l'utente sia il propietario
 
         return "Adding successful";
     }
 
-    @DeleteMapping("/card/{idUser}/{idList}")
+    @DeleteMapping("/card")
     @ResponseBody
-    public String deleteCard (@RequestBody Card card, @PathVariable("idList") int idList, @PathVariable("idUser") int idUser) {
+    public String deleteCard (@RequestBody DeleteCardDTO deleteCardDTO) {
 
         //controllo che l'utente sia il propietario
 
@@ -58,9 +61,9 @@ public class ListController {
         return "Deleting successful";
     }
 
-    @PutMapping("/status/{idUser}")
+    @PutMapping("/status")
     @ResponseBody
-    public String updateStatus (@RequestBody CardList list, @PathVariable("idUser") int idUser) {
+    public String updateStatus (@RequestBody UpdateCardListDTO updateCardListDTO) {
 
         //controllo che l'utente sia il propietario
 

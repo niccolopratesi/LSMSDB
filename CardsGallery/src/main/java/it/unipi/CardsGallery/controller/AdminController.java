@@ -1,6 +1,8 @@
 package it.unipi.CardsGallery.controller;
 
 
+import it.unipi.CardsGallery.DTO.AdminCardDTO;
+import it.unipi.CardsGallery.DTO.AdminDelete;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -13,7 +15,7 @@ public class AdminController {
 
     @PostMapping("/card")
     @ResponseBody
-    public String newCard() {
+    public String newCard(@RequestBody AdminCardDTO adminCardDTO) {
 
         //...
 
@@ -22,7 +24,7 @@ public class AdminController {
 
     @DeleteMapping("/card")
     @ResponseBody
-    public String deleteCard() {
+    public String deleteCard(@RequestBody AdminDelete adminDelete) {
 
         //...
 
@@ -31,7 +33,7 @@ public class AdminController {
 
     @PutMapping("/card")
     @ResponseBody
-    public String updateCard() {
+    public String updateCard(@RequestBody AdminCardDTO adminCardDTO) {
 
         //...
 
@@ -40,7 +42,7 @@ public class AdminController {
 
     @DeleteMapping("/user")
     @ResponseBody
-    public String deleteUser() {
+    public String deleteUser(@RequestBody AdminDelete adminDelete) {
 
         //...
 
@@ -49,7 +51,7 @@ public class AdminController {
 
     @DeleteMapping("/post")
     @ResponseBody
-    public String deletePost() {
+    public String deletePost(@RequestBody AdminDelete adminDelete) {
 
         //...
 

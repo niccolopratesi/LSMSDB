@@ -1,12 +1,15 @@
 package it.unipi.CardsGallery.DTO;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
-public class ReactionDTO {
-    private int userId;
+@NoArgsConstructor
+@AllArgsConstructor
+public class CardReactionDTO {
+    private AuthDTO auth;
     private int cardId;
-    private int postId;
     private String TCG; //enum???
     private String typeReaction; //enum???
 }

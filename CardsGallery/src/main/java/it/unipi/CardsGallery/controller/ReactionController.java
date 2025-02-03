@@ -1,5 +1,7 @@
 package it.unipi.CardsGallery.controller;
 
+import it.unipi.CardsGallery.DTO.CardReactionDTO;
+import it.unipi.CardsGallery.DTO.PostReactionDTO;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -10,7 +12,7 @@ public class ReactionController {
 
     @PostMapping("/card")
     @ResponseBody
-    public String reactCard () {
+    public String reactCard (@RequestBody CardReactionDTO cardReactionDTO) {
 
         //...
 
@@ -19,7 +21,7 @@ public class ReactionController {
 
     @DeleteMapping("/card")
     @ResponseBody
-    public String reactCardDelete () {
+    public String deleteReactCard (@RequestBody CardReactionDTO cardReactionDTO) {
 
         //...
 
@@ -28,7 +30,7 @@ public class ReactionController {
 
     @PostMapping("/post")
     @ResponseBody
-    public String reactPost () {
+    public String reactPost (@RequestBody PostReactionDTO postReactionDTO) {
 
         //...
 
@@ -37,7 +39,7 @@ public class ReactionController {
 
     @DeleteMapping("/post")
     @ResponseBody
-    public String reactPostDelete () {
+    public String deleteReactPost (@RequestBody PostReactionDTO postReactionDTO) {
 
         //...
 

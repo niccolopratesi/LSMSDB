@@ -1,12 +1,15 @@
 package it.unipi.CardsGallery.DTO;
 
 import it.unipi.CardsGallery.model.CardList;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class CardListDTO {
-
-    private int userId;
-    private CardList cardList;
-    private boolean status; //non servirebbe ma si può mettere a null l'oggetto CardList
+    private AuthDTO auth;
+    private String cardListName;
+    private boolean status; //va messo in fase di creazione??
 }

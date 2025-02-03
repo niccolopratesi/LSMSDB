@@ -1,6 +1,9 @@
 package it.unipi.CardsGallery.controller;
 
 
+import it.unipi.CardsGallery.DTO.AuthDTO;
+import it.unipi.CardsGallery.DTO.LoginDTO;
+import it.unipi.CardsGallery.DTO.UserDTO;
 import it.unipi.CardsGallery.model.User;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,7 +24,7 @@ public class UserController {
 
     @PostMapping("/login")
     @ResponseBody
-    public String loginUser(@RequestBody User user) {
+    public String loginUser(@RequestBody LoginDTO loginDTO) {
 
         //controllo che le codifiche hash siano uguali
 
@@ -41,7 +44,7 @@ public class UserController {
     */
 
     @GetMapping
-    public User profileUser(@RequestParam("username") int username) {
+    public User profileUser(@RequestParam("username") String username) {
 
         //...
 
@@ -49,7 +52,7 @@ public class UserController {
     }
 
     @GetMapping("/details")
-    public User detailsUser(@RequestParam("username") int username) {
+    public User detailsUser(@RequestParam("username") String username) {
 
         //...
 
@@ -58,7 +61,7 @@ public class UserController {
 
     @DeleteMapping
     @ResponseBody
-    public String deleteUser(@RequestBody User user) {
+    public String deleteUser(@RequestBody AuthDTO authDTO) {
 
         //controllo che l'utente sia il propietario dell'account da eliminare
 
@@ -71,6 +74,9 @@ public class UserController {
     @ResponseBody
     public String updateUser(@RequestBody User user) {
 
+        //!!! penso si possa lasciare tutto l'utente...è difficile sapere !!!
+        //!!! a priori quali campisaranno modificati=>come registrazione  !!!
+
         //controllo che l'utente sia il propietario dell'account da aggiornare
 
         //prelievo id user e modifiche da body
@@ -82,7 +88,7 @@ public class UserController {
 
     @PostMapping("/follow")
     @ResponseBody
-    public String followUser() {
+    public String followUser(@RequestBody UserDTO userDTO) {
 
         //...
 
@@ -91,11 +97,10 @@ public class UserController {
 
     @DeleteMapping("/follow")
     @ResponseBody
-    public String unfollowUser() {
+    public String unfollowUser(@RequestBody UserDTO userDTO) {
 
         //...
 
         return "Unfollow successful";
     }
-
 }
