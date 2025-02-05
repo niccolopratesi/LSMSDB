@@ -6,14 +6,14 @@ import org.springframework.beans.factory.annotation.Value;
 
 public class MongoDb {
 
-    @Value("${spring.data.mongodb.uri}")
+    /*@Value("${spring.data.mongodb.uri}")
     private String mongoDbURI;
 
     @Value("${spring.data.mongodb.username}")
     private String mongoDbUsername;
 
     @Value("${spring.data.mongodb.password}")
-    private String mongoDbPassword;
+    private String mongoDbPassword;*/
 
     public static void connect() {
         MongoClient myClient = MongoClients.create("mongodb://myUserAdmin:admin@localhost:27017");

@@ -1,8 +1,8 @@
 package it.unipi.CardsGallery.controller;
 
 import it.unipi.CardsGallery.model.YugiohCard;
-import it.unipi.CardsGallery.repository.CardNodeRepository;
-import it.unipi.CardsGallery.repository.YugiohCardMongoRepository;
+import it.unipi.CardsGallery.repository.neo4j.CardNodeRepository;
+import it.unipi.CardsGallery.repository.mongo.YugiohCardMongoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,11 +12,11 @@ import java.util.List;
 @RequestMapping("/Yugioh")
 public class YugiohCardController {
 
-    @Autowired
+    /*@Autowired
     YugiohCardMongoRepository yugiohCardMongoRepository;
 
     @Autowired
-    CardNodeRepository cardNodeRepository;
+    CardNodeRepository cardNodeRepository;*/
 
     @GetMapping
     public List<YugiohCard> getPageCards(@RequestParam("page") int page) {

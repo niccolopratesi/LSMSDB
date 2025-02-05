@@ -9,7 +9,7 @@ import org.springframework.data.neo4j.core.schema.Node;
 @Node("Card")
 public class CardNode {
     @Id
-    @GeneratedValue
+    //@GeneratedValue
     private int id;
 
     private String name;

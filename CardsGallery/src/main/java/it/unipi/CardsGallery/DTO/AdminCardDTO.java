@@ -9,5 +9,5 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class AdminCardDTO {
     private AuthDTO auth;
-    private TCGCard tcgCard; //????????
+    //private TCGCard tcgCard; //????????
 }
