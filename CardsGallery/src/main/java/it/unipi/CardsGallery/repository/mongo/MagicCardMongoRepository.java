@@ -6,4 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface MagicCardMongoRepository extends MongoRepository<MagicCard,String>  {
+    MagicCard findByName(String name);
 }
