@@ -9,6 +9,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class UpdateCardListDTO {
     private AuthDTO auth;
-    private int cardListId;
+    private String cardListId;
     private boolean status;
 }

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.neo4j.core.schema.GeneratedValue;
@@ -23,4 +24,10 @@ public class CardList {
     private String name;
     private boolean status;
     private List<Card> cards;
+
+    public CardList(String name, boolean status, List<Card> cards) {
+        this.name = name;
+        this.status = status;
+        this.cards = cards;
+    }
 }

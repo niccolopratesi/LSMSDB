@@ -9,6 +9,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class DeleteCardDTO {
     private AuthDTO auth;
-    private int cardListId;
-    private int cardId;
+    private String cardListId;
+    private String cardId;
 }
