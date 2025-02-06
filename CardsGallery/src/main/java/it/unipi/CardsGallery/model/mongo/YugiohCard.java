@@ -23,9 +23,10 @@ public class YugiohCard {
     private String race;
     private String attribute;
     private String type;
-    private int level;
-    private int atk;
-    private int def;
+    // level atk def can be null
+    private Integer level;
+    private Integer atk;
+    private Integer def;
     private int countReaction;
     private String[] typeLine;
     private String[] printings;

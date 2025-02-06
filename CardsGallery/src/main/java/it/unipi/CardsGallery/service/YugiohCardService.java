@@ -11,9 +11,9 @@ public interface YugiohCardService {
 
     List<YugiohCard> getYugiohCardByParameters(
             Optional<String> name,
-            Optional<String> type,
-            Optional<String> firstPrinting,
-            Optional<String> manaCost,
+            Optional<String> attribute,
+            Optional<String> race,
+            Optional<String> printing,
             int page
     );
 }

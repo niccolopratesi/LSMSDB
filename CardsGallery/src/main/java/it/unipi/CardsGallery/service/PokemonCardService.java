@@ -9,11 +9,11 @@ import java.util.Optional;
 public interface PokemonCardService {
     List<PokemonCard> getPokemonCardPage(int page);
 
-    List<PokemonCard> getPokemonCardCardByParameters(
+    List<PokemonCard> getPokemonCardByParameters(
             Optional<String> name,
-            Optional<String> type,
-            Optional<String> firstPrinting,
-            Optional<String> manaCost,
+            Optional<String> rarity,
+            Optional<String> set,
+            Optional<String> artist,
             int page
     );
 }
