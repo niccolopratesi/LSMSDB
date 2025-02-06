@@ -3,11 +3,14 @@ package it.unipi.CardsGallery.controller;
 import it.unipi.CardsGallery.DTO.*;
 import it.unipi.CardsGallery.model.mongo.CardList;
 import it.unipi.CardsGallery.service.CardListService;
+import it.unipi.CardsGallery.service.exception.AuthenticationException;
 import it.unipi.CardsGallery.service.impl.CardListServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/list")
@@ -17,17 +20,18 @@ public class CardListController {
     CardListService cardListService;
 
     @GetMapping
-    public CardList listsUser(@RequestParam("userId") int userId) {
-
-        //!!! mettiamo le pagine????? !!!
-
-        //...
-
-        return null;
+    public ResponseEntity<ResponseWrapper<List<CardList>>> listsUser(@RequestParam("username") String username, @RequestParam("page") int page, @RequestBody AuthDTO authDTO) {
+        try{
+            List<CardList> list = cardListService.userCardList(username, page, authDTO);
+            String response = (list != null) ? "User's lists found successfully" : "User has no lists";
+            return ResponseEntity.ok(new ResponseWrapper<>(response,list));
+        }catch(AuthenticationException e){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseWrapper<>("You have to be a registered user to search for lists",null));
+        }
     }
 
     @PostMapping
-    public ResponseEntity createList (@RequestBody CardListDTO cardListDTO) {
+    public ResponseEntity<ResponseWrapper<Void>> createList (@RequestBody CardListDTO cardListDTO) {
         try{
             cardListService.createCardList(cardListDTO);
             return ResponseEntity.ok(new ResponseWrapper<>("Card List created successfully",null));
@@ -37,43 +41,42 @@ public class CardListController {
     }
 
     @DeleteMapping
-    @ResponseBody
-    public String deleteList (@RequestBody DeleteCardListDTO deleteCardListDTO) {
-
-        //controllo che l'utente sia il propietario
-
-        //si potrebbe passare solo l'id della lista senza passare tutta la lista
-
-        return "Deleting successful";
+    public ResponseEntity<ResponseWrapper<Void>> deleteList (@RequestBody DeleteCardListDTO deleteCardListDTO) {
+        try{
+            cardListService.deleteCardList(deleteCardListDTO);
+            return ResponseEntity.ok(new ResponseWrapper<>("Card List deleted successfully",null));
+        }catch(AuthenticationException e){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseWrapper<>(e.getMessage(),null));
+        }
     }
 
     @PostMapping("/card")
-    @ResponseBody
-    public String addCard (@RequestBody CardDTO cardDTO) {
-
-        //controllo che l'utente sia il propietario
-
-        return "Adding successful";
+    public ResponseEntity<ResponseWrapper<Void>> addCard (@RequestBody CardDTO cardDTO) {
+        try{
+            cardListService.insertIntoCardList(cardDTO);
+            return ResponseEntity.ok(new ResponseWrapper<>("Card List deleted successfully",null));
+        }catch(AuthenticationException e){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseWrapper<>(e.getMessage(),null));
+        }
     }
 
     @DeleteMapping("/card")
-    @ResponseBody
-    public String deleteCard (@RequestBody DeleteCardDTO deleteCardDTO) {
-
-        //controllo che l'utente sia il propietario
-
-        //basterebbe l'id della carta da eliminare e non tutta la carta....!
-
-        return "Deleting successful";
+    public ResponseEntity<ResponseWrapper<Void>> deleteCard (@RequestBody DeleteCardDTO deleteCardDTO) {
+        try{
+            cardListService.removeFromCardList(deleteCardDTO);
+            return ResponseEntity.ok(new ResponseWrapper<>("Card List deleted successfully",null));
+        }catch(AuthenticationException e){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseWrapper<>(e.getMessage(),null));
+        }
     }
 
     @PutMapping("/status")
-    public ResponseEntity updateStatus (@RequestBody UpdateCardListDTO updateCardListDTO) {
+    public ResponseEntity<ResponseWrapper<Void>> updateStatus (@RequestBody UpdateCardListDTO updateCardListDTO) {
         try{
             String status = (updateCardListDTO.isStatus()) ? "public" : "private";
             cardListService.updateCardList(updateCardListDTO);
             return ResponseEntity.ok(new ResponseWrapper<>("List set to " + status + " successfully",null));
-        }catch(Exception e){
+        }catch(AuthenticationException e){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseWrapper<>("Failed to set Card List status",null));
         }
     }

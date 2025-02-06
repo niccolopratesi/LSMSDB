@@ -1,11 +1,16 @@
 package it.unipi.CardsGallery.service;
 
-import it.unipi.CardsGallery.DTO.CardListDTO;
-import it.unipi.CardsGallery.DTO.UpdateCardListDTO;
+import it.unipi.CardsGallery.DTO.*;
 import it.unipi.CardsGallery.model.mongo.CardList;
+import it.unipi.CardsGallery.service.exception.AuthenticationException;
+
+import java.util.List;
 
 public interface CardListService {
-    public CardList getCardList();
-    public void createCardList(CardListDTO list) throws Exception;
-    public void updateCardList(UpdateCardListDTO list) throws Exception;
+    public void createCardList(CardListDTO list) throws AuthenticationException;
+    public void updateCardList(UpdateCardListDTO list) throws AuthenticationException;
+    public void deleteCardList(DeleteCardListDTO list) throws AuthenticationException;
+    public List<CardList> userCardList(String username, int page, AuthDTO auth) throws AuthenticationException;
+    public void insertIntoCardList(CardDTO card) throws AuthenticationException;
+    public void removeFromCardList(DeleteCardDTO card) throws AuthenticationException;
 }

@@ -12,7 +12,7 @@ import org.springframework.data.neo4j.core.schema.GeneratedValue;
 import java.util.List;
 
 @Data
-@Document(collection = "List")
+@Document(collection = "CardList")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @NoArgsConstructor
 @AllArgsConstructor
@@ -24,10 +24,14 @@ public class CardList {
     private String name;
     private boolean status;
     private List<Card> cards;
+    private String userId;
+    private String username;
 
-    public CardList(String name, boolean status, List<Card> cards) {
+    public CardList(String name, boolean status, List<Card> cards, String userId, String username) {
         this.name = name;
         this.status = status;
         this.cards = cards;
+        this.userId = userId;
+        this.username = username;
     }
 }
