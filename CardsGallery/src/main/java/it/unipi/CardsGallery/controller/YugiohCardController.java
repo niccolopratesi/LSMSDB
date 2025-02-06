@@ -1,9 +1,6 @@
 package it.unipi.CardsGallery.controller;
 
-import it.unipi.CardsGallery.model.YugiohCard;
-import it.unipi.CardsGallery.repository.neo4j.CardNodeRepository;
-import it.unipi.CardsGallery.repository.mongo.YugiohCardMongoRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import it.unipi.CardsGallery.model.mongo.YugiohCard;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;

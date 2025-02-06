@@ -1,8 +1,7 @@
-package it.unipi.CardsGallery.model;
+package it.unipi.CardsGallery.model.neo4j;
 
 import lombok.Data;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.neo4j.core.schema.GeneratedValue;
 import org.springframework.data.neo4j.core.schema.Node;
 
 @Data

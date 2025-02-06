@@ -1,26 +1,27 @@
-package it.unipi.CardsGallery.model;
+package it.unipi.CardsGallery.model.mongo;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.neo4j.core.schema.GeneratedValue;
 
-import java.util.List;
+import java.util.Date;
 
 @Data
-@Document(collection = "List")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @NoArgsConstructor
 @AllArgsConstructor
-public class CardList {
+public class Post {
     @Id
     @GeneratedValue
     private String id;
 
-    private String name;
-    private boolean status;
-    private List<Card> cards;
+    private String title;
+    private String text;
+    private int authorId;
+    private int cardId;
+    private String TCG; //enum????
+    private Date creationDate;
 }

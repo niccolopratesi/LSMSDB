@@ -3,7 +3,7 @@ package it.unipi.CardsGallery.controller;
 
 import it.unipi.CardsGallery.DTO.DeletePostDTO;
 import it.unipi.CardsGallery.DTO.PostDTO;
-import it.unipi.CardsGallery.model.Post;
+import it.unipi.CardsGallery.model.mongo.Post;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;

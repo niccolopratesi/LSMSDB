@@ -1,6 +1,6 @@
 package it.unipi.CardsGallery.DTO;
 
-import it.unipi.CardsGallery.model.Post;
+import it.unipi.CardsGallery.model.mongo.Post;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

@@ -1,10 +1,9 @@
 package it.unipi.CardsGallery.repository.mongo;
 
-import it.unipi.CardsGallery.model.mongo.MagicCard;
+import it.unipi.CardsGallery.model.mongo.User;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface MagicCardMongoRepository extends MongoRepository<MagicCard,String>  {
-    MagicCard findByName(String name);
+public interface UserRepository extends MongoRepository<User, String> {
 }

@@ -9,6 +9,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class UserDTO
 {
-    private String un_followUser;
+    private String followUser;
     private AuthDTO auth;
 }

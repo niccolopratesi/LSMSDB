@@ -4,7 +4,7 @@ package it.unipi.CardsGallery.controller;
 import it.unipi.CardsGallery.DTO.AuthDTO;
 import it.unipi.CardsGallery.DTO.LoginDTO;
 import it.unipi.CardsGallery.DTO.UserDTO;
-import it.unipi.CardsGallery.model.User;
+import it.unipi.CardsGallery.model.mongo.User;
 import org.springframework.web.bind.annotation.*;
 
 @RestController

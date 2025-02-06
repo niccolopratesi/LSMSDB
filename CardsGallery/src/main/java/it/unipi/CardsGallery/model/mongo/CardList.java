@@ -1,5 +1,4 @@
-package it.unipi.CardsGallery.model;
-
+package it.unipi.CardsGallery.model.mongo;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
@@ -9,24 +8,19 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.neo4j.core.schema.GeneratedValue;
 
+import java.util.List;
+
 @Data
-@Document(collection = "Yugioh")
+@Document(collection = "List")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @NoArgsConstructor
 @AllArgsConstructor
-public class YugiohCard {
-    @Id @GeneratedValue
+public class CardList {
+    @Id
+    @GeneratedValue
     private String id;
 
     private String name;
-    private String desc;
-    private String race;
-    private String attribute;
-    private String type;
-    private int level;
-    private int atk;
-    private int def;
-    private int countReaction;
-    private String[] typeLine;
-    private String[] printings;
+    private boolean status;
+    private List<Card> cards;
 }

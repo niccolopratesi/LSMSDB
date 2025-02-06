@@ -1,4 +1,4 @@
-package it.unipi.CardsGallery.model;
+package it.unipi.CardsGallery.model.mongo;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

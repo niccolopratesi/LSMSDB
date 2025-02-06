@@ -1,6 +1,6 @@
 package it.unipi.CardsGallery.repository.mongo;
 
-import it.unipi.CardsGallery.model.PokemonCard;
+import it.unipi.CardsGallery.model.mongo.PokemonCard;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 

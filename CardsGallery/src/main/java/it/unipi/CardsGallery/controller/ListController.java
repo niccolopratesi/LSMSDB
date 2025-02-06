@@ -1,8 +1,7 @@
 package it.unipi.CardsGallery.controller;
 
 import it.unipi.CardsGallery.DTO.*;
-import it.unipi.CardsGallery.model.Card;
-import it.unipi.CardsGallery.model.CardList;
+import it.unipi.CardsGallery.model.mongo.CardList;
 import org.springframework.web.bind.annotation.*;
 
 @RestController

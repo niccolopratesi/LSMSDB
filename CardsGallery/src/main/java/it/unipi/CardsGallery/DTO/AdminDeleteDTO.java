@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class AdminDelete {
+public class AdminDeleteDTO {
     private AuthDTO auth;
     private int id;
 }
