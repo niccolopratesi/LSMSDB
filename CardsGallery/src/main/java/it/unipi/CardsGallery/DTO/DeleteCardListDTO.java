@@ -9,5 +9,5 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class DeleteCardListDTO {
     private AuthDTO auth;
-    private int cardListId;
+    private String cardListId;
 }

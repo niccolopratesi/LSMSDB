@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class CardReactionDTO {
     private AuthDTO auth;
-    private int cardId;
+    private String cardId;
     private String TCG; //enum???
     private String typeReaction; //enum???
 }

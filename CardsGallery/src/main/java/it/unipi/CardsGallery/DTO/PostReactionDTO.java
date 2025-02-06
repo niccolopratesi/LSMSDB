@@ -9,6 +9,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class PostReactionDTO {
     private AuthDTO auth;
-    private int postId;
+    private String postId;
     private String typeReaction; //enum???
 }

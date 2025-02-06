@@ -10,6 +10,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class CardDTO {
     private AuthDTO auth;
-    private int cardListId;
+    private String cardListId;
     private Card card;
 }
