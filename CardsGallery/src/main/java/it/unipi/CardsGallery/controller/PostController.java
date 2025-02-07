@@ -10,6 +10,7 @@ import it.unipi.CardsGallery.model.mongo.CardList;
 import it.unipi.CardsGallery.model.mongo.Post;
 import it.unipi.CardsGallery.service.PostService;
 import it.unipi.CardsGallery.service.exception.AuthenticationException;
+import it.unipi.CardsGallery.service.exception.OwnershipException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -47,10 +48,15 @@ public class PostController {
 
     @DeleteMapping
     @ResponseBody
-    public String deletePost(@RequestBody DeletePostDTO deletePostDTO) {
-        //postService.deletePost(deletePostDTO);
-
-        return "Delete successful";
+    public ResponseEntity<ResponseWrapper<Void>> deletePostMember(@RequestBody DeletePostDTO deletePostDTO) {
+        try {
+            postService.deletePostMember(deletePostDTO);
+            return ResponseEntity.ok(new ResponseWrapper<>(CommonConstants.DELETE_OK_MSG,null));
+        } catch (OwnershipException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseWrapper<>(CommonConstants.NO_OWNER_MSG,null));
+        } catch (AuthenticationException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseWrapper<>(CommonConstants.MUST_BE_LOGGED_MSG,null));
+        }
     }
 
 }

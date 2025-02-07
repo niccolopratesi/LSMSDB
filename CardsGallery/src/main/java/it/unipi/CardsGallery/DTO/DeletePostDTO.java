@@ -9,5 +9,5 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class DeletePostDTO {
     private AuthDTO auth;
-    private String postId;
+    private String postTitle;
 }

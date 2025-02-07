@@ -1,6 +1,6 @@
 package it.unipi.CardsGallery.service.exception;
 
-public class NoAdminException extends RuntimeException {
+public class NoAdminException extends Exception {
     public NoAdminException(Exception e) {
         super(e);
     }

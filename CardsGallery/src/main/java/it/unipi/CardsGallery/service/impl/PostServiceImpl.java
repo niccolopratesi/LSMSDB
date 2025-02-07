@@ -11,6 +11,7 @@ import it.unipi.CardsGallery.service.AuthenticationService;
 import it.unipi.CardsGallery.service.PostService;
 import it.unipi.CardsGallery.service.exception.AuthenticationException;
 import it.unipi.CardsGallery.service.exception.NoAdminException;
+import it.unipi.CardsGallery.service.exception.OwnershipException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.AutoConfigureOrder;
 import org.springframework.data.domain.Page;
@@ -45,8 +46,13 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public void deletePost(DeletePostDTO dpDTO) throws AuthenticationException, NoAdminException {
-
+    public void deletePostMember(DeletePostDTO dpDTO) throws AuthenticationException, OwnershipException {
+        authenticationService.authenticate(dpDTO.getAuth());
+        if(userRepository.existsByUsernameAndPostsTitle(dpDTO.getAuth().getUsername(), dpDTO.getPostTitle())){
+            userRepository.deletePostFromUser(dpDTO.getAuth().getUsername(), dpDTO.getPostTitle());
+        } else {
+            throw new OwnershipException("you are not the owner of the post!");
+        }
     }
 
 }

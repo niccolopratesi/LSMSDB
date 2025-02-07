@@ -42,4 +42,10 @@ public interface UserRepository extends MongoRepository<User, String> {
 
     //@Query("{'_id': ?0, 'username': ?01, 'password':  ?2}")
     public boolean existsByIdAndUsernameAndPassword(String id, String username, String password);
+
+    boolean existsByUsernameAndPostsTitle(String username, String postTitle);
+
+    @Query("{ 'username': ?0 }")
+    @Update("{ '$pull': { 'posts': { 'title': ?1 } } }")
+    void deletePostFromUser(String username, String postTitle);
 }
