@@ -26,7 +26,7 @@ public class PokemonCardController {
             @RequestParam(required = false) Optional<String> rarity,
             @RequestParam(required = false) Optional<String> set,
             @RequestParam(required = false) Optional<String> artist,
-            @RequestParam(required = true) int page
+            @RequestParam(defaultValue = "0") int page
     ) {
         List<PokemonCard> result = cardService.getPokemonCardByParameters(name, rarity, set, artist, page);
         String msg;

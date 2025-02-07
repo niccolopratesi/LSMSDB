@@ -20,7 +20,6 @@ public class Post {
 
     private String title;
     private String text;
-    private int authorId;
     private int cardId;
     private String TCG; //enum????
     private Date creationDate;

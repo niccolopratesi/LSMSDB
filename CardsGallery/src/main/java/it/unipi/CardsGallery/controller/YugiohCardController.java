@@ -25,7 +25,7 @@ public class YugiohCardController {
             @RequestParam(required = false) Optional<String> attribute,
             @RequestParam(required = false) Optional<String> race,
             @RequestParam(required = false) Optional<String> printing,
-            @RequestParam(required = true) int page
+            @RequestParam(defaultValue = "0") int page
     ) {
         List<YugiohCard> result = cardService.getYugiohCardByParameters(name, attribute, race, printing, page);
         String msg;

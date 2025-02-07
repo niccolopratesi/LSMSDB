@@ -27,7 +27,7 @@ public class MagicCardController {
             @RequestParam(required = false) Optional<String> type,
             @RequestParam(required = false) Optional<String> firstPrinting,
             @RequestParam(required = false) Optional<String> manaCost,
-            @RequestParam(required = true) int page
+            @RequestParam(defaultValue = "0") int page
     ) {
         List<MagicCard> result = cardService.getMagicCardByParameters(name, type, firstPrinting, manaCost, page);
         String msg;
