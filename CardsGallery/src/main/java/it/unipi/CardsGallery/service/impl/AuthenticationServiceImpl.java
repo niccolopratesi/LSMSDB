@@ -29,8 +29,11 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     public void authenticate(AuthDTO authDTO) throws AuthenticationException {
         //!!! serve il .hash() della password !!!
         String hashedPassword = authDTO.getPassword();
-        Optional<User> user = userRepository.findUserByUsernameAndPassword(authDTO.getUsername(), hashedPassword);
+        /*Optional<User> user = userRepository.findUserByUsernameAndPassword(authDTO.getUsername(), hashedPassword);
         if(user.isEmpty()) {
+            throw new AuthenticationException("Username or password is incorrect");
+        }*/
+        if(!userRepository.existsUserByUsernameAndPassword(authDTO.getUsername(), hashedPassword)){
             throw new AuthenticationException("Username or password is incorrect");
         }
     }
@@ -43,6 +46,14 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         }*/
         if(!cardListRepository.existsByIdAndUserId(cardListId,userId)) {
             throw new AuthenticationException("User is not the owner of the card list");
+        }
+    }
+
+    @Override
+    public void accountOwnership(AuthDTO authDTO) throws AuthenticationException {
+        //!!! serve il .hash() della password !!!
+        if(!userRepository.existsByIdAndUsernameAndPassword(authDTO.getId(),authDTO.getUsername(),authDTO.getPassword())) {
+            throw new AuthenticationException("You are not the owner of the account");
         }
     }
 }
