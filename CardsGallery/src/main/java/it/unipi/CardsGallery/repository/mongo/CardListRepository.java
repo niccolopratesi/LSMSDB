@@ -23,7 +23,7 @@ public interface CardListRepository extends MongoRepository<CardList, String> {
             Pageable pageable
     );
 
-    @Query("{'name': {'$regex' : ?0}}")
+    @Query("{'name': {'$regex' : ?0} }")
     Page<CardList> findByName(
             String cardListName,
             Pageable pageable

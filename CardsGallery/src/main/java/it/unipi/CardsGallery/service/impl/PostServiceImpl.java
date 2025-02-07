@@ -2,6 +2,7 @@ package it.unipi.CardsGallery.service.impl;
 
 import it.unipi.CardsGallery.CommonConstants;
 import it.unipi.CardsGallery.DTO.AuthDTO;
+import it.unipi.CardsGallery.DTO.DeletePostDTO;
 import it.unipi.CardsGallery.DTO.PostDTO;
 import it.unipi.CardsGallery.controller.PostController;
 import it.unipi.CardsGallery.model.mongo.Post;
@@ -9,6 +10,7 @@ import it.unipi.CardsGallery.repository.mongo.UserRepository;
 import it.unipi.CardsGallery.service.AuthenticationService;
 import it.unipi.CardsGallery.service.PostService;
 import it.unipi.CardsGallery.service.exception.AuthenticationException;
+import it.unipi.CardsGallery.service.exception.NoAdminException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.AutoConfigureOrder;
 import org.springframework.data.domain.Page;
@@ -36,10 +38,15 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public void createPost(PostDTO postDTO) throws AuthenticationException {
-        authenticationService.authenticate(postDTO.getAuth());
+        authenticationService.accountOwnership(postDTO.getAuth());
         Post post = postDTO.getPost();
         String id = postDTO.getAuth().getId();
         userRepository.addPostToUser(id, post);
+    }
+
+    @Override
+    public void deletePost(DeletePostDTO dpDTO) throws AuthenticationException, NoAdminException {
+
     }
 
 }

@@ -48,9 +48,7 @@ public class PostController {
     @DeleteMapping
     @ResponseBody
     public String deletePost(@RequestBody DeletePostDTO deletePostDTO) {
-        //controllo che l'utente sia il propietario
-
-        //prelievo id utente e id post dal body
+        //postService.deletePost(deletePostDTO);
 
         return "Delete successful";
     }
