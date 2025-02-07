@@ -50,10 +50,15 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     }
 
     @Override
-    public void accountOwnership(AuthDTO authDTO) throws AuthenticationException {
+    public Boolean accountOwnership(AuthDTO authDTO) throws AuthenticationException {
         //!!! serve il .hash() della password !!!
-        if(!userRepository.existsByIdAndUsernameAndPassword(authDTO.getId(),authDTO.getUsername(),authDTO.getPassword())) {
+        /*if(!userRepository.existsByIdAndUsernameAndPassword(authDTO.getId(),authDTO.getUsername(),authDTO.getPassword())) {
+            throw new AuthenticationException("You are not the owner of the account");
+        }*/
+        Boolean result = userRepository.findByIdAndUsernameAndPassword(authDTO.getId(),authDTO.getUsername(),authDTO.getPassword());
+        if(result == null) {
             throw new AuthenticationException("You are not the owner of the account");
         }
+        return result;
     }
 }

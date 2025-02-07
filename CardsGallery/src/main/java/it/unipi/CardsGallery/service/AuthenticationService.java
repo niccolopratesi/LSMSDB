@@ -6,5 +6,5 @@ import it.unipi.CardsGallery.service.exception.AuthenticationException;
 public interface AuthenticationService {
     public void authenticate(AuthDTO authDTO) throws AuthenticationException;
     public void listOwnership(String userId, String cardListId) throws AuthenticationException;
-    public void accountOwnership(AuthDTO authDTO) throws AuthenticationException;
+    public Boolean accountOwnership(AuthDTO authDTO) throws AuthenticationException;
 }

@@ -5,7 +5,7 @@ import it.unipi.CardsGallery.model.mongo.CardList;
 import it.unipi.CardsGallery.service.CardListService;
 import it.unipi.CardsGallery.service.exception.AuthenticationException;
 import it.unipi.CardsGallery.service.exception.ExistingEntityException;
-import it.unipi.CardsGallery.service.impl.CardListServiceImpl;
+import it.unipi.CardsGallery.utilities.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,20 +21,16 @@ public class CardListController {
     CardListService cardListService;
 
     @GetMapping("/name")
-    public ResponseEntity<ResponseWrapper<List<CardList>>> getCardList(@RequestParam("cardListName") String cardListName, @RequestParam("page") int page, @RequestBody AuthDTO authDTO) {
-        try{
-            List<CardList> list = cardListService.searchCardList(cardListName, page, authDTO);
-            String response = (list != null) ? "Lists found successfully" : "No lists found";
-            return ResponseEntity.ok(new ResponseWrapper<>(response,list));
-        }catch(AuthenticationException e){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseWrapper<>("You have to be a registered user to search for lists",null));
-        }
+    public ResponseEntity<ResponseWrapper<List<CardList>>> getCardList(@RequestParam("cardListName") String cardListName, @RequestParam("page") int page) {
+        List<CardList> list = cardListService.searchCardList(cardListName, page);
+        String response = (list != null) ? "Lists found successfully" : "No lists found";
+        return ResponseEntity.ok(new ResponseWrapper<>(response,list));
     }
 
     @GetMapping
-    public ResponseEntity<ResponseWrapper<List<CardList>>> listsUser(@RequestParam("username") String username, @RequestParam("page") int page, @RequestBody AuthDTO authDTO) {
+    public ResponseEntity<ResponseWrapper<List<CardList>>> listsUser(@RequestParam("owner") String owner, @RequestParam("page") int page, @RequestParam(value = "username",required = false) String username, @RequestParam(value = "password", required = false) String password) throws AuthenticationException {
         try{
-            List<CardList> list = cardListService.userCardList(username, page, authDTO);
+            List<CardList> list = cardListService.userCardList(owner, page, username, password);
             String response = (list != null) ? "User's lists found successfully" : "User has no lists";
             return ResponseEntity.ok(new ResponseWrapper<>(response,list));
         }catch(AuthenticationException e){
@@ -66,12 +62,11 @@ public class CardListController {
     public ResponseEntity<ResponseWrapper<Void>> addCard (@RequestBody CardDTO cardDTO) {
         try{
             cardListService.insertIntoCardList(cardDTO);
-            return ResponseEntity.ok(new ResponseWrapper<>("Card List deleted successfully",null));
+            return ResponseEntity.ok(new ResponseWrapper<>("Card added to the list",null));
         }catch(AuthenticationException e){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseWrapper<>(e.getMessage(),null));
         }catch(ExistingEntityException e){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseWrapper<>(e.getMessage(),null));
-
         }
     }
 
@@ -79,7 +74,7 @@ public class CardListController {
     public ResponseEntity<ResponseWrapper<Void>> deleteCard (@RequestBody DeleteCardDTO deleteCardDTO) {
         try{
             cardListService.removeFromCardList(deleteCardDTO);
-            return ResponseEntity.ok(new ResponseWrapper<>("Card List deleted successfully",null));
+            return ResponseEntity.ok(new ResponseWrapper<>("Card removed from the list",null));
         }catch(AuthenticationException e){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseWrapper<>(e.getMessage(),null));
         }
@@ -88,7 +83,7 @@ public class CardListController {
     @PutMapping("/status")
     public ResponseEntity<ResponseWrapper<Void>> updateStatus (@RequestBody UpdateCardListDTO updateCardListDTO) {
         try{
-            String status = (updateCardListDTO.isStatus()) ? "public" : "private";
+            String status = (updateCardListDTO.isStatus() == Constants.PUBLIC) ? "public" : "private";
             cardListService.updateCardList(updateCardListDTO);
             return ResponseEntity.ok(new ResponseWrapper<>("List set to " + status + " successfully",null));
         }catch(AuthenticationException e){

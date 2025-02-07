@@ -2,8 +2,8 @@ package it.unipi.CardsGallery.service.impl;
 
 import it.unipi.CardsGallery.DTO.AuthDTO;
 import it.unipi.CardsGallery.DTO.LoginDTO;
+import it.unipi.CardsGallery.DTO.UpdateUserDTO;
 import it.unipi.CardsGallery.model.mongo.User;
-import it.unipi.CardsGallery.repository.mongo.UserMongoTemplate;
 import it.unipi.CardsGallery.repository.mongo.UserRepository;
 import it.unipi.CardsGallery.service.AuthenticationService;
 import it.unipi.CardsGallery.service.UserService;
@@ -13,16 +13,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Optional;
+import java.util.List;
 
 @Service
 public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserRepository userRepository;
-
-    @Autowired
-    private UserMongoTemplate userMongoTemplate;
 
     @Autowired
     private AuthenticationService auth;
@@ -59,18 +56,25 @@ public class UserServiceImpl implements UserService {
     @Override
     public User profileUser(String username) throws AuthenticationException, ExistingEntityException {
         //auth.authenticate(authDTO);
-        User user = userMongoTemplate.findUserByUsername(username);
+        //User user = userMongoTemplate.findUserByUsername(username);
+        List<User> user = userRepository.findUserByUsername(username);
         if(user == null) {
             throw new ExistingEntityException("User not found");
         }
-        return user;
+        return user.get(0);
     }
 
     @Override
-    public void updateUser(User user) throws AuthenticationException {
-        auth.accountOwnership(new AuthDTO(user.getUsername(),user.getPassword(), user.getId()));
-        //!!! come gestiamo update admin e update password????? !!!
-        user.setAdmin(false);
+    public void updateUser(UpdateUserDTO userDTO) throws AuthenticationException {
+        //auth.accountOwnership(new AuthDTO(user.getUsername(),user.getPassword(), user.getId()));
+        //!!! update password????? !!!
+        User user = userDTO.getUser();
+        user.setAdmin(auth.accountOwnership(new AuthDTO(user.getUsername(),user.getPassword(), user.getId())));
+
+        if(userDTO.getNewPassword() != null){
+            //!!! hash pass !!!
+            user.setPassword(userDTO.getNewPassword());
+        }
         userRepository.save(user);
     }
 }

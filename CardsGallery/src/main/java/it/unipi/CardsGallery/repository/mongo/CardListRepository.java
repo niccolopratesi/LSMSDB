@@ -7,6 +7,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
+import org.springframework.data.mongodb.repository.Update;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
@@ -18,16 +19,34 @@ public interface CardListRepository extends MongoRepository<CardList, String> {
     boolean existsByIdAndUserId(String id, String userId);
 
     @Query("{'username': ?0}")
-    Page<CardList> findByParameters(
+    Page<CardList> findOwnedLists(
             String username,
             Pageable pageable
     );
 
-    @Query("{'name': {'$regex' : ?0} }")
+    @Query("{'username': ?0, 'status': true }")
+    Page<CardList> findByOwner(
+            String username,
+            Pageable pageable
+    );
+
+    @Query("{'name': {'$regex' : ?0}, 'status': true}")
     Page<CardList> findByName(
             String cardListName,
             Pageable pageable
     );
+
+    @Query("{ 'id': ?0 }")
+    @Update("{ '$set': {'status': ?1} }")
+    void updateCardListStatus(String id, boolean status);
+
+    @Query("{ 'id': ?0 }")
+    @Update("{ '$push': { 'cards': ?1 } }")
+    void insertCardIntoCardList(String cardListId, Card card);
+
+    @Query("{ 'id': ?0 }")
+    @Update("{ '$pull': { 'cards': {'id': ?1} } }")
+    void removeCardFromCardList(String cardListId, String cardId);
 
     //boolean existsByIdAndCardsId(String id, String cardsId);
 }

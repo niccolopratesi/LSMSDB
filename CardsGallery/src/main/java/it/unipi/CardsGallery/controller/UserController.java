@@ -1,10 +1,7 @@
 package it.unipi.CardsGallery.controller;
 
 
-import it.unipi.CardsGallery.DTO.AuthDTO;
-import it.unipi.CardsGallery.DTO.LoginDTO;
-import it.unipi.CardsGallery.DTO.ResponseWrapper;
-import it.unipi.CardsGallery.DTO.UserDTO;
+import it.unipi.CardsGallery.DTO.*;
 import it.unipi.CardsGallery.model.mongo.User;
 import it.unipi.CardsGallery.service.AuthenticationService;
 import it.unipi.CardsGallery.service.CardListService;
@@ -84,7 +81,7 @@ public class UserController {
 
     @PutMapping
     @ResponseBody
-    public ResponseEntity<ResponseWrapper<Void>> updateUser(@RequestBody User user) {
+    public ResponseEntity<ResponseWrapper<Void>> updateUser(@RequestBody UpdateUserDTO user) {
         try{
             userService.updateUser(user);
             return ResponseEntity.ok(new ResponseWrapper<>("Account updated correctly",null));

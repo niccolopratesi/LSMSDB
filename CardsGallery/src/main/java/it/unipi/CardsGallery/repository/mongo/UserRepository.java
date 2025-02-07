@@ -19,7 +19,7 @@ public interface UserRepository extends MongoRepository<User, String> {
 
     //public Optional<User> findUserByUsernameAndPassword(String username, String password);
 
-    public boolean existsUserByUsernameAndPassword(String username, String password);
+    boolean existsUserByUsernameAndPassword(String username, String password);
 
     @Aggregation(pipeline = {
             "{ '$match': { 'username': ?0 } }",
@@ -37,11 +37,16 @@ public interface UserRepository extends MongoRepository<User, String> {
     //@Query("{'username': ?0}")
     //public Optional<User> findUserByUsername(String username);
 
+    @Query(value = "{ 'username': ?0}" , fields = "{'password': 0, 'admin': 0}")
+    List<User> findUserByUsername(String username);
+
     //@Query("{'username': ?0}")
-    public boolean existsUserByUsername(String username);
+    boolean existsUserByUsername(String username);
 
     //@Query("{'_id': ?0, 'username': ?01, 'password':  ?2}")
-    public boolean existsByIdAndUsernameAndPassword(String id, String username, String password);
+    //boolean existsByIdAndUsernameAndPassword(String id, String username, String password);
+    @Query(value = "{ 'id': ?0,'username': ?1, 'password': ?2}" , fields = "{'admin': 1, 'id': 0}")
+    Boolean findByIdAndUsernameAndPassword(String id, String username, String password);
 
     boolean existsByUsernameAndPostsTitle(String username, String postTitle);
 

@@ -32,5 +32,5 @@ public class User {
     private List<Post> posts;
 
     //Admin bool?????
-    private boolean admin;
+    private Boolean admin;
 }
