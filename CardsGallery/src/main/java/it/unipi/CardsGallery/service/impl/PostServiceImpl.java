@@ -10,6 +10,7 @@ import it.unipi.CardsGallery.repository.mongo.UserRepository;
 import it.unipi.CardsGallery.service.AuthenticationService;
 import it.unipi.CardsGallery.service.PostService;
 import it.unipi.CardsGallery.service.exception.AuthenticationException;
+import it.unipi.CardsGallery.service.exception.ExistingEntityException;
 import it.unipi.CardsGallery.service.exception.NoAdminException;
 import it.unipi.CardsGallery.service.exception.OwnershipException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,10 +39,13 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public void createPost(PostDTO postDTO) throws AuthenticationException {
+    public void createPost(PostDTO postDTO) throws AuthenticationException, ExistingEntityException {
         authenticationService.accountOwnership(postDTO.getAuth());
         Post post = postDTO.getPost();
         String id = postDTO.getAuth().getId();
+        if(userRepository.existsByUsernameAndPostsTitle(postDTO.getAuth().getUsername(), postDTO.getPost().getTitle())) {
+            throw new ExistingEntityException("post already exists");
+        }
         userRepository.addPostToUser(id, post);
     }
 
