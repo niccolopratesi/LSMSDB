@@ -3,52 +3,63 @@ package it.unipi.CardsGallery.controller;
 
 import it.unipi.CardsGallery.DTO.AuthDTO;
 import it.unipi.CardsGallery.DTO.LoginDTO;
+import it.unipi.CardsGallery.DTO.ResponseWrapper;
 import it.unipi.CardsGallery.DTO.UserDTO;
 import it.unipi.CardsGallery.model.mongo.User;
+import it.unipi.CardsGallery.service.AuthenticationService;
+import it.unipi.CardsGallery.service.CardListService;
+import it.unipi.CardsGallery.service.UserService;
+import it.unipi.CardsGallery.service.exception.AuthenticationException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/user")
 public class UserController {
 
-    //Repository necessari
+    @Autowired
+    UserService userService;
 
     @PostMapping("/registration")
-    @ResponseBody
-    public String registerUser(@RequestBody User user) {
-
-        //hash per codificare la password
-
-        return "Registration successful";
+    public ResponseEntity<ResponseWrapper<Void>> registerUser(@RequestBody User user) {
+        //!!! hash per codificare la password !!!
+        try{
+            userService.insertUser(user);
+            return ResponseEntity.ok(new ResponseWrapper<>("Registration successful",null));
+        }catch(AuthenticationException e){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseWrapper<>(e.getMessage(),null));
+        }
     }
 
     @PostMapping("/login")
     @ResponseBody
-    public String loginUser(@RequestBody LoginDTO loginDTO) {
-
-        //controllo che le codifiche hash siano uguali
-
-        return "Login successful";
+    public ResponseEntity<ResponseWrapper<Void>> loginUser(@RequestBody LoginDTO loginDTO) {
+        //!!! controllo che le codifiche hash siano uguali !!!
+        try{
+            userService.loginUser(loginDTO);
+            return ResponseEntity.ok(new ResponseWrapper<>("Login successful",null));
+        }catch(AuthenticationException e){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseWrapper<>("Username or Password wrong",null));
+        }
     }
 
     //!!! Logout dovrebbe essere gestito solo lato client se non abbiamo cookie !!!
 
-    /*@GetMapping("/{id}")
-    public User profileUser(@PathVariable int id) {
-
-        //...
-
-        return null;
-    }
-    si può fare anche solo con username per prendere sia il proprio che quello degli altri
-    */
-
     @GetMapping
-    public User profileUser(@RequestParam("username") String username) {
-
-        //...
-
-        return null;
+    public ResponseEntity<ResponseWrapper<Optional<User>>> profileUser(@RequestParam("username") String username) {
+        try{
+            Optional<User> user = userService.profileUser(username);
+            if(user.isEmpty()){
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseWrapper<>("User not found",null));
+            }
+            return ResponseEntity.ok(new ResponseWrapper<>("User found successfully",user));
+        }catch(AuthenticationException e){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseWrapper<>("Username or Password wrong",null));
+        }
     }
 
     @GetMapping("/details")
@@ -61,13 +72,13 @@ public class UserController {
 
     @DeleteMapping
     @ResponseBody
-    public String deleteUser(@RequestBody AuthDTO authDTO) {
-
-        //controllo che l'utente sia il propietario dell'account da eliminare
-
-        //prelievo id user da body
-
-        return "Delete successful";
+    public ResponseEntity<ResponseWrapper<Void>> deleteUser(@RequestBody AuthDTO authDTO) {
+        try{
+            userService.deleteUser(authDTO);
+            return ResponseEntity.ok(new ResponseWrapper<>("Account deleted correctly",null));
+        }catch(AuthenticationException e){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseWrapper<>("Account ownership failed",null));
+        }
     }
 
     @PutMapping

@@ -37,8 +37,11 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     @Override
     public void listOwnership(String userId, String cardListId) throws AuthenticationException {
-        Optional<CardList> cardList = cardListRepository.findByIdAndUserId(cardListId,userId);
+        /*Optional<CardList> cardList = cardListRepository.findByIdAndUserId(cardListId,userId);
         if(cardList.isEmpty()) {
+            throw new AuthenticationException("User is not the owner of the card list");
+        }*/
+        if(!cardListRepository.existsByIdAndUserId(cardListId,userId)) {
             throw new AuthenticationException("User is not the owner of the card list");
         }
     }

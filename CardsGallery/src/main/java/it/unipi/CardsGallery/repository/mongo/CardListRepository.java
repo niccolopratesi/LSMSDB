@@ -14,10 +14,8 @@ import java.util.Optional;
 @Repository
 public interface CardListRepository extends MongoRepository<CardList, String> {
 
-    @Query("{'_id': ?0 }")
-    void updateCardListStatus(String id, boolean status);
-
-    Optional<CardList> findByIdAndUserId(String id, String userId);
+    //Optional<CardList> findByIdAndUserId(String id, String userId);
+    boolean existsByIdAndUserId(String id, String userId);
 
     @Query("{'username': ?0}")
     Page<CardList> findByParameters(
@@ -25,6 +23,11 @@ public interface CardListRepository extends MongoRepository<CardList, String> {
             Pageable pageable
     );
 
-    void insertCardById(String cardListId, Card card);
-    void deleteCardById(String cardListId, String cardId);
+    @Query("{'name': {'$regex' : ?0}}")
+    Page<CardList> findByName(
+            String cardListName,
+            Pageable pageable
+    );
+
+    //boolean existsByIdAndCardsId(String id, String cardsId);
 }

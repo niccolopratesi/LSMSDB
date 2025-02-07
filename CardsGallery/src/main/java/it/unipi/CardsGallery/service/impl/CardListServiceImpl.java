@@ -1,13 +1,13 @@
 package it.unipi.CardsGallery.service.impl;
 
 import it.unipi.CardsGallery.DTO.*;
-import it.unipi.CardsGallery.model.mongo.Card;
 import it.unipi.CardsGallery.model.mongo.CardList;
-import it.unipi.CardsGallery.model.mongo.MagicCard;
+import it.unipi.CardsGallery.repository.mongo.CardListMongoTemplate;
 import it.unipi.CardsGallery.repository.mongo.CardListRepository;
 import it.unipi.CardsGallery.service.AuthenticationService;
 import it.unipi.CardsGallery.service.CardListService;
 import it.unipi.CardsGallery.service.exception.AuthenticationException;
+import it.unipi.CardsGallery.service.exception.ExistingEntityException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -25,7 +25,10 @@ public class CardListServiceImpl implements CardListService {
     private CardListRepository cardListRepository;
 
     @Autowired
-    AuthenticationService auth;
+    private AuthenticationService auth;
+
+    @Autowired
+    private CardListMongoTemplate cardListMongoTemplate;
 
     public CardListServiceImpl() {}
 
@@ -39,7 +42,7 @@ public class CardListServiceImpl implements CardListService {
     @Override
     public void updateCardList(UpdateCardListDTO list) throws AuthenticationException {
         auth.authenticate(list.getAuth());
-        cardListRepository.updateCardListStatus(list.getCardListId(),list.isStatus());
+        cardListMongoTemplate.updateCardListStatus(list.getCardListId(),list.isStatus());
     }
 
     @Override
@@ -48,6 +51,15 @@ public class CardListServiceImpl implements CardListService {
         auth.listOwnership(list.getAuth().getId(), list.getCardListId());
 
         cardListRepository.deleteById(list.getCardListId());
+    }
+
+    @Override
+    public List<CardList> searchCardList(String cardListName, int page, AuthDTO authdto) throws AuthenticationException {
+        auth.authenticate(authdto);
+
+        Pageable pageable = PageRequest.of(page, 3, Sort.by("id").ascending()); // Sorting optional
+        Page<CardList> result = cardListRepository.findByName(cardListName, pageable);
+        return result.getContent();
     }
 
     @Override
@@ -60,11 +72,13 @@ public class CardListServiceImpl implements CardListService {
     }
 
     @Override
-    public void insertIntoCardList(CardDTO card) throws AuthenticationException {
+    public void insertIntoCardList(CardDTO card) throws AuthenticationException, ExistingEntityException {
         auth.authenticate(card.getAuth());
         auth.listOwnership(card.getAuth().getId(), card.getCardListId());
-
-        cardListRepository.insertCardById(card.getCardListId(), card.getCard());
+        /*if(cardListRepository.existsByIdAndCardsId(card.getCardListId(),card.getCard().getId())) {
+            throw new ExistingEntityException("Card already in the card list");
+        }*/
+        cardListMongoTemplate.insertCardIntoCardList(card.getCardListId(), card.getCard());
     }
 
     @Override
@@ -72,6 +86,6 @@ public class CardListServiceImpl implements CardListService {
         auth.authenticate(card.getAuth());
         auth.listOwnership(card.getAuth().getId(), card.getCardListId());
 
-        cardListRepository.deleteCardById(card.getCardListId(),card.getCardId());
+        cardListMongoTemplate.removeCardFromCardList(card.getCardListId(),card.getCardId());
     }
 }
