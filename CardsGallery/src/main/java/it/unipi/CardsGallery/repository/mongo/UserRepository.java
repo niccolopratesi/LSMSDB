@@ -17,7 +17,9 @@ import java.util.Optional;
 @Repository
 public interface UserRepository extends MongoRepository<User, String> {
 
-    public Optional<User> findUserByUsernameAndPassword(String username, String password);
+    //public Optional<User> findUserByUsernameAndPassword(String username, String password);
+
+    public boolean existsUserByUsernameAndPassword(String username, String password);
 
     @Query("{'username': ?0}")
     public Optional<User> findUserByUsername(String username);
@@ -35,4 +37,12 @@ public interface UserRepository extends MongoRepository<User, String> {
     @Query("{ 'id': ?0 }")
     @Update("{ '$push': { 'posts': ?1 } }")
     void addPostToUser(String id, Post post);
+    //@Query("{'username': ?0}")
+    //public Optional<User> findUserByUsername(String username);
+
+    //@Query("{'username': ?0}")
+    public boolean existsUserByUsername(String username);
+
+    //@Query("{'_id': ?0, 'username': ?01, 'password':  ?2}")
+    boolean existsByIdAndUsernameAndPassword(String id, String username, String password);
 }

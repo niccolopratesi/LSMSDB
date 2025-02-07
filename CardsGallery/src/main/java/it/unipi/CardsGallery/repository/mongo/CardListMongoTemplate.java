@@ -21,7 +21,7 @@ public class CardListMongoTemplate {
 
         Update update = new Update().set("status", status);
 
-        mongoTemplate.updateFirst(query, update, User.class);
+        mongoTemplate.updateFirst(query, update, CardList.class);
     }
 
     public void insertCardIntoCardList(String cardListId, Card card){

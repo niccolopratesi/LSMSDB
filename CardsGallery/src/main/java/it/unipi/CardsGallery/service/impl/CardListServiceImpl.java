@@ -36,12 +36,15 @@ public class CardListServiceImpl implements CardListService {
     public void createCardList(CardListDTO list) throws AuthenticationException {
         auth.authenticate(list.getAuth());
         CardList cardList = new CardList(list.getCardListName(),list.isStatus(),new ArrayList<>(),list.getAuth().getId(),list.getAuth().getUsername());
+        cardList.setId(null);
         cardListRepository.save(cardList);
     }
 
     @Override
     public void updateCardList(UpdateCardListDTO list) throws AuthenticationException {
         auth.authenticate(list.getAuth());
+        auth.listOwnership(list.getAuth().getId(), list.getCardListId());
+
         cardListMongoTemplate.updateCardListStatus(list.getCardListId(),list.isStatus());
     }
 

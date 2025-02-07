@@ -10,6 +10,7 @@ import it.unipi.CardsGallery.service.AuthenticationService;
 import it.unipi.CardsGallery.service.CardListService;
 import it.unipi.CardsGallery.service.UserService;
 import it.unipi.CardsGallery.service.exception.AuthenticationException;
+import it.unipi.CardsGallery.service.exception.ExistingEntityException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -50,15 +51,14 @@ public class UserController {
     //!!! Logout dovrebbe essere gestito solo lato client se non abbiamo cookie !!!
 
     @GetMapping
-    public ResponseEntity<ResponseWrapper<Optional<User>>> profileUser(@RequestParam("username") String username) {
+    public ResponseEntity<ResponseWrapper<User>> profileUser(@RequestParam("username") String username) {
         try{
-            Optional<User> user = userService.profileUser(username);
-            if(user.isEmpty()){
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseWrapper<>("User not found",null));
-            }
+            User user = userService.profileUser(username);
             return ResponseEntity.ok(new ResponseWrapper<>("User found successfully",user));
         }catch(AuthenticationException e){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseWrapper<>("Username or Password wrong",null));
+        }catch(ExistingEntityException e){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseWrapper<>(e.getMessage(),null));
         }
     }
 
@@ -73,28 +73,24 @@ public class UserController {
     @DeleteMapping
     @ResponseBody
     public ResponseEntity<ResponseWrapper<Void>> deleteUser(@RequestBody AuthDTO authDTO) {
+        //!!! controllo che le codifiche hash siano uguali !!!
         try{
             userService.deleteUser(authDTO);
             return ResponseEntity.ok(new ResponseWrapper<>("Account deleted correctly",null));
         }catch(AuthenticationException e){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseWrapper<>("Account ownership failed",null));
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseWrapper<>(e.getMessage(),null));
         }
     }
 
     @PutMapping
     @ResponseBody
-    public String updateUser(@RequestBody User user) {
-
-        //!!! penso si possa lasciare tutto l'utente...è difficile sapere !!!
-        //!!! a priori quali campisaranno modificati=>come registrazione  !!!
-
-        //controllo che l'utente sia il propietario dell'account da aggiornare
-
-        //prelievo id user e modifiche da body
-
-        //update dati utente
-
-        return "Update successful";
+    public ResponseEntity<ResponseWrapper<Void>> updateUser(@RequestBody User user) {
+        try{
+            userService.updateUser(user);
+            return ResponseEntity.ok(new ResponseWrapper<>("Account updated correctly",null));
+        }catch(AuthenticationException e){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseWrapper<>(e.getMessage(),null));
+        }
     }
 
     @PostMapping("/follow")
