@@ -55,7 +55,7 @@ public class UserController {
         }catch(AuthenticationException e){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseWrapper<>("Username or Password wrong",null));
         }catch(ExistingEntityException e){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseWrapper<>(e.getMessage(),null));
+            return ResponseEntity.ok(new ResponseWrapper<>(e.getMessage(),null));
         }
     }
 

@@ -43,7 +43,7 @@ public class CardListController {
         try{
             cardListService.createCardList(cardListDTO);
             return ResponseEntity.ok(new ResponseWrapper<>("Card List created successfully",null));
-        }catch(Exception e){
+        }catch(AuthenticationException e){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseWrapper<>("Failed to create Card List",null));
         }
     }

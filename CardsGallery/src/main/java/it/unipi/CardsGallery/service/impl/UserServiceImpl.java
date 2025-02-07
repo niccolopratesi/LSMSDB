@@ -4,6 +4,7 @@ import it.unipi.CardsGallery.DTO.AuthDTO;
 import it.unipi.CardsGallery.DTO.LoginDTO;
 import it.unipi.CardsGallery.DTO.UpdateUserDTO;
 import it.unipi.CardsGallery.model.mongo.User;
+import it.unipi.CardsGallery.repository.mongo.CardListRepository;
 import it.unipi.CardsGallery.repository.mongo.UserRepository;
 import it.unipi.CardsGallery.service.AuthenticationService;
 import it.unipi.CardsGallery.service.UserService;
@@ -20,6 +21,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private CardListRepository cardListRepository;
 
     @Autowired
     private AuthenticationService auth;
@@ -40,6 +44,8 @@ public class UserServiceImpl implements UserService {
     public void deleteUser(AuthDTO authDTO) throws AuthenticationException {
         auth.accountOwnership(authDTO);
         userRepository.deleteById(authDTO.getId());
+        //delete all lists of this user
+        cardListRepository.deleteByUserId(authDTO.getId());
     }
 
     @Override
@@ -74,6 +80,10 @@ public class UserServiceImpl implements UserService {
         if(userDTO.getNewPassword() != null){
             //!!! hash pass !!!
             user.setPassword(userDTO.getNewPassword());
+        }
+        if(userDTO.getNewUsername() != null){
+            user.setUsername(userDTO.getNewUsername());
+            cardListRepository.updateUsername(user.getUsername(), userDTO.getNewUsername());
         }
         userRepository.save(user);
     }
