@@ -34,19 +34,17 @@ public interface UserRepository extends MongoRepository<User, String> {
     @Query("{ 'id': ?0 }")
     @Update("{ '$push': { 'posts': ?1 } }")
     void addPostToUser(String id, Post post);
-    //@Query("{'username': ?0}")
-    //public Optional<User> findUserByUsername(String username);
 
     @Query(value = "{ 'username': ?0}" , fields = "{'password': 0, 'admin': 0}")
     List<User> findUserByUsername(String username);
 
-    //@Query("{'username': ?0}")
     boolean existsUserByUsername(String username);
 
-    //@Query("{'_id': ?0, 'username': ?01, 'password':  ?2}")
-    //boolean existsByIdAndUsernameAndPassword(String id, String username, String password);
     @Query(value = "{ 'id': ?0,'username': ?1, 'password': ?2}" , fields = "{'admin': 1, 'id': 0}")
     Boolean findByIdAndUsernameAndPassword(String id, String username, String password);
+
+    @Query(value = "{ 'username': ?0, 'password': ?1}" , fields = "{'admin': 1, 'id': 0}")
+    Boolean findByUsernameAndPassword(String username, String password);
 
     boolean existsByUsernameAndPostsTitle(String username, String postTitle);
 

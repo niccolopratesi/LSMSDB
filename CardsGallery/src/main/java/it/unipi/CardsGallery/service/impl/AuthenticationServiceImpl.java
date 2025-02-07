@@ -7,6 +7,7 @@ import it.unipi.CardsGallery.repository.mongo.CardListRepository;
 import it.unipi.CardsGallery.repository.mongo.UserRepository;
 import it.unipi.CardsGallery.service.AuthenticationService;
 import it.unipi.CardsGallery.service.exception.AuthenticationException;
+import it.unipi.CardsGallery.service.exception.NoAdminException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -60,5 +61,14 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             throw new AuthenticationException("You are not the owner of the account");
         }
         return result;
+    }
+
+    @Override
+    public void authenticateAdmin(AuthDTO authDTO) throws AuthenticationException, NoAdminException {
+        Boolean isAdmin = userRepository.findByUsernameAndPassword(authDTO.getUsername(), authDTO.getPassword());
+        if(isAdmin == null)
+            throw new AuthenticationException("User not found");
+        if(!isAdmin)
+            throw new NoAdminException("User is not admin");
     }
 }

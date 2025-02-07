@@ -9,6 +9,8 @@ public class CommonConstants {
     final static public String DELETE_OK_MSG = "entity deleted successfully";
     final static public String NO_OWNER_MSG = "you are not the owner of the target entiy";
     final static public String ALREADY_EXISTS_MSG = "entity already exists";
+    final static public String NO_ADMIN_MSG = "you must be admin to do this";
+    final static public String UPDATE_OK_MSG = "entity updated successfully";
 
     final static public int PAGE_SIZE = 20;
 }

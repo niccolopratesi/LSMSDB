@@ -15,11 +15,11 @@ public class Card {
     private String id;
 
     private String name;
-    private String TCG; //enum????
+    private String TCG;
     private String printingSet;
 
     //dati utili per le query
-    private Integer pokedexNumber;
+    private int[] pokedexNumber;
 
     private List<String> colors;
 

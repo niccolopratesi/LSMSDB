@@ -48,5 +48,9 @@ public interface CardListRepository extends MongoRepository<CardList, String> {
     @Update("{ '$pull': { 'cards': {'id': ?1} } }")
     void removeCardFromCardList(String cardListId, String cardId);
 
+    @Query("{}")
+    @Update("{ '$pull': { 'cards': {'id': ?1} } }")
+    void removeCardFromAllCardList(String cardId);
+
     //boolean existsByIdAndCardsId(String id, String cardsId);
 }

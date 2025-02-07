@@ -1,5 +1,6 @@
 package it.unipi.CardsGallery.DTO;
 
+import it.unipi.CardsGallery.utilities.TCG;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -7,7 +8,8 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class AdminDeleteDTO {
+public class AdminCardNoFieldsDTO {
     private AuthDTO auth;
+    private TCG type;
     private String id;
 }
