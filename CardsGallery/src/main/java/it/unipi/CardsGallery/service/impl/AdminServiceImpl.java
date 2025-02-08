@@ -87,10 +87,23 @@ public class AdminServiceImpl implements AdminService {
         authenticationService.authenticateAdmin(authDTO);
         TCG type = adminCardDTO.getType();
         switch (type) {
-            case MAGIC -> magicCardMongoRepository.save(adminCardDTO.getMagic());
-            case POKEMON -> pokemonCardMongoRepository.save(adminCardDTO.getPokemon());
-            case YUGIOH -> yugiohCardMongoRepository.save(adminCardDTO.getYugioh());
-            default -> throw new ExistingEntityException("Invalid TCG type");
+            case MAGIC:
+            adminCardDTO.getMagic().setId(null);
+            magicCardMongoRepository.save(adminCardDTO.getMagic());
+            break;
+
+            case POKEMON:
+            adminCardDTO.getPokemon().setId(null);
+            pokemonCardMongoRepository.save(adminCardDTO.getPokemon());
+            break;
+
+            case YUGIOH:
+            adminCardDTO.getYugioh().setId(null);
+            yugiohCardMongoRepository.save(adminCardDTO.getYugioh());
+            break;
+
+            default:
+            throw new ExistingEntityException("Invalid TCG type");
         }
     }
 
