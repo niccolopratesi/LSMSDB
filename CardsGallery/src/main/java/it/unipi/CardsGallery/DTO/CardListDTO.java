@@ -10,5 +10,5 @@ import lombok.NoArgsConstructor;
 public class CardListDTO {
     private AuthDTO auth;
     private String cardListName;
-    private boolean status; //va messo in fase di creazione??
+    private boolean status;
 }

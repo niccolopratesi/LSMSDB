@@ -13,6 +13,6 @@ public interface UserService {
     public void insertUser(User user) throws AuthenticationException;
     public void deleteUser(AuthDTO authDTO) throws AuthenticationException;
     public void loginUser(LoginDTO loginDTO) throws AuthenticationException;
-    public void updateUser(UpdateUserDTO user) throws AuthenticationException;
+    public void updateUser(UpdateUserDTO user) throws AuthenticationException, ExistingEntityException;
     public User profileUser(String username) throws AuthenticationException, ExistingEntityException;
 }

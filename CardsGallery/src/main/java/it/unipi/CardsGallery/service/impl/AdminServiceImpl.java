@@ -7,7 +7,7 @@ import it.unipi.CardsGallery.service.AuthenticationService;
 import it.unipi.CardsGallery.service.exception.AuthenticationException;
 import it.unipi.CardsGallery.service.exception.ExistingEntityException;
 import it.unipi.CardsGallery.service.exception.NoAdminException;
-import it.unipi.CardsGallery.utilities.TCG;
+import it.unipi.CardsGallery.model.enums.TCG;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

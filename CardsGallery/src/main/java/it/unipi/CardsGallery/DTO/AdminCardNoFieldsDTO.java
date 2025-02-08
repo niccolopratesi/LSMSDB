@@ -1,6 +1,6 @@
 package it.unipi.CardsGallery.DTO;
 
-import it.unipi.CardsGallery.utilities.TCG;
+import it.unipi.CardsGallery.model.enums.TCG;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

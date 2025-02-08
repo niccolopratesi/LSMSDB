@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -45,7 +46,7 @@ public class UserServiceImpl implements UserService {
         auth.accountOwnership(authDTO);
         userRepository.deleteById(authDTO.getId());
         //delete all lists of this user
-        cardListRepository.deleteByUserId(authDTO.getId());
+        cardListRepository.deleteAllByUserId(authDTO.getId());
     }
 
     @Override
@@ -71,20 +72,36 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void updateUser(UpdateUserDTO userDTO) throws AuthenticationException {
+    public void updateUser(UpdateUserDTO userDTO) throws AuthenticationException, ExistingEntityException {
         //auth.accountOwnership(new AuthDTO(user.getUsername(),user.getPassword(), user.getId()));
         //!!! update password????? !!!
-        User user = userDTO.getUser();
-        user.setAdmin(auth.accountOwnership(new AuthDTO(user.getUsername(),user.getPassword(), user.getId())));
+
+        User user = userRepository.findById(userDTO.getAuth().getId()).orElse(null);
+        if(user == null) {
+            throw new ExistingEntityException("User not found");
+        }
+
+        // !!! hash password !!!
+        if(!user.getUsername().equals(userDTO.getAuth().getUsername()) || !user.getPassword().equals(userDTO.getAuth().getPassword())){
+            throw new AuthenticationException("Username or Password wrong");
+        }
 
         if(userDTO.getNewPassword() != null){
-            //!!! hash pass !!!
+            //!!! hash password !!!
             user.setPassword(userDTO.getNewPassword());
         }
         if(userDTO.getNewUsername() != null){
             user.setUsername(userDTO.getNewUsername());
             cardListRepository.updateUsername(user.getUsername(), userDTO.getNewUsername());
         }
+
+        user.setBirthDate(userDTO.getBirthDate());
+        user.setFirstName(userDTO.getFirstName());
+        user.setLastName(userDTO.getLastName());
+        user.setProfession(userDTO.getProfession());
+        user.setRegistrationDate(userDTO.getRegistrationDate());
+        user.setSex(userDTO.getSex());
+
         userRepository.save(user);
     }
 }
