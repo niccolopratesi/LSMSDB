@@ -40,10 +40,26 @@ public class AdminServiceImpl implements AdminService {
         TCG type = adminCardNoFieldsDTO.getType();
         String id = adminCardNoFieldsDTO.getId();
         switch (type) {
-            case MAGIC -> magicCardMongoRepository.deleteById(id);
-            case POKEMON -> pokemonCardMongoRepository.deleteById(id);
-            case YUGIOH -> yugiohCardMongoRepository.deleteById(id);
-            default -> throw new NoAdminException("Type not supported");
+            case MAGIC:
+            if(!magicCardMongoRepository.existsById(id))
+                throw new ExistingEntityException("magic card not found");
+            magicCardMongoRepository.deleteById(id);
+            break;
+
+            case POKEMON:
+            if(!pokemonCardMongoRepository.existsById(id))
+                throw new ExistingEntityException("pokemon card not found");
+            pokemonCardMongoRepository.deleteById(id);
+            break;
+
+            case YUGIOH:
+            if(!yugiohCardMongoRepository.existsById(id))
+                throw new ExistingEntityException("yugioh card not found");
+            yugiohCardMongoRepository.deleteById(id);
+            break;
+
+            default:
+            throw new NoAdminException("Type not supported");
         }
         cardListRepository.removeCardFromAllCardList(id, type);
     }
