@@ -30,9 +30,9 @@ public class YugiohCardController {
         List<YugiohCard> result = cardService.getYugiohCardByParameters(name, attribute, race, printing, page);
         String msg;
         if(result == null){
-            msg = CommonConstants.SEARCH_ERROR_MSG;
+            msg = "search failed";
         } else {
-            msg = result.isEmpty() ? CommonConstants.PAGE_EMPTY_MSG : CommonConstants.PAGE_OK_MSG;
+            msg = result.isEmpty() ? "search has no results" : "search completed successfully";
         }
         ResponseWrapper<List<YugiohCard>> response = new ResponseWrapper<>(msg, result);
         return ResponseEntity.ok(response);
@@ -41,7 +41,7 @@ public class YugiohCardController {
     @GetMapping
     public ResponseEntity<ResponseWrapper<List<YugiohCard>>> getPageCards(@RequestParam("page") int page) {
         List<YugiohCard> result = cardService.getYugiohCardPage(page);
-        String msg = result.isEmpty() ? CommonConstants.PAGE_EMPTY_MSG : CommonConstants.PAGE_OK_MSG;
+        String msg = result.isEmpty() ? "search has no results" : "search completed successfully";
         ResponseWrapper<List<YugiohCard>> response = new ResponseWrapper<>(msg, result);
         return ResponseEntity.ok(response);
     }

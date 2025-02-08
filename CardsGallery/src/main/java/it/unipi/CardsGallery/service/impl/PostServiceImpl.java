@@ -55,7 +55,7 @@ public class PostServiceImpl implements PostService {
         if(userRepository.existsByUsernameAndPostsTitle(dpDTO.getAuth().getUsername(), dpDTO.getPostTitle())){
             userRepository.deletePostFromUser(dpDTO.getAuth().getUsername(), dpDTO.getPostTitle());
         } else {
-            throw new OwnershipException("you are not the owner of the post!");
+            throw new OwnershipException("post not found");
         }
     }
 

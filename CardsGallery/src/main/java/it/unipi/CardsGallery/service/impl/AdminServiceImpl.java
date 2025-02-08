@@ -57,21 +57,21 @@ public class AdminServiceImpl implements AdminService {
         switch (type) {
             case MAGIC:
             id = adminCardDTO.getMagic().getId();
-            if(magicCardMongoRepository.existsById(id))
+            if(!magicCardMongoRepository.existsById(id))
                 throw new ExistingEntityException("Card not found");
             magicCardMongoRepository.save(adminCardDTO.getMagic());
             break;
 
             case POKEMON:
             id = adminCardDTO.getPokemon().getId();
-            if(pokemonCardMongoRepository.existsById(id))
+            if(!pokemonCardMongoRepository.existsById(id))
                 throw new ExistingEntityException("Card not found");
             pokemonCardMongoRepository.save(adminCardDTO.getPokemon());
             break;
 
             case YUGIOH:
             id = adminCardDTO.getYugioh().getId();
-            if(yugiohCardMongoRepository.existsById(id))
+            if(!yugiohCardMongoRepository.existsById(id))
                 throw new ExistingEntityException("Card not found");
             yugiohCardMongoRepository.save(adminCardDTO.getYugioh());
             break;

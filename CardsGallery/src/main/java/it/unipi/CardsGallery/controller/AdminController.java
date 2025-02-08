@@ -26,12 +26,8 @@ public class AdminController {
     public ResponseEntity<ResponseWrapper<Void>> newCard(@RequestBody AdminCardDTO dto) {
         try {
             adminService.insertCard(dto);
-            return ResponseEntity.ok(new ResponseWrapper<Void>(CommonConstants.CREATION_OK_MSG, null));
-        } catch (AuthenticationException e) {
-            return ResponseEntity.badRequest().body(new ResponseWrapper<Void>(CommonConstants.MUST_BE_LOGGED_MSG, null));
-        } catch (NoAdminException e) {
-            return ResponseEntity.badRequest().body(new ResponseWrapper<Void>(CommonConstants.NO_ADMIN_MSG, null));
-        } catch (ExistingEntityException e) {
+            return ResponseEntity.ok(new ResponseWrapper<Void>("card created successfully", null));
+        } catch (AuthenticationException | NoAdminException | ExistingEntityException e) {
             return ResponseEntity.badRequest().body(new ResponseWrapper<Void>(e.getMessage(), null));
         }
     }
@@ -41,12 +37,8 @@ public class AdminController {
     public ResponseEntity<ResponseWrapper<Void>> deleteCard(@RequestBody AdminCardNoFieldsDTO adminDelete) {
         try {
             adminService.deleteCard(adminDelete);
-            return ResponseEntity.ok(new ResponseWrapper<Void>(CommonConstants.DELETE_OK_MSG, null));
-        } catch (AuthenticationException e) {
-            return ResponseEntity.badRequest().body(new ResponseWrapper<Void>(CommonConstants.MUST_BE_LOGGED_MSG, null));
-        } catch (NoAdminException e) {
-            return ResponseEntity.badRequest().body(new ResponseWrapper<Void>(CommonConstants.NO_ADMIN_MSG, null));
-        } catch (ExistingEntityException e){
+            return ResponseEntity.ok(new ResponseWrapper<Void>("card deleted successfully", null));
+        } catch (AuthenticationException | NoAdminException | ExistingEntityException e) {
             return ResponseEntity.badRequest().body(new ResponseWrapper<Void>(e.getMessage(), null));
         }
     }
@@ -56,12 +48,8 @@ public class AdminController {
     public ResponseEntity<ResponseWrapper<Void>> updateCard(@RequestBody AdminCardDTO adminCardDTO) {
         try {
             adminService.updateCard(adminCardDTO);
-            return ResponseEntity.ok(new ResponseWrapper<Void>(CommonConstants.UPDATE_OK_MSG, null));
-        } catch (AuthenticationException e) {
-            return ResponseEntity.badRequest().body(new ResponseWrapper<Void>(CommonConstants.MUST_BE_LOGGED_MSG, null));
-        } catch (NoAdminException e) {
-            return ResponseEntity.badRequest().body(new ResponseWrapper<Void>(CommonConstants.NO_ADMIN_MSG, null));
-        } catch (ExistingEntityException e){
+            return ResponseEntity.ok(new ResponseWrapper<Void>("card updated successfully", null));
+        } catch (AuthenticationException | NoAdminException | ExistingEntityException e) {
             return ResponseEntity.badRequest().body(new ResponseWrapper<Void>(e.getMessage(), null));
         }
     }
@@ -71,12 +59,8 @@ public class AdminController {
     public ResponseEntity<ResponseWrapper<Void>> deleteUser(@RequestBody UserDTO dto) {
         try {
             adminService.deleteUser(dto);
-            return ResponseEntity.ok(new ResponseWrapper<Void>(CommonConstants.DELETE_OK_MSG, null));
-        } catch (AuthenticationException e) {
-            return ResponseEntity.badRequest().body(new ResponseWrapper<Void>(CommonConstants.MUST_BE_LOGGED_MSG, null));
-        } catch (NoAdminException e) {
-            return ResponseEntity.badRequest().body(new ResponseWrapper<Void>(CommonConstants.NO_ADMIN_MSG, null));
-        } catch (ExistingEntityException e){
+            return ResponseEntity.ok(new ResponseWrapper<Void>("user deleted successfully", null));
+        } catch (AuthenticationException | NoAdminException | ExistingEntityException e) {
             return ResponseEntity.badRequest().body(new ResponseWrapper<Void>(e.getMessage(), null));
         }
     }
@@ -86,11 +70,9 @@ public class AdminController {
     public ResponseEntity<ResponseWrapper<Void>> deletePost(@RequestBody DeletePostDTO dto) {
         try {
             adminService.deletePost(dto);
-            return ResponseEntity.ok(new ResponseWrapper<>(CommonConstants.DELETE_OK_MSG, null));
-        } catch (AuthenticationException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseWrapper<>(CommonConstants.MUST_BE_LOGGED_MSG, null));
-        } catch (NoAdminException e) {
-            return ResponseEntity.badRequest().body(new ResponseWrapper<Void>(CommonConstants.NO_ADMIN_MSG, null));
+            return ResponseEntity.ok(new ResponseWrapper<>("post deleted successfully", null));
+        } catch (AuthenticationException | NoAdminException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseWrapper<>(e.getMessage(), null));
         }
     }
 }

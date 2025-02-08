@@ -85,7 +85,7 @@ public class UserController {
         try{
             userService.updateUser(user);
             return ResponseEntity.ok(new ResponseWrapper<>("Account updated correctly",null));
-        }catch(AuthenticationException e){
+        }catch(AuthenticationException | ExistingEntityException e){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseWrapper<>(e.getMessage(),null));
         }
     }

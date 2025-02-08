@@ -29,9 +29,9 @@ public class MagicCardController {
         List<MagicCard> result = cardService.getMagicCardByParameters(name, type, firstPrinting, manaCost, page);
         String msg;
         if(result == null){
-            msg = CommonConstants.SEARCH_ERROR_MSG;
+            msg = "error on search";
         } else {
-            msg = result.isEmpty() ? CommonConstants.PAGE_EMPTY_MSG : CommonConstants.PAGE_OK_MSG;
+            msg = result.isEmpty() ? "search has no results" : "search completed successfully";
         }
         ResponseWrapper<List<MagicCard>> response = new ResponseWrapper<>(msg, result);
         return ResponseEntity.ok(response);
@@ -40,7 +40,7 @@ public class MagicCardController {
     @GetMapping
     public ResponseEntity<ResponseWrapper<List<MagicCard>>> getPageCards(@RequestParam("page") int page) {
         List<MagicCard> result = cardService.getMagicCardPage(page);
-        String msg = result.isEmpty() ? CommonConstants.PAGE_EMPTY_MSG : CommonConstants.PAGE_OK_MSG;
+        String msg = result.isEmpty() ? "search has no results" : "search completed successfully";
         ResponseWrapper<List<MagicCard>> response = new ResponseWrapper<>(msg, result);
         return ResponseEntity.ok(response);
     }

@@ -31,9 +31,9 @@ public class PokemonCardController {
         List<PokemonCard> result = cardService.getPokemonCardByParameters(name, rarity, set, artist, page);
         String msg;
         if(result == null){
-            msg = CommonConstants.SEARCH_ERROR_MSG;
+            msg = "search failed";
         } else {
-            msg = result.isEmpty() ? CommonConstants.PAGE_EMPTY_MSG : CommonConstants.PAGE_OK_MSG;
+            msg = result.isEmpty() ? "search has no results" : "search completed successfully";
         }
         ResponseWrapper<List<PokemonCard>> response = new ResponseWrapper<>(msg, result);
         return ResponseEntity.ok(response);
@@ -42,7 +42,7 @@ public class PokemonCardController {
     @GetMapping
     public ResponseEntity<ResponseWrapper<List<PokemonCard>>> getPageCards(@RequestParam("page") int page) {
         List<PokemonCard> result = cardService.getPokemonCardPage(page);
-        String msg = result.isEmpty() ? CommonConstants.PAGE_EMPTY_MSG : CommonConstants.PAGE_OK_MSG;
+        String msg = result.isEmpty() ? "search has no result" : "search completed successfully";
         ResponseWrapper<List<PokemonCard>> response = new ResponseWrapper<>(msg, result);
         return ResponseEntity.ok(response);
     }
