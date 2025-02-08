@@ -1,7 +1,6 @@
 package it.unipi.CardsGallery.controller;
 
 
-import it.unipi.CardsGallery.CommonConstants;
 import it.unipi.CardsGallery.DTO.*;
 import it.unipi.CardsGallery.service.AdminService;
 import it.unipi.CardsGallery.service.exception.AuthenticationException;

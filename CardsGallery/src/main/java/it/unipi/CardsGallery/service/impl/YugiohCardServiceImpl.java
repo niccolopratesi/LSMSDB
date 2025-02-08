@@ -1,9 +1,9 @@
 package it.unipi.CardsGallery.service.impl;
 
-import it.unipi.CardsGallery.CommonConstants;
 import it.unipi.CardsGallery.model.mongo.YugiohCard;
 import it.unipi.CardsGallery.repository.mongo.YugiohCardMongoRepository;
 import it.unipi.CardsGallery.service.YugiohCardService;
+import it.unipi.CardsGallery.utilities.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -35,7 +35,7 @@ public class YugiohCardServiceImpl implements YugiohCardService {
             Optional<String> printing,
             int page
     ) {
-        Pageable pageable = PageRequest.of(page, CommonConstants.PAGE_SIZE, Sort.by("id").ascending()); // Sorting optional
+        Pageable pageable = PageRequest.of(page, Constants.PAGE_SIZE, Sort.by("id").ascending()); // Sorting optional
 
         String n = name.orElse(".*");
         String a = attribute.orElse(".*");

@@ -1,6 +1,5 @@
 package it.unipi.CardsGallery.controller;
 
-import it.unipi.CardsGallery.CommonConstants;
 import it.unipi.CardsGallery.DTO.ResponseWrapper;
 import it.unipi.CardsGallery.model.mongo.MagicCard;
 import it.unipi.CardsGallery.service.MagicCardService;

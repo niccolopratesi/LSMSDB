@@ -1,10 +1,7 @@
 package it.unipi.CardsGallery.controller;
 
-import it.unipi.CardsGallery.CommonConstants;
 import it.unipi.CardsGallery.DTO.ResponseWrapper;
-import it.unipi.CardsGallery.model.mongo.MagicCard;
 import it.unipi.CardsGallery.model.mongo.PokemonCard;
-import it.unipi.CardsGallery.service.MagicCardService;
 import it.unipi.CardsGallery.service.PokemonCardService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

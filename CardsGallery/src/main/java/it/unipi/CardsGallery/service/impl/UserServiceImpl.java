@@ -6,6 +6,7 @@ import it.unipi.CardsGallery.DTO.UpdateUserDTO;
 import it.unipi.CardsGallery.model.mongo.User;
 import it.unipi.CardsGallery.repository.mongo.CardListRepository;
 import it.unipi.CardsGallery.repository.mongo.UserRepository;
+import it.unipi.CardsGallery.repository.neo4j.UserNodeRepository;
 import it.unipi.CardsGallery.service.AuthenticationService;
 import it.unipi.CardsGallery.service.UserService;
 import it.unipi.CardsGallery.service.exception.AuthenticationException;
@@ -25,6 +26,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private CardListRepository cardListRepository;
+
+    @Autowired
+    private UserNodeRepository userNodeRepository;
 
     @Autowired
     private AuthenticationService auth;

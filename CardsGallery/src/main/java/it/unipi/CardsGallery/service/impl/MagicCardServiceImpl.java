@@ -1,9 +1,9 @@
 package it.unipi.CardsGallery.service.impl;
 
-import it.unipi.CardsGallery.CommonConstants;
 import it.unipi.CardsGallery.model.mongo.MagicCard;
 import it.unipi.CardsGallery.repository.mongo.MagicCardMongoRepository;
 import it.unipi.CardsGallery.service.MagicCardService;
+import it.unipi.CardsGallery.utilities.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -11,7 +11,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,7 +22,7 @@ public class MagicCardServiceImpl implements MagicCardService {
 
     @Override
     public List<MagicCard> getMagicCardPage(int page) {
-        Pageable pageable = PageRequest.of(page, CommonConstants.PAGE_SIZE, Sort.by("id").ascending()); // Sorting optional
+        Pageable pageable = PageRequest.of(page, Constants.PAGE_SIZE, Sort.by("id").ascending()); // Sorting optional
         Page<MagicCard> result = magicCardMongoRepository.findAll(pageable);
         return result.getContent();
     }

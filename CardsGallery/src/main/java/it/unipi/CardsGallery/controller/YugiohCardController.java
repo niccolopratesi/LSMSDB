@@ -1,8 +1,6 @@
 package it.unipi.CardsGallery.controller;
 
-import it.unipi.CardsGallery.CommonConstants;
 import it.unipi.CardsGallery.DTO.ResponseWrapper;
-import it.unipi.CardsGallery.model.mongo.YugiohCard;
 import it.unipi.CardsGallery.model.mongo.YugiohCard;
 import it.unipi.CardsGallery.service.YugiohCardService;
 import org.springframework.beans.factory.annotation.Autowired;
