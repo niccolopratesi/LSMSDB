@@ -54,7 +54,7 @@ public interface CardListRepository extends MongoRepository<CardList, String> {
 
     /*@Query("{ 'userId': ?0 }")
       @Update("{ '$pull' }")*/
-    void deleteByUserId(String userId);
+    void deleteAllByUserId(String userId);
 
     @Query("{ 'username': ?0 }")
     @Update("{ '$set': { 'username': ?1} }")

@@ -5,11 +5,20 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Date;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class UpdateUserDTO {
-    String newUsername;
-    String newPassword;
-    User user;
+    private String newUsername;
+    private String newPassword;
+
+    private AuthDTO auth;
+    private String firstName;
+    private String lastName;
+    private char sex;
+    private Date birthDate;
+    private Date registrationDate;
+    private String profession;
 }

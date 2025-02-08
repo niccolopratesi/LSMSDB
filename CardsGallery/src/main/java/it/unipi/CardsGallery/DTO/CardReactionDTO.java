@@ -1,5 +1,6 @@
 package it.unipi.CardsGallery.DTO;
 
+import it.unipi.CardsGallery.model.enums.TCG;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -10,6 +11,6 @@ import lombok.NoArgsConstructor;
 public class CardReactionDTO {
     private AuthDTO auth;
     private String cardId;
-    private String TCG; //enum???
+    private TCG type;
     private String typeReaction; //enum???
 }
