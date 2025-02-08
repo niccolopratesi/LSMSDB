@@ -1,6 +1,7 @@
 package it.unipi.CardsGallery.service.impl;
 
 import it.unipi.CardsGallery.DTO.*;
+import it.unipi.CardsGallery.model.enums.TCG;
 import it.unipi.CardsGallery.model.mongo.CardList;
 import it.unipi.CardsGallery.repository.mongo.CardListRepository;
 import it.unipi.CardsGallery.service.AuthenticationService;
@@ -29,8 +30,11 @@ public class CardListServiceImpl implements CardListService {
     public CardListServiceImpl() {}
 
     @Override
-    public void createCardList(CardListDTO list) throws AuthenticationException {
-        auth.authenticate(list.getAuth());
+    public void createCardList(CardListDTO list) throws AuthenticationException, ExistingEntityException {
+        if(list.getCardListName() == null || list.getCardListName().trim().equals("")) {
+            throw new ExistingEntityException("Please enter card list name");
+        }
+        auth.accountOwnership(list.getAuth());
         CardList cardList = new CardList(list.getCardListName(),list.isStatus(),new ArrayList<>(),list.getAuth().getId(),list.getAuth().getUsername());
         cardList.setId(null);
         cardListRepository.save(cardList);
@@ -87,6 +91,26 @@ public class CardListServiceImpl implements CardListService {
             throw new ExistingEntityException("Card already in the card list");
         }*/
         //cardListMongoTemplate.insertCardIntoCardList(card.getCardListId(), card.getCard());
+
+        switch (card.getCard().getTcg()) {
+            case MAGIC:
+                card.getCard().setType(null);
+                card.getCard().setAttribute(null);
+                card.getCard().setPokedexNumber(null);
+                break;
+            case POKEMON:
+                card.getCard().setType(null);
+                card.getCard().setAttribute(null);
+                card.getCard().setColors(null);
+                break;
+            case YUGIOH:
+                card.getCard().setPokedexNumber(null);
+                card.getCard().setColors(null);
+                break;
+            default:
+                throw new ExistingEntityException("Please enter card's Tcg correctly");
+        }
+
         cardListRepository.insertCardIntoCardList(card.getCardListId(), card.getCard());
     }
 

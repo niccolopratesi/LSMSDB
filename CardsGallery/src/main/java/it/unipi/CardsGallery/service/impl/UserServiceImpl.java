@@ -44,9 +44,9 @@ public class UserServiceImpl implements UserService {
     @Override
     public void deleteUser(AuthDTO authDTO) throws AuthenticationException {
         auth.accountOwnership(authDTO);
-        userRepository.deleteById(authDTO.getId());
         //delete all lists of this user
         cardListRepository.deleteAllByUserId(authDTO.getId());
+        userRepository.deleteById(authDTO.getId());
     }
 
     @Override
@@ -65,7 +65,7 @@ public class UserServiceImpl implements UserService {
         //auth.authenticate(authDTO);
         //User user = userMongoTemplate.findUserByUsername(username);
         List<User> user = userRepository.findUserByUsername(username);
-        if(user == null) {
+        if(user.isEmpty()) {
             throw new ExistingEntityException("User not found");
         }
         return user.get(0);
@@ -83,7 +83,7 @@ public class UserServiceImpl implements UserService {
 
         // !!! hash password !!!
         if(!user.getUsername().equals(userDTO.getAuth().getUsername()) || !user.getPassword().equals(userDTO.getAuth().getPassword())){
-            throw new AuthenticationException("Username or Password wrong");
+            throw new AuthenticationException("You are not the owner of the account");
         }
 
         if(userDTO.getNewPassword() != null){
@@ -91,8 +91,8 @@ public class UserServiceImpl implements UserService {
             user.setPassword(userDTO.getNewPassword());
         }
         if(userDTO.getNewUsername() != null){
-            user.setUsername(userDTO.getNewUsername());
             cardListRepository.updateUsername(user.getUsername(), userDTO.getNewUsername());
+            user.setUsername(userDTO.getNewUsername());
         }
 
         user.setBirthDate(userDTO.getBirthDate());

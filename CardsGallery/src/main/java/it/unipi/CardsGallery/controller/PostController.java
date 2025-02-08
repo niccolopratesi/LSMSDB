@@ -26,7 +26,7 @@ public class PostController {
     @Autowired
     private PostService postService;
 
-    @GetMapping("/")
+    @GetMapping
     public ResponseEntity<ResponseWrapper<List<Post>>> postsUser (
             @RequestParam(required = true) String username,
             @RequestParam(defaultValue = "0") int page
@@ -36,7 +36,7 @@ public class PostController {
         return ResponseEntity.ok(new ResponseWrapper<>(msg, posts));
     }
 
-    @PostMapping("/create")
+    @PostMapping
     @ResponseBody
     public ResponseEntity<ResponseWrapper<Void>> createPost (@RequestBody PostDTO postDTO) {
         try{

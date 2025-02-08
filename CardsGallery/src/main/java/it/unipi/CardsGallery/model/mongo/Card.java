@@ -1,5 +1,6 @@
 package it.unipi.CardsGallery.model.mongo;
 
+import it.unipi.CardsGallery.model.enums.TCG;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -15,7 +16,7 @@ public class Card {
     private String id;
 
     private String name;
-    private String TCG;
+    private TCG tcg;
     private String printingSet;
 
     //dati utili per le query

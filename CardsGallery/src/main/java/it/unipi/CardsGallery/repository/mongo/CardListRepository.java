@@ -1,5 +1,6 @@
 package it.unipi.CardsGallery.repository.mongo;
 
+import it.unipi.CardsGallery.model.enums.TCG;
 import it.unipi.CardsGallery.model.mongo.Card;
 import it.unipi.CardsGallery.model.mongo.CardList;
 import it.unipi.CardsGallery.model.mongo.MagicCard;
@@ -49,8 +50,8 @@ public interface CardListRepository extends MongoRepository<CardList, String> {
     void removeCardFromCardList(String cardListId, String cardId);
 
     @Query("{}")
-    @Update("{ '$pull': { 'cards': {'id': ?1} } }")
-    void removeCardFromAllCardList(String cardId);
+    @Update("{ '$pull': { 'cards': {'id': ?0, 'tcg': ?1} } }")
+    void removeCardFromAllCardList(String cardId, TCG type);
 
     /*@Query("{ 'userId': ?0 }")
       @Update("{ '$pull' }")*/

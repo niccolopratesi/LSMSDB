@@ -1,6 +1,7 @@
 package it.unipi.CardsGallery.model.mongo;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import it.unipi.CardsGallery.model.enums.TCG;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -14,13 +15,9 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Post {
-    @Id
-    @GeneratedValue
-    private String id;
-
     private String title;
     private String text;
-    private int cardId;
-    private String TCG; //enum????
+    private String cardId;
+    private TCG type; //enum????
     private Date creationDate;
 }

@@ -45,6 +45,9 @@ public class CardListController {
             return ResponseEntity.ok(new ResponseWrapper<>("Card List created successfully",null));
         }catch(AuthenticationException e){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseWrapper<>("Failed to create Card List",null));
+        }catch(ExistingEntityException e){
+            return ResponseEntity.ok(new ResponseWrapper<>(e.getMessage(),null));
+
         }
     }
 

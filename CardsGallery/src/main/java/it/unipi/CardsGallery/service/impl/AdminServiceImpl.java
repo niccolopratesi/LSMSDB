@@ -45,7 +45,7 @@ public class AdminServiceImpl implements AdminService {
             case YUGIOH -> yugiohCardMongoRepository.deleteById(id);
             default -> throw new NoAdminException("Type not supported");
         }
-        cardListRepository.removeCardFromAllCardList(id);
+        cardListRepository.removeCardFromAllCardList(id, type);
     }
 
     @Override
