@@ -1,9 +1,6 @@
 package it.unipi.CardsGallery.service.impl;
 
-import it.unipi.CardsGallery.DTO.AdminCardNoFieldsDTO;
-import it.unipi.CardsGallery.DTO.AdminCardDTO;
-import it.unipi.CardsGallery.DTO.AuthDTO;
-import it.unipi.CardsGallery.DTO.DeletePostDTO;
+import it.unipi.CardsGallery.DTO.*;
 import it.unipi.CardsGallery.repository.mongo.*;
 import it.unipi.CardsGallery.service.AdminService;
 import it.unipi.CardsGallery.service.AuthenticationService;
@@ -60,21 +57,21 @@ public class AdminServiceImpl implements AdminService {
         switch (type) {
             case MAGIC:
             id = adminCardDTO.getMagic().getId();
-            if(magicCardMongoRepository.findById(id).isEmpty())
+            if(magicCardMongoRepository.existsById(id))
                 throw new ExistingEntityException("Card not found");
             magicCardMongoRepository.save(adminCardDTO.getMagic());
             break;
 
             case POKEMON:
             id = adminCardDTO.getPokemon().getId();
-            if(pokemonCardMongoRepository.findById(id).isEmpty())
+            if(pokemonCardMongoRepository.existsById(id))
                 throw new ExistingEntityException("Card not found");
             pokemonCardMongoRepository.save(adminCardDTO.getPokemon());
             break;
 
             case YUGIOH:
             id = adminCardDTO.getYugioh().getId();
-            if(yugiohCardMongoRepository.findById(id).isEmpty())
+            if(yugiohCardMongoRepository.existsById(id))
                 throw new ExistingEntityException("Card not found");
             yugiohCardMongoRepository.save(adminCardDTO.getYugioh());
             break;
@@ -82,7 +79,19 @@ public class AdminServiceImpl implements AdminService {
             default:
                 throw new ExistingEntityException("Invalid TCG type");
         }
+    }
 
+    @Override
+    public void insertCard(AdminCardDTO adminCardDTO) throws AuthenticationException, NoAdminException, ExistingEntityException {
+        AuthDTO authDTO = adminCardDTO.getAuth();
+        authenticationService.authenticateAdmin(authDTO);
+        TCG type = adminCardDTO.getType();
+        switch (type) {
+            case MAGIC -> magicCardMongoRepository.save(adminCardDTO.getMagic());
+            case POKEMON -> pokemonCardMongoRepository.save(adminCardDTO.getPokemon());
+            case YUGIOH -> yugiohCardMongoRepository.save(adminCardDTO.getYugioh());
+            default -> throw new ExistingEntityException("Invalid TCG type");
+        }
     }
 
     @Override
@@ -90,5 +99,15 @@ public class AdminServiceImpl implements AdminService {
         AuthDTO authDTO = dpDTO.getAuth();
         authenticationService.authenticateAdmin(authDTO);
         userRepository.deletePostFromUser(dpDTO.getAuth().getUsername(), dpDTO.getPostTitle());
+    }
+
+    @Override
+    public void deleteUser(UserDTO dto) throws AuthenticationException, NoAdminException, ExistingEntityException {
+        AuthDTO authDTO = dto.getAuth();
+        authenticationService.authenticateAdmin(authDTO);
+        if(!userRepository.existsUserByUsername(dto.getUsername()))
+            throw new ExistingEntityException("User not found");
+        userRepository.deleteByUsername(dto.getUsername());
+        cardListRepository.deleteAllByUsername(dto.getUsername());
     }
 }

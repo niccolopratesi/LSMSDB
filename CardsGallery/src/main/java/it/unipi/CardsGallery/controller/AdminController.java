@@ -23,11 +23,17 @@ public class AdminController {
 
     @PostMapping("/card")
     @ResponseBody
-    public String newCard(@RequestBody AdminCardNoFieldsDTO adminCardNoFieldsDTO) {
-
-        //...
-
-        return "New Card";
+    public ResponseEntity<ResponseWrapper<Void>> newCard(@RequestBody AdminCardDTO dto) {
+        try {
+            adminService.insertCard(dto);
+            return ResponseEntity.ok(new ResponseWrapper<Void>(CommonConstants.CREATION_OK_MSG, null));
+        } catch (AuthenticationException e) {
+            return ResponseEntity.badRequest().body(new ResponseWrapper<Void>(CommonConstants.MUST_BE_LOGGED_MSG, null));
+        } catch (NoAdminException e) {
+            return ResponseEntity.badRequest().body(new ResponseWrapper<Void>(CommonConstants.NO_ADMIN_MSG, null));
+        } catch (ExistingEntityException e) {
+            return ResponseEntity.badRequest().body(new ResponseWrapper<Void>(e.getMessage(), null));
+        }
     }
 
     @DeleteMapping("/card")
@@ -62,11 +68,17 @@ public class AdminController {
 
     @DeleteMapping("/user")
     @ResponseBody
-    public String deleteUser(@RequestBody AdminCardNoFieldsDTO adminDelete) {
-
-        //...
-
-        return "Delete User";
+    public ResponseEntity<ResponseWrapper<Void>> deleteUser(@RequestBody UserDTO dto) {
+        try {
+            adminService.deleteUser(dto);
+            return ResponseEntity.ok(new ResponseWrapper<Void>(CommonConstants.DELETE_OK_MSG, null));
+        } catch (AuthenticationException e) {
+            return ResponseEntity.badRequest().body(new ResponseWrapper<Void>(CommonConstants.MUST_BE_LOGGED_MSG, null));
+        } catch (NoAdminException e) {
+            return ResponseEntity.badRequest().body(new ResponseWrapper<Void>(CommonConstants.NO_ADMIN_MSG, null));
+        } catch (ExistingEntityException e){
+            return ResponseEntity.badRequest().body(new ResponseWrapper<Void>(e.getMessage(), null));
+        }
     }
 
     @DeleteMapping("/post")

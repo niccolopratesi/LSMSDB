@@ -61,4 +61,6 @@ public interface CardListRepository extends MongoRepository<CardList, String> {
     void updateUsername(String oldUsername, String newUsername);
 
     //boolean existsByIdAndCardsId(String id, String cardsId);
+
+    void deleteAllByUsername(String username);
 }

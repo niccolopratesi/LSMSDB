@@ -56,18 +56,20 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         /*if(!userRepository.existsByIdAndUsernameAndPassword(authDTO.getId(),authDTO.getUsername(),authDTO.getPassword())) {
             throw new AuthenticationException("You are not the owner of the account");
         }*/
-        Boolean result = userRepository.findByIdAndUsernameAndPassword(authDTO.getId(),authDTO.getUsername(),authDTO.getPassword());
+        User result = userRepository.findByIdAndUsernameAndPassword(authDTO.getId(),authDTO.getUsername(),authDTO.getPassword());
         if(result == null) {
             throw new AuthenticationException("You are not the owner of the account");
         }
-        return result;
+        boolean isAdmin = result.getAdmin();
+        return isAdmin;
     }
 
     @Override
     public void authenticateAdmin(AuthDTO authDTO) throws AuthenticationException, NoAdminException {
-        Boolean isAdmin = userRepository.findByUsernameAndPassword(authDTO.getUsername(), authDTO.getPassword());
-        if(isAdmin == null)
+        User u = userRepository.findByUsernameAndPassword(authDTO.getUsername(), authDTO.getPassword());
+        if(u == null)
             throw new AuthenticationException("User not found");
+        boolean isAdmin = u.getAdmin();
         if(!isAdmin)
             throw new NoAdminException("User is not admin");
     }
