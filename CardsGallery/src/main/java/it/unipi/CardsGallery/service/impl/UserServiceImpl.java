@@ -3,7 +3,11 @@ package it.unipi.CardsGallery.service.impl;
 import it.unipi.CardsGallery.DTO.AuthDTO;
 import it.unipi.CardsGallery.DTO.LoginDTO;
 import it.unipi.CardsGallery.DTO.UpdateUserDTO;
+import it.unipi.CardsGallery.model.enums.RequestType;
 import it.unipi.CardsGallery.model.mongo.User;
+import it.unipi.CardsGallery.model.neo4j.UserNode;
+import it.unipi.CardsGallery.pendingRequests.PendingRequests;
+import it.unipi.CardsGallery.pendingRequests.Request;
 import it.unipi.CardsGallery.repository.mongo.CardListRepository;
 import it.unipi.CardsGallery.repository.mongo.UserRepository;
 import it.unipi.CardsGallery.repository.neo4j.UserNodeRepository;
@@ -16,7 +20,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -43,6 +46,9 @@ public class UserServiceImpl implements UserService {
         user.setId(null);
         user.setPosts(new ArrayList<>());
         userRepository.save(user);
+
+        UserNode userNode = new UserNode(user.getUsername());
+        PendingRequests.pendingRequests.add(new Request(RequestType.CREATE, userNode));
     }
 
     @Override
@@ -51,6 +57,9 @@ public class UserServiceImpl implements UserService {
         //delete all lists of this user
         cardListRepository.deleteAllByUserId(authDTO.getId());
         userRepository.deleteById(authDTO.getId());
+
+        UserNode userNode = new UserNode(authDTO.getUsername());
+        PendingRequests.pendingRequests.add(new Request(RequestType.DELETE, userNode));
     }
 
     @Override

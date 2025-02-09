@@ -17,7 +17,7 @@ import java.util.Optional;
 @Service
 public class PokemonCardServiceImpl implements PokemonCardService {
     @Autowired
-    PokemonCardMongoRepository pokemonCardMongoRepository;
+    private PokemonCardMongoRepository pokemonCardMongoRepository;
 
     @Override
     public List<PokemonCard> getPokemonCardPage(int page) {

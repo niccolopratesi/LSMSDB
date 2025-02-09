@@ -2,8 +2,14 @@ package it.unipi.CardsGallery.service.impl;
 
 import it.unipi.CardsGallery.DTO.DeletePostDTO;
 import it.unipi.CardsGallery.DTO.PostDTO;
+import it.unipi.CardsGallery.model.enums.RequestType;
 import it.unipi.CardsGallery.model.mongo.Post;
+import it.unipi.CardsGallery.model.neo4j.PostNode;
+import it.unipi.CardsGallery.model.neo4j.UserNode;
+import it.unipi.CardsGallery.pendingRequests.PendingRequests;
+import it.unipi.CardsGallery.pendingRequests.Request;
 import it.unipi.CardsGallery.repository.mongo.UserRepository;
+import it.unipi.CardsGallery.repository.neo4j.UserNodeRepository;
 import it.unipi.CardsGallery.service.AuthenticationService;
 import it.unipi.CardsGallery.service.PostService;
 import it.unipi.CardsGallery.service.exception.AuthenticationException;
@@ -24,6 +30,9 @@ public class PostServiceImpl implements PostService {
     private UserRepository userRepository;
 
     @Autowired
+    private UserNodeRepository userNodeRepository;
+
+    @Autowired
     private AuthenticationService authenticationService;
 
     @Override
@@ -42,6 +51,12 @@ public class PostServiceImpl implements PostService {
             throw new ExistingEntityException("post already exists");
         }
         userRepository.addPostToUser(id, post);
+
+        UserNode user = userNodeRepository.findByUsername(postDTO.getAuth().getUsername()).get(0);
+        if(user != null) {
+            PostNode postNode = new PostNode(post.getTitle(), user);
+            PendingRequests.pendingRequests.add(new Request(RequestType.CREATE, postNode));
+        }
     }
 
     @Override

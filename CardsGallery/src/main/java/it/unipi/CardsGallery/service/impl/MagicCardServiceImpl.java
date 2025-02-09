@@ -18,7 +18,7 @@ import java.util.Optional;
 public class MagicCardServiceImpl implements MagicCardService {
 
     @Autowired
-    MagicCardMongoRepository magicCardMongoRepository;
+    private MagicCardMongoRepository magicCardMongoRepository;
 
     @Override
     public List<MagicCard> getMagicCardPage(int page) {

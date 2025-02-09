@@ -18,7 +18,7 @@ import java.util.Optional;
 public class YugiohCardServiceImpl implements YugiohCardService {
 
     @Autowired
-    YugiohCardMongoRepository yugiohCardMongoRepository;
+    private YugiohCardMongoRepository yugiohCardMongoRepository;
 
     @Override
     public List<YugiohCard> getYugiohCardPage(int page) {

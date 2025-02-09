@@ -15,22 +15,22 @@ import org.springframework.stereotype.Service;
 public class AdminServiceImpl implements AdminService {
 
     @Autowired
-    AuthenticationService authenticationService;
+    private AuthenticationService authenticationService;
 
     @Autowired
-    UserRepository userRepository;
+    private UserRepository userRepository;
 
     @Autowired
-    CardListRepository cardListRepository;
+    private CardListRepository cardListRepository;
 
     @Autowired
-    PokemonCardMongoRepository pokemonCardMongoRepository;
+    private PokemonCardMongoRepository pokemonCardMongoRepository;
 
     @Autowired
-    YugiohCardMongoRepository yugiohCardMongoRepository;
+    private YugiohCardMongoRepository yugiohCardMongoRepository;
 
     @Autowired
-    MagicCardMongoRepository magicCardMongoRepository;
+    private MagicCardMongoRepository magicCardMongoRepository;
 
 
     @Override
