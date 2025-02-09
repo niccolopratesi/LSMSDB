@@ -30,24 +30,39 @@ public class UpdateDatabase {
     public void updateDatabase() {
         while(!PendingRequests.pendingRequests.isEmpty()) {
             Request request = PendingRequests.pendingRequests.remove();
-            switch(request.type) {
+            switch(request.getType()) {
                 case CREATE:
-                    if(request.data instanceof UserNode) {
-                        userNodeRepository.save((UserNode) request.data);
-                    } else if(request.data instanceof PostNode) {
-                        String t = ((PostNode) request.data).getTitle();
-                        String u = ((PostNode) request.data).getCreatedBy().getUsername();
-                        System.out.println(u + " " + t);
-                        postNodeRepository.createPost(u, t);
-                    } else if(request.data instanceof CardNode) {
-                        cardNodeRepository.save((CardNode) request.data);
+                    if(request.getData() instanceof UserNode) {
+                        userNodeRepository.save((UserNode) request.getData());
+                    } else if(request.getData() instanceof PostNode) {
+                        postNodeRepository.createPost(request.getUsername(), ((PostNode) request.getData()).getTitle());
+                    } else if(request.getData() instanceof CardNode) {
+                        cardNodeRepository.save((CardNode) request.getData());
                     }
                     break;
+                case CREATE_POST_REACTION:
+                    break;
+                case DELETE_POST_REACTION:
+                    break;
+                case CREATE_CARD_REACTION:
+                    break;
+                case DELETE_CARD_REACTION:
+                    break;
                 case UPDATE:
+                    if(request.getData() instanceof UserNode) {
+                        userNodeRepository.update(((UserNode) request.getData()).getUsername(), request.getUsername());
+                    } else if(request.getData() instanceof CardNode) {
+                        cardNodeRepository.update(((CardNode) request.getData()).getIdentifier(), ((CardNode) request.getData()).getType(), ((CardNode) request.getData()).getName());
+                    }
                     break;
                 case DELETE:
-                    break;
-                case REACTION:
+                    if(request.getData() instanceof UserNode) {
+                        userNodeRepository.delete(((UserNode) request.getData()).getUsername());
+                    } else if(request.getData() instanceof PostNode) {
+                        postNodeRepository.delete(request.getUsername(), ((PostNode) request.getData()).getTitle());
+                    } else if(request.getData() instanceof CardNode) {
+                        cardNodeRepository.delete(((CardNode) request.getData()).getIdentifier(), ((CardNode) request.getData()).getType());
+                    }
                     break;
                 default:
                     break;

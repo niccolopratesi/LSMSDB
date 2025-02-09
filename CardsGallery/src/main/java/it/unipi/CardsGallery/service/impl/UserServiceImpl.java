@@ -1,15 +1,17 @@
 package it.unipi.CardsGallery.service.impl;
 
-import it.unipi.CardsGallery.DTO.AuthDTO;
-import it.unipi.CardsGallery.DTO.LoginDTO;
-import it.unipi.CardsGallery.DTO.UpdateUserDTO;
+import it.unipi.CardsGallery.DTO.*;
 import it.unipi.CardsGallery.model.enums.RequestType;
 import it.unipi.CardsGallery.model.mongo.User;
+import it.unipi.CardsGallery.model.neo4j.CardNode;
+import it.unipi.CardsGallery.model.neo4j.PostNode;
 import it.unipi.CardsGallery.model.neo4j.UserNode;
 import it.unipi.CardsGallery.pendingRequests.PendingRequests;
 import it.unipi.CardsGallery.pendingRequests.Request;
 import it.unipi.CardsGallery.repository.mongo.CardListRepository;
 import it.unipi.CardsGallery.repository.mongo.UserRepository;
+import it.unipi.CardsGallery.repository.neo4j.CardNodeRepository;
+import it.unipi.CardsGallery.repository.neo4j.PostNodeRepository;
 import it.unipi.CardsGallery.repository.neo4j.UserNodeRepository;
 import it.unipi.CardsGallery.service.AuthenticationService;
 import it.unipi.CardsGallery.service.UserService;
@@ -32,6 +34,12 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserNodeRepository userNodeRepository;
+
+    @Autowired
+    private CardNodeRepository cardNodeRepository;
+
+    @Autowired
+    private PostNodeRepository postNodeRepository;
 
     @Autowired
     private AuthenticationService auth;
@@ -104,8 +112,11 @@ public class UserServiceImpl implements UserService {
             user.setPassword(userDTO.getNewPassword());
         }
         if(userDTO.getNewUsername() != null){
+            UserNode userNode = new UserNode(user.getUsername());
             cardListRepository.updateUsername(user.getUsername(), userDTO.getNewUsername());
             user.setUsername(userDTO.getNewUsername());
+
+            PendingRequests.pendingRequests.add(new Request(RequestType.UPDATE, userNode, userDTO.getNewUsername()));
         }
 
         user.setBirthDate(userDTO.getBirthDate());
@@ -116,5 +127,41 @@ public class UserServiceImpl implements UserService {
         user.setSex(userDTO.getSex());
 
         userRepository.save(user);
+    }
+
+    @Override
+    public void followUser(UserDTO userDTO) throws AuthenticationException{
+        auth.authenticate(userDTO.getAuth());
+        userNodeRepository.follow(userDTO.getAuth().getId(), userDTO.getUsername());
+    }
+
+    @Override
+    public void unfollowUser(UserDTO userDTO) throws AuthenticationException{
+        auth.authenticate(userDTO.getAuth());
+        userNodeRepository.unfollow(userDTO.getAuth().getId(), userDTO.getUsername());
+    }
+
+    @Override
+    public void reactCard(CardReactionDTO cardReactionDTO) throws AuthenticationException {
+        auth.authenticate(cardReactionDTO.getAuth());
+        cardNodeRepository.react(cardReactionDTO.getAuth().getUsername(), cardReactionDTO.getCardId(), cardReactionDTO.getType(), cardReactionDTO.getReaction());
+    }
+
+    @Override
+    public void deleteReactCard(CardReactionDTO cardReactionDTO) throws AuthenticationException {
+        auth.authenticate(cardReactionDTO.getAuth());
+        cardNodeRepository.reactDelete(cardReactionDTO.getAuth().getUsername(), cardReactionDTO.getCardId(), cardReactionDTO.getType(), cardReactionDTO.getReaction());
+    }
+
+    @Override
+    public void reactPost(PostReactionDTO postReactionDTO) throws AuthenticationException {
+        auth.authenticate(postReactionDTO.getAuth());
+        postNodeRepository.react(postReactionDTO.getAuth().getUsername(), postReactionDTO.getTitle(), postReactionDTO.getOwner(), postReactionDTO.getReaction());
+    }
+
+    @Override
+    public void deleteReactPost(PostReactionDTO postReactionDTO) throws AuthenticationException {
+        auth.authenticate(postReactionDTO.getAuth());
+        postNodeRepository.reactDelete(postReactionDTO.getAuth().getUsername(), postReactionDTO.getTitle(), postReactionDTO.getOwner(), postReactionDTO.getReaction());
     }
 }

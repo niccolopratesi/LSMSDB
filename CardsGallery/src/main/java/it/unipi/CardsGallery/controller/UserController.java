@@ -34,7 +34,6 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    @ResponseBody
     public ResponseEntity<ResponseWrapper<Void>> loginUser(@RequestBody LoginDTO loginDTO) {
         //!!! controllo che le codifiche hash siano uguali !!!
         try{
@@ -44,8 +43,6 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseWrapper<>("Username or Password wrong",null));
         }
     }
-
-    //!!! Logout dovrebbe essere gestito solo lato client se non abbiamo cookie !!!
 
     @GetMapping
     public ResponseEntity<ResponseWrapper<User>> profileUser(@RequestParam("username") String username) {
@@ -68,7 +65,6 @@ public class UserController {
     }
 
     @DeleteMapping
-    @ResponseBody
     public ResponseEntity<ResponseWrapper<Void>> deleteUser(@RequestBody AuthDTO authDTO) {
         //!!! controllo che le codifiche hash siano uguali !!!
         try{
@@ -91,20 +87,22 @@ public class UserController {
     }
 
     @PostMapping("/follow")
-    @ResponseBody
-    public String followUser(@RequestBody UserDTO userDTO) {
-
-        //...
-
-        return "Follow successful";
+    public ResponseEntity<ResponseWrapper<Void>> followUser(@RequestBody UserDTO userDTO) {
+        try{
+            userService.followUser(userDTO);
+            return ResponseEntity.ok(new ResponseWrapper<>("You now follow " + userDTO.getUsername(),null));
+        }catch(AuthenticationException | ExistingEntityException e){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseWrapper<>(e.getMessage(),null));
+        }
     }
 
     @DeleteMapping("/follow")
-    @ResponseBody
-    public String unfollowUser(@RequestBody UserDTO userDTO) {
-
-        //...
-
-        return "Unfollow successful";
+    public ResponseEntity<ResponseWrapper<Void>>unfollowUser(@RequestBody UserDTO userDTO) {
+        try{
+            userService.unfollowUser(userDTO);
+            return ResponseEntity.ok(new ResponseWrapper<>("You no longer follow " + userDTO.getUsername(),null));
+        }catch(AuthenticationException | ExistingEntityException e){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseWrapper<>(e.getMessage(),null));
+        }
     }
 }

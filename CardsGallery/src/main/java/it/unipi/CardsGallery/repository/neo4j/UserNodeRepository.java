@@ -10,4 +10,21 @@ import java.util.List;
 
 @Repository
 public interface UserNodeRepository extends Neo4jRepository<UserNode,Long> {
+
+    @Query("MATCH (u:User) " +
+           "OPTIONAL MATCH (u)-[:CREATED]->(p:Post) " +
+           "WHERE u.username = $username " +
+           "DETACH DELETE u, p")
+    void delete(String username);
+
+    @Query("MATCH (u:User)" +
+           "WHERE u.username = $oldUsername" +
+           "SET u.username = $newUsername")
+    void update(String oldUsername, String newUsername);
+
+    //@Query("")
+    void follow(String username, String followingUsername);
+
+    //@Query("")
+    void unfollow(String username, String unfollowingUsername);
 }

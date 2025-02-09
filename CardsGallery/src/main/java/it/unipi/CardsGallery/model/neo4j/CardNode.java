@@ -10,6 +10,8 @@ import org.springframework.data.neo4j.core.schema.GeneratedValue;
 import org.springframework.data.neo4j.core.schema.Node;
 import org.springframework.data.neo4j.core.schema.Property;
 
+import java.util.UUID;
+
 @Data
 @Node("Card")
 @NoArgsConstructor
@@ -23,4 +25,5 @@ public class CardNode {
 
     private String name;
     private TCG type;
+    private String identifier;
 }

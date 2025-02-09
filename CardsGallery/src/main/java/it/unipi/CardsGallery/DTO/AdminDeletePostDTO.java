@@ -1,6 +1,5 @@
 package it.unipi.CardsGallery.DTO;
 
-import it.unipi.CardsGallery.model.enums.Reaction;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -8,9 +7,8 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class PostReactionDTO {
+public class AdminDeletePostDTO {
     private AuthDTO auth;
-    private String title;
-    private String owner;
-    private Reaction reaction;
+    private String postTitle;
+    private String username;
 }

@@ -52,8 +52,8 @@ public class PostServiceImpl implements PostService {
         }
         userRepository.addPostToUser(id, post);
 
-        PostNode postNode = new PostNode(post.getTitle(), new UserNode(postDTO.getAuth().getUsername()));
-        PendingRequests.pendingRequests.add(new Request(RequestType.CREATE, postNode));
+        PostNode postNode = new PostNode(post.getTitle());
+        PendingRequests.pendingRequests.add(new Request(RequestType.CREATE, postNode, postDTO.getAuth().getUsername()));
     }
 
     @Override
@@ -64,6 +64,9 @@ public class PostServiceImpl implements PostService {
         } else {
             throw new OwnershipException("post not found");
         }
+
+        PostNode postNode = new PostNode(dpDTO.getPostTitle());
+        PendingRequests.pendingRequests.add(new Request(RequestType.DELETE, postNode, dpDTO.getAuth().getUsername()));
     }
 
 }

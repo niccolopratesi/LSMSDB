@@ -15,8 +15,6 @@ import org.springframework.data.neo4j.core.schema.Property;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserNode {
-    /*@Id @GeneratedValue
-    private Long id;*/
     @Id
     private Long id;
 

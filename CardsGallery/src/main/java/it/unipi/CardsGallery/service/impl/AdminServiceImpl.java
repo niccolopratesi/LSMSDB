@@ -1,6 +1,15 @@
 package it.unipi.CardsGallery.service.impl;
 
 import it.unipi.CardsGallery.DTO.*;
+import it.unipi.CardsGallery.model.enums.RequestType;
+import it.unipi.CardsGallery.model.mongo.MagicCard;
+import it.unipi.CardsGallery.model.mongo.PokemonCard;
+import it.unipi.CardsGallery.model.mongo.YugiohCard;
+import it.unipi.CardsGallery.model.neo4j.CardNode;
+import it.unipi.CardsGallery.model.neo4j.PostNode;
+import it.unipi.CardsGallery.model.neo4j.UserNode;
+import it.unipi.CardsGallery.pendingRequests.PendingRequests;
+import it.unipi.CardsGallery.pendingRequests.Request;
 import it.unipi.CardsGallery.repository.mongo.*;
 import it.unipi.CardsGallery.service.AdminService;
 import it.unipi.CardsGallery.service.AuthenticationService;
@@ -39,6 +48,10 @@ public class AdminServiceImpl implements AdminService {
         authenticationService.authenticateAdmin(authDTO);
         TCG type = adminCardNoFieldsDTO.getType();
         String id = adminCardNoFieldsDTO.getId();
+
+        CardNode cardNode = new CardNode();
+        cardNode.setIdentifier(id);
+
         switch (type) {
             case MAGIC:
             if(!magicCardMongoRepository.existsById(id))
@@ -62,6 +75,8 @@ public class AdminServiceImpl implements AdminService {
             throw new NoAdminException("Type not supported");
         }
         cardListRepository.removeCardFromAllCardList(id, type);
+
+        PendingRequests.pendingRequests.add(new Request(RequestType.DELETE, cardNode));
     }
 
     @Override
@@ -70,9 +85,15 @@ public class AdminServiceImpl implements AdminService {
         authenticationService.authenticateAdmin(authDTO);
         TCG type = adminCardDTO.getType();
         String id;
+
+        CardNode cardNode = new CardNode();
+
         switch (type) {
             case MAGIC:
             id = adminCardDTO.getMagic().getId();
+            cardNode.setIdentifier(id);
+            cardNode.setType(TCG.MAGIC);
+            cardNode.setName(adminCardDTO.getMagic().getName());
             if(!magicCardMongoRepository.existsById(id))
                 throw new ExistingEntityException("Card not found");
             magicCardMongoRepository.save(adminCardDTO.getMagic());
@@ -80,6 +101,9 @@ public class AdminServiceImpl implements AdminService {
 
             case POKEMON:
             id = adminCardDTO.getPokemon().getId();
+            cardNode.setIdentifier(id);
+            cardNode.setType(TCG.POKEMON);
+            cardNode.setName(adminCardDTO.getPokemon().getName());
             if(!pokemonCardMongoRepository.existsById(id))
                 throw new ExistingEntityException("Card not found");
             pokemonCardMongoRepository.save(adminCardDTO.getPokemon());
@@ -87,6 +111,9 @@ public class AdminServiceImpl implements AdminService {
 
             case YUGIOH:
             id = adminCardDTO.getYugioh().getId();
+            cardNode.setIdentifier(id);
+            cardNode.setType(TCG.YUGIOH);
+            cardNode.setName(adminCardDTO.getYugioh().getName());
             if(!yugiohCardMongoRepository.existsById(id))
                 throw new ExistingEntityException("Card not found");
             yugiohCardMongoRepository.save(adminCardDTO.getYugioh());
@@ -95,6 +122,8 @@ public class AdminServiceImpl implements AdminService {
             default:
                 throw new ExistingEntityException("Invalid TCG type");
         }
+
+        PendingRequests.pendingRequests.add(new Request(RequestType.UPDATE, cardNode));
     }
 
     @Override
@@ -102,32 +131,49 @@ public class AdminServiceImpl implements AdminService {
         AuthDTO authDTO = adminCardDTO.getAuth();
         authenticationService.authenticateAdmin(authDTO);
         TCG type = adminCardDTO.getType();
+
+        CardNode cardNode = new CardNode();
+
         switch (type) {
             case MAGIC:
             adminCardDTO.getMagic().setId(null);
-            magicCardMongoRepository.save(adminCardDTO.getMagic());
+            MagicCard magicCard = magicCardMongoRepository.save(adminCardDTO.getMagic());
+            cardNode.setName(adminCardDTO.getMagic().getName());
+            cardNode.setType(TCG.MAGIC);
+            cardNode.setIdentifier(magicCard.getId());
             break;
 
             case POKEMON:
             adminCardDTO.getPokemon().setId(null);
-            pokemonCardMongoRepository.save(adminCardDTO.getPokemon());
+            PokemonCard pokemonCard = pokemonCardMongoRepository.save(adminCardDTO.getPokemon());
+            cardNode.setName(adminCardDTO.getYugioh().getName());
+            cardNode.setType(TCG.YUGIOH);
+            cardNode.setIdentifier(pokemonCard.getId());
             break;
 
             case YUGIOH:
             adminCardDTO.getYugioh().setId(null);
-            yugiohCardMongoRepository.save(adminCardDTO.getYugioh());
+            YugiohCard yugiohCard = yugiohCardMongoRepository.save(adminCardDTO.getYugioh());
+            cardNode.setName(adminCardDTO.getPokemon().getName());
+            cardNode.setType(TCG.POKEMON);
+            cardNode.setIdentifier(yugiohCard.getId());
             break;
 
             default:
             throw new ExistingEntityException("Invalid TCG type");
         }
+
+        PendingRequests.pendingRequests.add(new Request(RequestType.CREATE, cardNode));
     }
 
     @Override
-    public void deletePost(DeletePostDTO dpDTO) throws AuthenticationException, NoAdminException {
+    public void deletePost(AdminDeletePostDTO dpDTO) throws AuthenticationException, NoAdminException {
         AuthDTO authDTO = dpDTO.getAuth();
         authenticationService.authenticateAdmin(authDTO);
-        userRepository.deletePostFromUser(dpDTO.getAuth().getUsername(), dpDTO.getPostTitle());
+        userRepository.deletePostFromUser(dpDTO.getUsername(), dpDTO.getPostTitle());
+
+        PostNode postNode = new PostNode(dpDTO.getPostTitle());
+        PendingRequests.pendingRequests.add(new Request(RequestType.DELETE, postNode, dpDTO.getUsername()));
     }
 
     @Override
@@ -138,5 +184,8 @@ public class AdminServiceImpl implements AdminService {
             throw new ExistingEntityException("User not found");
         userRepository.deleteByUsername(dto.getUsername());
         cardListRepository.deleteAllByUsername(dto.getUsername());
+
+        UserNode userNode = new UserNode(dto.getUsername());
+        PendingRequests.pendingRequests.add(new Request(RequestType.DELETE, userNode));
     }
 }

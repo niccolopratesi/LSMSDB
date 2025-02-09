@@ -66,7 +66,7 @@ public class AdminController {
 
     @DeleteMapping("/post")
     @ResponseBody
-    public ResponseEntity<ResponseWrapper<Void>> deletePost(@RequestBody DeletePostDTO dto) {
+    public ResponseEntity<ResponseWrapper<Void>> deletePost(@RequestBody AdminDeletePostDTO dto) {
         try {
             adminService.deletePost(dto);
             return ResponseEntity.ok(new ResponseWrapper<>("post deleted successfully", null));
