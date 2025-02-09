@@ -52,11 +52,8 @@ public class PostServiceImpl implements PostService {
         }
         userRepository.addPostToUser(id, post);
 
-        UserNode user = userNodeRepository.findByUsername(postDTO.getAuth().getUsername()).get(0);
-        if(user != null) {
-            PostNode postNode = new PostNode(post.getTitle(), user);
-            PendingRequests.pendingRequests.add(new Request(RequestType.CREATE, postNode));
-        }
+        PostNode postNode = new PostNode(post.getTitle(), new UserNode(postDTO.getAuth().getUsername()));
+        PendingRequests.pendingRequests.add(new Request(RequestType.CREATE, postNode));
     }
 
     @Override

@@ -12,6 +12,7 @@ import it.unipi.CardsGallery.repository.neo4j.UserNodeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class UpdateDatabase {
@@ -34,7 +35,10 @@ public class UpdateDatabase {
                     if(request.data instanceof UserNode) {
                         userNodeRepository.save((UserNode) request.data);
                     } else if(request.data instanceof PostNode) {
-                        postNodeRepository.save((PostNode) request.data);
+                        String t = ((PostNode) request.data).getTitle();
+                        String u = ((PostNode) request.data).getCreatedBy().getUsername();
+                        System.out.println(u + " " + t);
+                        postNodeRepository.createPost(u, t);
                     } else if(request.data instanceof CardNode) {
                         cardNodeRepository.save((CardNode) request.data);
                     }
