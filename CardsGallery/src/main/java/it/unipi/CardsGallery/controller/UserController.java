@@ -91,7 +91,7 @@ public class UserController {
         try{
             userService.followUser(userDTO);
             return ResponseEntity.ok(new ResponseWrapper<>("You now follow " + userDTO.getUsername(),null));
-        }catch(AuthenticationException | ExistingEntityException e){
+        } catch(AuthenticationException e){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseWrapper<>(e.getMessage(),null));
         }
     }
@@ -101,7 +101,7 @@ public class UserController {
         try{
             userService.unfollowUser(userDTO);
             return ResponseEntity.ok(new ResponseWrapper<>("You no longer follow " + userDTO.getUsername(),null));
-        }catch(AuthenticationException | ExistingEntityException e){
+        } catch(AuthenticationException e){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseWrapper<>(e.getMessage(),null));
         }
     }

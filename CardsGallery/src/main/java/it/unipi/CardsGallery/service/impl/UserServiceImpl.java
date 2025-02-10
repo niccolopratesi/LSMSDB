@@ -1,5 +1,6 @@
 package it.unipi.CardsGallery.service.impl;
 
+import at.favre.lib.crypto.bcrypt.BCrypt;
 import it.unipi.CardsGallery.DTO.*;
 import it.unipi.CardsGallery.model.enums.RequestType;
 import it.unipi.CardsGallery.model.mongo.User;
@@ -30,6 +31,9 @@ public class UserServiceImpl implements UserService {
     private UserRepository userRepository;
 
     @Autowired
+    private AuthenticationService authenticationService;
+
+    @Autowired
     private CardListRepository cardListRepository;
 
     @Autowired
@@ -53,6 +57,8 @@ public class UserServiceImpl implements UserService {
         }
         user.setId(null);
         user.setPosts(new ArrayList<>());
+        String hash = BCrypt.withDefaults().hashToString(10, user.getPassword().toCharArray());
+        user.setPassword(hash);
         userRepository.save(user);
 
         UserNode userNode = new UserNode(user.getUsername());
@@ -76,9 +82,7 @@ public class UserServiceImpl implements UserService {
         if(userOptional.isEmpty()) {
             throw new AuthenticationException("Username or Password wrong");
         }*/
-        if(!userRepository.existsUserByUsernameAndPassword(loginDTO.getUsername(), loginDTO.getPassword())){
-            throw new AuthenticationException("Username or Password wrong");
-        }
+        authenticationService.authenticate(new AuthDTO(loginDTO.getUsername(), loginDTO.getPassword()));
     }
 
     @Override
@@ -102,14 +106,16 @@ public class UserServiceImpl implements UserService {
             throw new ExistingEntityException("User not found");
         }
 
-        // !!! hash password !!!
-        if(!user.getUsername().equals(userDTO.getAuth().getUsername()) || !user.getPassword().equals(userDTO.getAuth().getPassword())){
+        if(
+                !user.getUsername().equals(userDTO.getAuth().getUsername())  ||
+                !BCrypt.verifyer().verify(user.getPassword().toCharArray(), user.getPassword().toCharArray()).verified
+        ){
             throw new AuthenticationException("You are not the owner of the account");
         }
 
         if(userDTO.getNewPassword() != null){
-            //!!! hash password !!!
-            user.setPassword(userDTO.getNewPassword());
+            String hash = BCrypt.withDefaults().hashToString(10, userDTO.getNewPassword().toCharArray());
+            user.setPassword(hash);
         }
         if(userDTO.getNewUsername() != null){
             UserNode userNode = new UserNode(user.getUsername());

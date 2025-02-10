@@ -53,4 +53,10 @@ public interface UserRepository extends MongoRepository<User, String> {
     void deletePostFromUser(String username, String postTitle);
 
     void deleteByUsername(String username);
+
+    @Query("{ 'username': ?0 }")
+    User getUserByUsername(String username);
+
+    @Query("{ '_id': ?0, 'username': ?1 }")
+    User getUserByIdAndUsername(String id, String username);
 }
