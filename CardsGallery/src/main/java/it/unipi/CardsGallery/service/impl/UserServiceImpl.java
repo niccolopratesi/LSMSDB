@@ -2,12 +2,16 @@ package it.unipi.CardsGallery.service.impl;
 
 import at.favre.lib.crypto.bcrypt.BCrypt;
 import it.unipi.CardsGallery.DTO.*;
+import it.unipi.CardsGallery.model.enums.Reaction;
 import it.unipi.CardsGallery.model.enums.RequestType;
+import it.unipi.CardsGallery.model.enums.TCG;
 import it.unipi.CardsGallery.model.mongo.User;
 import it.unipi.CardsGallery.model.neo4j.CardNode;
 import it.unipi.CardsGallery.model.neo4j.PostNode;
 import it.unipi.CardsGallery.model.neo4j.UserNode;
 import it.unipi.CardsGallery.pendingRequests.PendingRequests;
+import it.unipi.CardsGallery.pendingRequests.ReactionRequest;
+import it.unipi.CardsGallery.pendingRequests.ReactionRequestData;
 import it.unipi.CardsGallery.pendingRequests.Request;
 import it.unipi.CardsGallery.repository.mongo.CardListRepository;
 import it.unipi.CardsGallery.repository.mongo.UserRepository;
@@ -23,6 +27,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static it.unipi.CardsGallery.utilities.Constants.DECREMENT;
+import static it.unipi.CardsGallery.utilities.Constants.INCREMENT;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -118,6 +125,9 @@ public class UserServiceImpl implements UserService {
             user.setPassword(hash);
         }
         if(userDTO.getNewUsername() != null){
+            if(userRepository.existsUserByUsername(userDTO.getNewUsername())){
+                throw new AuthenticationException("Username already registered");
+            }
             UserNode userNode = new UserNode(user.getUsername());
             cardListRepository.updateUsername(user.getUsername(), userDTO.getNewUsername());
             user.setUsername(userDTO.getNewUsername());
@@ -151,12 +161,18 @@ public class UserServiceImpl implements UserService {
     public void reactCard(CardReactionDTO cardReactionDTO) throws AuthenticationException {
         auth.authenticate(cardReactionDTO.getAuth());
         cardNodeRepository.react(cardReactionDTO.getAuth().getUsername(), cardReactionDTO.getCardId(), cardReactionDTO.getType(), cardReactionDTO.getReaction());
+
+        ReactionRequest reactionRequest = new ReactionRequest(cardReactionDTO.getCardId(), cardReactionDTO.getType());
+        ReactionRequestData reactionRequestData = new ReactionRequestData(cardReactionDTO.getReaction());
+        PendingRequests.addOrUpdateReaction(reactionRequest, reactionRequestData, cardReactionDTO.getReaction(), INCREMENT);
     }
 
     @Override
     public void deleteReactCard(CardReactionDTO cardReactionDTO) throws AuthenticationException {
         auth.authenticate(cardReactionDTO.getAuth());
         cardNodeRepository.reactDelete(cardReactionDTO.getAuth().getUsername(), cardReactionDTO.getCardId(), cardReactionDTO.getType(), cardReactionDTO.getReaction());
+        ReactionRequest reactionRequest = new ReactionRequest(cardReactionDTO.getCardId(), cardReactionDTO.getType());
+        PendingRequests.addOrUpdateReaction(reactionRequest, null, cardReactionDTO.getReaction(), DECREMENT);
     }
 
     @Override
@@ -169,5 +185,11 @@ public class UserServiceImpl implements UserService {
     public void deleteReactPost(PostReactionDTO postReactionDTO) throws AuthenticationException {
         auth.authenticate(postReactionDTO.getAuth());
         postNodeRepository.reactDelete(postReactionDTO.getAuth().getUsername(), postReactionDTO.getTitle(), postReactionDTO.getOwner(), postReactionDTO.getReaction());
+    }
+
+    @Override
+    public Reaction getCardReact(String username, String cardId, TCG tcg) {
+        Reaction reaction = cardNodeRepository.getReact(username, cardId, tcg);
+        return reaction;
     }
 }

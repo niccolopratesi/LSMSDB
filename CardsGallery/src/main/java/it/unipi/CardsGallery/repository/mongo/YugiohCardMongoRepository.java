@@ -27,4 +27,10 @@ public interface YugiohCardMongoRepository extends MongoRepository<YugiohCard,St
             String printing,
             Pageable pageable
     );
+
+    @Query("{ 'id': ?0 }")
+    //@Update("{ '$inc': { 'likeCount' : ?1, 'dislikeCount': ?2, 'loveCount': ?3, 'laughCount': ?4 } }")
+    void updateReactions(String cardId, int likeCount, int dislikeCount, int loveCount, int laughCount);
+
+    boolean existsByCardId(String cardId);
 }

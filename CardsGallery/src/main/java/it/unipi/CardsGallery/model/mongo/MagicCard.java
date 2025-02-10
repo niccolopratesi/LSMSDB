@@ -31,4 +31,16 @@ public class MagicCard {
     private String[] colorIdentity;
     private float manaValue;
     private boolean isFunny;
+
+    private int likeCount;
+    private int dislikeCount;
+    private int loveCount;
+    private int laughCount;
+
+    public void defaultCounts() {
+        likeCount = 0;
+        dislikeCount = 0;
+        loveCount = 0;
+        laughCount = 0;
+    }
 }

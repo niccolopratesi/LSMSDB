@@ -23,11 +23,21 @@ public class YugiohCard {
     private String race;
     private String attribute;
     private String type;
-    // level atk def can be null
     private Integer level;
     private Integer atk;
     private Integer def;
-    private int countReaction;
     private String[] typeLine;
     private String[] printings;
+
+    private int likeCount;
+    private int dislikeCount;
+    private int loveCount;
+    private int laughCount;
+
+    public void defaultCounts() {
+        likeCount = 0;
+        dislikeCount = 0;
+        loveCount = 0;
+        laughCount = 0;
+    }
 }

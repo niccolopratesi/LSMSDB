@@ -3,9 +3,10 @@ package it.unipi.CardsGallery.controller;
 import it.unipi.CardsGallery.DTO.CardReactionDTO;
 import it.unipi.CardsGallery.DTO.PostReactionDTO;
 import it.unipi.CardsGallery.DTO.ResponseWrapper;
+import it.unipi.CardsGallery.model.enums.Reaction;
+import it.unipi.CardsGallery.model.enums.TCG;
 import it.unipi.CardsGallery.service.UserService;
 import it.unipi.CardsGallery.service.exception.AuthenticationException;
-import it.unipi.CardsGallery.service.exception.ExistingEntityException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +18,12 @@ public class ReactionController {
 
     @Autowired
     UserService userService;
+
+    @GetMapping("/card")
+    public ResponseEntity<ResponseWrapper<Reaction>> reactCard (@RequestParam("username") String username, @RequestParam("cardId") String cardId, @RequestParam("tcg") TCG tcg) {
+        Reaction reaction = userService.getCardReact(username, cardId, tcg);
+        return ResponseEntity.ok(new ResponseWrapper<>("React found", reaction));
+    }
 
     @PostMapping("/card")
     public ResponseEntity<ResponseWrapper<Void>> reactCard (@RequestBody CardReactionDTO cardReactionDTO) {

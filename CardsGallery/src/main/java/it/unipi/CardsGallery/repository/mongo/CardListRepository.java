@@ -11,13 +11,13 @@ import org.springframework.data.mongodb.repository.Query;
 import org.springframework.data.mongodb.repository.Update;
 import org.springframework.stereotype.Repository;
 
-import java.util.Optional;
-
 @Repository
 public interface CardListRepository extends MongoRepository<CardList, String> {
 
-    //Optional<CardList> findByIdAndUserId(String id, String userId);
     boolean existsByIdAndUserId(String id, String userId);
+
+    @Query("{ 'id': ?0, 'cards.id': ?1 }")
+    boolean existsByIdAndCardsId(String id, String cardsId);
 
     @Query("{'username': ?0}")
     Page<CardList> findOwnedLists(
@@ -53,15 +53,11 @@ public interface CardListRepository extends MongoRepository<CardList, String> {
     @Update("{ '$pull': { 'cards': {'id': ?0, 'tcg': ?1} } }")
     void removeCardFromAllCardList(String cardId, TCG type);
 
-    /*@Query("{ 'userId': ?0 }")
-      @Update("{ '$pull' }")*/
     void deleteAllByUserId(String userId);
 
     @Query("{ 'username': ?0 }")
     @Update("{ '$set': { 'username': ?1} }")
     void updateUsername(String oldUsername, String newUsername);
-
-    //boolean existsByIdAndCardsId(String id, String cardsId);
 
     void deleteAllByUsername(String username);
 }

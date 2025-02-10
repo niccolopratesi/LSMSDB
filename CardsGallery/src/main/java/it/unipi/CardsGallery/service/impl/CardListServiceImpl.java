@@ -4,6 +4,9 @@ import it.unipi.CardsGallery.DTO.*;
 import it.unipi.CardsGallery.model.enums.TCG;
 import it.unipi.CardsGallery.model.mongo.CardList;
 import it.unipi.CardsGallery.repository.mongo.CardListRepository;
+import it.unipi.CardsGallery.repository.mongo.MagicCardMongoRepository;
+import it.unipi.CardsGallery.repository.mongo.PokemonCardMongoRepository;
+import it.unipi.CardsGallery.repository.mongo.YugiohCardMongoRepository;
 import it.unipi.CardsGallery.service.AuthenticationService;
 import it.unipi.CardsGallery.service.CardListService;
 import it.unipi.CardsGallery.service.exception.AuthenticationException;
@@ -26,6 +29,15 @@ public class CardListServiceImpl implements CardListService {
 
     @Autowired
     private AuthenticationService auth;
+
+    @Autowired
+    private MagicCardMongoRepository magicCardMongoRepository;
+
+    @Autowired
+    private PokemonCardMongoRepository pokemonCardMongoRepository;
+
+    @Autowired
+    private YugiohCardMongoRepository yugiohCardMongoRepository;
 
     public CardListServiceImpl() {}
 
@@ -87,28 +99,36 @@ public class CardListServiceImpl implements CardListService {
     public void insertIntoCardList(CardDTO card) throws AuthenticationException, ExistingEntityException {
         auth.authenticate(card.getAuth());
         auth.listOwnership(card.getAuth().getId(), card.getCardListId());
-        /*if(cardListRepository.existsByIdAndCardsId(card.getCardListId(),card.getCard().getId())) {
+        if(!cardListRepository.existsByIdAndCardsId(card.getCardListId(),card.getCard().getId())) {
             throw new ExistingEntityException("Card already in the card list");
-        }*/
-        //cardListMongoTemplate.insertCardIntoCardList(card.getCardListId(), card.getCard());
+        }
+
+        boolean result;
 
         switch (card.getCard().getTcg()) {
             case MAGIC:
+                result = magicCardMongoRepository.existsByCardId(card.getCard().getId());
                 card.getCard().setType(null);
                 card.getCard().setAttribute(null);
                 card.getCard().setPokedexNumber(null);
                 break;
             case POKEMON:
+                result = pokemonCardMongoRepository.existsByCardId(card.getCard().getId());
                 card.getCard().setType(null);
                 card.getCard().setAttribute(null);
                 card.getCard().setColors(null);
                 break;
             case YUGIOH:
+                result = yugiohCardMongoRepository.existsByCardId(card.getCard().getId());
                 card.getCard().setPokedexNumber(null);
                 card.getCard().setColors(null);
                 break;
             default:
                 throw new ExistingEntityException("Please enter card's Tcg correctly");
+        }
+
+        if (!result) {
+            throw new ExistingEntityException("Card does not exist");
         }
 
         cardListRepository.insertCardIntoCardList(card.getCardListId(), card.getCard());

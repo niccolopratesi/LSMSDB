@@ -1,6 +1,8 @@
 package it.unipi.CardsGallery.service;
 
 import it.unipi.CardsGallery.DTO.*;
+import it.unipi.CardsGallery.model.enums.Reaction;
+import it.unipi.CardsGallery.model.enums.TCG;
 import it.unipi.CardsGallery.model.mongo.User;
 import it.unipi.CardsGallery.service.exception.AuthenticationException;
 import it.unipi.CardsGallery.service.exception.ExistingEntityException;
@@ -19,5 +21,6 @@ public interface UserService {
     public void deleteReactCard(CardReactionDTO cardReactionDTO) throws AuthenticationException;
     public void reactPost(PostReactionDTO postReactionDTO) throws AuthenticationException;
     public void deleteReactPost(PostReactionDTO postReactionDTO) throws AuthenticationException;
+    public Reaction getCardReact(String username, String cardId, TCG tcg);
 }
 

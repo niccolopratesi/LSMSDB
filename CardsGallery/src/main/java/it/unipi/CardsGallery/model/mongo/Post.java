@@ -18,6 +18,6 @@ public class Post {
     private String title;
     private String text;
     private String cardId;
-    private TCG type; //enum????
+    private TCG type;
     private Date creationDate;
 }

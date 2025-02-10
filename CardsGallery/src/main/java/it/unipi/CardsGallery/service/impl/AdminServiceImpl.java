@@ -137,6 +137,7 @@ public class AdminServiceImpl implements AdminService {
         switch (type) {
             case MAGIC:
             adminCardDTO.getMagic().setId(null);
+            adminCardDTO.getMagic().defaultCounts();
             MagicCard magicCard = magicCardMongoRepository.save(adminCardDTO.getMagic());
             cardNode.setName(adminCardDTO.getMagic().getName());
             cardNode.setType(TCG.MAGIC);
@@ -145,6 +146,7 @@ public class AdminServiceImpl implements AdminService {
 
             case POKEMON:
             adminCardDTO.getPokemon().setId(null);
+            adminCardDTO.getPokemon().defaultCounts();
             PokemonCard pokemonCard = pokemonCardMongoRepository.save(adminCardDTO.getPokemon());
             cardNode.setName(adminCardDTO.getYugioh().getName());
             cardNode.setType(TCG.YUGIOH);
@@ -153,6 +155,7 @@ public class AdminServiceImpl implements AdminService {
 
             case YUGIOH:
             adminCardDTO.getYugioh().setId(null);
+            adminCardDTO.getYugioh().defaultCounts();
             YugiohCard yugiohCard = yugiohCardMongoRepository.save(adminCardDTO.getYugioh());
             cardNode.setName(adminCardDTO.getPokemon().getName());
             cardNode.setType(TCG.POKEMON);

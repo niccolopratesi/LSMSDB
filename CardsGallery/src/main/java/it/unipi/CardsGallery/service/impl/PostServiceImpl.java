@@ -8,7 +8,10 @@ import it.unipi.CardsGallery.model.neo4j.PostNode;
 import it.unipi.CardsGallery.model.neo4j.UserNode;
 import it.unipi.CardsGallery.pendingRequests.PendingRequests;
 import it.unipi.CardsGallery.pendingRequests.Request;
+import it.unipi.CardsGallery.repository.mongo.MagicCardMongoRepository;
+import it.unipi.CardsGallery.repository.mongo.PokemonCardMongoRepository;
 import it.unipi.CardsGallery.repository.mongo.UserRepository;
+import it.unipi.CardsGallery.repository.mongo.YugiohCardMongoRepository;
 import it.unipi.CardsGallery.repository.neo4j.UserNodeRepository;
 import it.unipi.CardsGallery.service.AuthenticationService;
 import it.unipi.CardsGallery.service.PostService;
@@ -30,14 +33,19 @@ public class PostServiceImpl implements PostService {
     private UserRepository userRepository;
 
     @Autowired
-    private UserNodeRepository userNodeRepository;
+    private MagicCardMongoRepository magicCardMongoRepository;
+
+    @Autowired
+    private PokemonCardMongoRepository pokemonCardMongoRepository;
+
+    @Autowired
+    private YugiohCardMongoRepository yugiohCardMongoRepository;
 
     @Autowired
     private AuthenticationService authenticationService;
 
     @Override
     public List<Post> getPostsByUser(String username, int page) {
-        Pageable pageable = PageRequest.of(page, Constants.PAGE_SIZE, Sort.by("id").ascending()); // Sorting optional
         List<Post> result = userRepository.findPostsByUsername(username, page*Constants.PAGE_SIZE, Constants.PAGE_SIZE);
         return result;
     }
@@ -50,6 +58,27 @@ public class PostServiceImpl implements PostService {
         if(userRepository.existsByUsernameAndPostsTitle(postDTO.getAuth().getUsername(), postDTO.getPost().getTitle())) {
             throw new ExistingEntityException("post already exists");
         }
+
+        boolean result;
+
+        switch (post.getType()) {
+            case MAGIC:
+                result = magicCardMongoRepository.existsByCardId(post.getCardId());
+                break;
+            case POKEMON:
+                result = pokemonCardMongoRepository.existsByCardId(post.getCardId());
+                break;
+            case YUGIOH:
+                result = yugiohCardMongoRepository.existsByCardId(post.getCardId());
+                break;
+            default:
+                throw new ExistingEntityException("Please enter card's Tcg correctly");
+        }
+
+        if (!result) {
+            throw new ExistingEntityException("Card does not exist");
+        }
+
         userRepository.addPostToUser(id, post);
 
         PostNode postNode = new PostNode(post.getTitle());

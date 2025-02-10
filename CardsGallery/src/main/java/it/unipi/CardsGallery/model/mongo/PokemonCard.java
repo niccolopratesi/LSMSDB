@@ -18,7 +18,6 @@ public class PokemonCard {
     private String id;
 
     private String name;
-    private int countReaction;
     private int level;
     private int hp;
     private int[] nationalPokedexNumbers;
@@ -35,4 +34,16 @@ public class PokemonCard {
     private String artist;
     private String rarity;
     private String flavourText;
+
+    private int likeCount;
+    private int dislikeCount;
+    private int loveCount;
+    private int laughCount;
+
+    public void defaultCounts() {
+        likeCount = 0;
+        dislikeCount = 0;
+        loveCount = 0;
+        laughCount = 0;
+    }
 }
