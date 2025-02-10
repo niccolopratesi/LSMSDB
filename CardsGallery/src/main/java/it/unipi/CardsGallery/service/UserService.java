@@ -22,5 +22,6 @@ public interface UserService {
     public void reactPost(PostReactionDTO postReactionDTO) throws AuthenticationException;
     public void deleteReactPost(PostReactionDTO postReactionDTO) throws AuthenticationException;
     public Reaction getCardReact(String username, String cardId, TCG tcg);
+    public ResultPostReactionDTO getPostReact(String username, String owner, String title);
 }
 

@@ -3,6 +3,7 @@ package it.unipi.CardsGallery.controller;
 import it.unipi.CardsGallery.DTO.CardReactionDTO;
 import it.unipi.CardsGallery.DTO.PostReactionDTO;
 import it.unipi.CardsGallery.DTO.ResponseWrapper;
+import it.unipi.CardsGallery.DTO.ResultPostReactionDTO;
 import it.unipi.CardsGallery.model.enums.Reaction;
 import it.unipi.CardsGallery.model.enums.TCG;
 import it.unipi.CardsGallery.service.UserService;
@@ -23,6 +24,12 @@ public class ReactionController {
     public ResponseEntity<ResponseWrapper<Reaction>> reactCard (@RequestParam("username") String username, @RequestParam("cardId") String cardId, @RequestParam("tcg") TCG tcg) {
         Reaction reaction = userService.getCardReact(username, cardId, tcg);
         return ResponseEntity.ok(new ResponseWrapper<>("React found", reaction));
+    }
+
+    @GetMapping("/post")
+    public ResponseEntity<ResponseWrapper<ResultPostReactionDTO>> reactPost (@RequestParam("username") String username, @RequestParam("owner") String owner, @RequestParam("title") String title) {
+        ResultPostReactionDTO resultPostReactionDTO = userService.getPostReact(username, owner, title);
+        return ResponseEntity.ok(new ResponseWrapper<>("Reactions found", resultPostReactionDTO));
     }
 
     @PostMapping("/card")

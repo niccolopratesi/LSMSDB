@@ -33,7 +33,8 @@ public interface CardNodeRepository  extends Neo4jRepository<CardNode,Long> {
             "DELETE r")
     void reactDelete(String username, String identifier, TCG type, Reaction reaction);
 
-    @Query("MATCH (u:User {username: $username})-[r:REACTED{reaction: $reaction}]->(c:Card {id: $cardId, tcg: $tcg})" +
-            "RETURN r.reaction AS reaction")
+    @Query("MATCH (u:User)-[r:REACTED]->(c:Card)" +
+            "WHERE u.username = $username AND c.id = $cardId AND c.tcg = $tcg" +
+            "RETURN r.reaction")
     Reaction getReact(String username, String cardId, TCG tcg);
 }

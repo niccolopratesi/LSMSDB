@@ -7,6 +7,9 @@ import org.springframework.data.neo4j.repository.Neo4jRepository;
 import org.springframework.data.neo4j.repository.query.Query;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+import java.util.Map;
+
 @Repository
 public interface PostNodeRepository extends Neo4jRepository<PostNode,Long> {
 
@@ -33,4 +36,14 @@ public interface PostNodeRepository extends Neo4jRepository<PostNode,Long> {
             "MATCH (u)-[r:REACTED {reaction: $reaction}]-(p) " +
             "DELETE r")
     void reactDelete(String username, String title, String postOwner, Reaction reaction);
+
+    @Query("MATCH (p:Post)<-[r:REACTED]-(u:User), (o:User)-[:CREATED]->(p)" +
+            "WHERE p.title = $title AND o.username = $owner" +
+            "RETURN r.reaction, COUNT(r)")
+    List<Map<Reaction, Integer>>  getCounts(String owner, String title);
+
+    @Query("MATCH (p:Post)<-[r:REACTED]-(u:User), (o:User)-[:CREATED]->(p)" +
+            "WHERE p.title = $title AND o.username = $owner AND u.username = $username" +
+            "RETURN r.reaction")
+    Reaction getReact(String username, String owner, String title);
 }

@@ -58,14 +58,6 @@ public class UpdateDatabase {
                         cardNodeRepository.save((CardNode) request.getData());
                     }
                     break;
-                case CREATE_POST_REACTION:
-                    break;
-                case DELETE_POST_REACTION:
-                    break;
-                case CREATE_CARD_REACTION:
-                    break;
-                case DELETE_CARD_REACTION:
-                    break;
                 case UPDATE:
                     if(request.getData() instanceof UserNode) {
                         userNodeRepository.update(((UserNode) request.getData()).getUsername(), request.getUsername());
@@ -115,7 +107,6 @@ public class UpdateDatabase {
                 default:
                     break;
             }
-
             iterator.remove();
         }
     }

@@ -27,6 +27,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import static it.unipi.CardsGallery.utilities.Constants.DECREMENT;
 import static it.unipi.CardsGallery.utilities.Constants.INCREMENT;
@@ -189,7 +190,17 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Reaction getCardReact(String username, String cardId, TCG tcg) {
-        Reaction reaction = cardNodeRepository.getReact(username, cardId, tcg);
-        return reaction;
+        return cardNodeRepository.getReact(username, cardId, tcg);
+    }
+
+    @Override
+    public ResultPostReactionDTO getPostReact(String username, String owner, String title) {
+        List<Map<Reaction, Integer>> list = postNodeRepository.getCounts(owner, title);
+        if(list.isEmpty()){
+            return null;
+        }
+        Map<Reaction, Integer> map = list.get(0);
+        Reaction reaction = postNodeRepository.getReact(username, owner, title);
+        return new ResultPostReactionDTO(map.get(Reaction.LIKE),map.get(Reaction.DISLIKE),map.get(Reaction.LOVE),map.get(Reaction.LAUGH),reaction);
     }
 }
