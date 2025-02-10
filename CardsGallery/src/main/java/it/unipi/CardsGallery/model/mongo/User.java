@@ -27,8 +27,8 @@ public class User {
     private String firstName;
     private String lastName;
     private char sex;
-    private Date birthDate;
-    private Date registrationDate;
+    private String birthDate;
+    private String registrationDate;
     private String profession;
     private List<Post> posts;
 

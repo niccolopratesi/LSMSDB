@@ -34,11 +34,11 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<ResponseWrapper<Void>> loginUser(@RequestBody LoginDTO loginDTO) {
+    public ResponseEntity<ResponseWrapper<String>> loginUser(@RequestBody LoginDTO loginDTO) {
         //!!! controllo che le codifiche hash siano uguali !!!
         try{
-            userService.loginUser(loginDTO);
-            return ResponseEntity.ok(new ResponseWrapper<>("Login successful",null));
+            String id = userService.loginUser(loginDTO);
+            return ResponseEntity.ok(new ResponseWrapper<>("Login successful",id));
         }catch(AuthenticationException e){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseWrapper<>("Username or Password wrong",null));
         }

@@ -77,12 +77,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void loginUser(LoginDTO loginDTO) throws AuthenticationException{
+    public String loginUser(LoginDTO loginDTO) throws AuthenticationException{
         /*Optional<User> userOptional = userRepository.findUserByUsernameAndPassword(loginDTO.getUsername(), loginDTO.getPassword());
         if(userOptional.isEmpty()) {
             throw new AuthenticationException("Username or Password wrong");
         }*/
-        authenticationService.authenticate(new AuthDTO(loginDTO.getUsername(), loginDTO.getPassword()));
+        return authenticationService.authenticate(new AuthDTO(loginDTO.getUsername(), loginDTO.getPassword()));
     }
 
     @Override

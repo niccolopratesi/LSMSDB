@@ -29,7 +29,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     }
 
     @Override
-    public void authenticate(AuthDTO authDTO) throws AuthenticationException {
+    public String authenticate(AuthDTO authDTO) throws AuthenticationException {
         String password = authDTO.getPassword();
 
         User u = userRepository.getUserByUsername(authDTO.getUsername());
@@ -39,6 +39,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         ) {
             throw new AuthenticationException("Username or password is incorrect");
         }
+        return u.getId();
     }
 
     @Override
