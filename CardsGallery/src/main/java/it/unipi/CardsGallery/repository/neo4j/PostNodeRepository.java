@@ -22,9 +22,10 @@ public interface PostNodeRepository extends Neo4jRepository<PostNode,Long> {
            "DETACH DELETE p")
     void delete(String username, String title);
 
-    @Query("MATCH (u:User {username: $username}), (p:Post {title: $title}), (o:User {username: $postOwner}) " +
-            "WHERE EXISTS((o)-[:CREATED]->(p)) " +
-            "MERGE (u)-[r:REACTED {reaction: $reaction}]-(p)")
+    @Query("MATCH (u:User {username: $username}), (p:Post {title: $title}), (o:User {username: $postOwner})" +
+            "WHERE EXISTS((o)-[:CREATED]->(p))" +
+            "MERGE (u)-[r:REACTED]->(p)" +
+            "SET r.reaction = $reaction")
     void react(String username, String title, String postOwner, Reaction reaction);
 
     @Query("MATCH (u:User {username: $username}), (p:Post {title: $title}), (o:User {username: $postOwner}) " +

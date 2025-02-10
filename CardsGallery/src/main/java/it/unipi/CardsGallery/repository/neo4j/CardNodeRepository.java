@@ -20,14 +20,11 @@ public interface CardNodeRepository  extends Neo4jRepository<CardNode,Long> {
            "SET c.name = $name")
     void update(String identifier, TCG type, String name);
 
-    /*
-    * MERGE works like a combination of MATCH and CREATE.
-    * It first looks for existing nodes or relationships that match the criteria. If they exist, it returns them.
-    * If not, it creates the nodes or relationships.
-     * */
+
     @Query("MATCH (u:User), (c:Card) " +
             "WHERE u.username = $username AND c.identifier = $identifier AND c.type = $type " +
-            "MERGE (u)-[r:REACTED {reaction: $reaction}]->(c)")
+            "MERGE (u)-[r:REACTED {reaction: $reaction}]->(c)" +
+            "SET r.reaction = $reaction")
     void react(String username, String identifier, TCG type, Reaction reaction);
 
     @Query("MATCH (u:User), (c:Card) " +
