@@ -1,5 +1,6 @@
 package it.unipi.CardsGallery.DTO;
 
+import it.unipi.CardsGallery.model.enums.Sex;
 import it.unipi.CardsGallery.model.mongo.User;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -17,7 +18,7 @@ public class UpdateUserDTO {
     private AuthDTO auth;
     private String firstName;
     private String lastName;
-    private char sex;
+    private Sex sex;
     private String birthDate;
     private String registrationDate;
     private String profession;

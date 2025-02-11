@@ -10,10 +10,10 @@ public interface YugiohCardService {
     List<YugiohCard> getYugiohCardPage(int page);
 
     List<YugiohCard> getYugiohCardByParameters(
-            Optional<String> name,
-            Optional<String> attribute,
-            Optional<String> race,
-            Optional<String> printing,
+            String name,
+            String attribute,
+            String race,
+            String printing,
             int page
     );
 }

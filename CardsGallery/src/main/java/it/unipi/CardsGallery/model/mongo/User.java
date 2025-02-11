@@ -1,6 +1,7 @@
 package it.unipi.CardsGallery.model.mongo;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import it.unipi.CardsGallery.model.enums.Sex;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -26,7 +27,7 @@ public class User {
     private String password;
     private String firstName;
     private String lastName;
-    private char sex;
+    private Sex sex;
     private String birthDate;
     private String registrationDate;
     private String profession;

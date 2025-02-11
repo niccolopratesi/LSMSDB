@@ -9,10 +9,10 @@ public interface MagicCardService {
     List<MagicCard> getMagicCardPage(int page);
 
     List<MagicCard> getMagicCardByParameters(
-            Optional<String> name,
-            Optional<String> type,
-            Optional<String> firstPrinting,
-            Optional<String> manaCost,
+            String name,
+            String type,
+            String firstPrinting,
+            String manaCost,
             int page
     );
 }

@@ -19,11 +19,11 @@ public class MagicCardController {
 
     @GetMapping("/search")
     public ResponseEntity<ResponseWrapper<List<MagicCard>>> getMagicCardByParameters(
-            @RequestParam(required = false) Optional<String> name,
-            @RequestParam(required = false) Optional<String> type,
-            @RequestParam(required = false) Optional<String> firstPrinting,
-            @RequestParam(required = false) Optional<String> manaCost,
-            @RequestParam(defaultValue = "0") int page
+            @RequestParam(required = false, defaultValue = ".*") String name,
+            @RequestParam(required = false, defaultValue = ".*") String type,
+            @RequestParam(required = false, defaultValue = ".*") String firstPrinting,
+            @RequestParam(required = false, defaultValue = ".*") String manaCost,
+            @RequestParam(required = false, defaultValue = "0") int page
     ) {
         List<MagicCard> result = cardService.getMagicCardByParameters(name, type, firstPrinting, manaCost, page);
         String msg;

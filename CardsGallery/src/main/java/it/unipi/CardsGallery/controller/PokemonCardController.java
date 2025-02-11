@@ -19,11 +19,11 @@ public class PokemonCardController {
 
     @GetMapping("/search")
     public ResponseEntity<ResponseWrapper<List<PokemonCard>>> getPokemonCardByParameters(
-            @RequestParam(required = false) Optional<String> name,
-            @RequestParam(required = false) Optional<String> rarity,
-            @RequestParam(required = false) Optional<String> set,
-            @RequestParam(required = false) Optional<String> artist,
-            @RequestParam(defaultValue = "0") int page
+            @RequestParam(required = false, defaultValue = ".*") String name,
+            @RequestParam(required = false, defaultValue = ".*") String rarity,
+            @RequestParam(required = false, defaultValue = ".*") String set,
+            @RequestParam(required = false, defaultValue = ".*") String artist,
+            @RequestParam(required = false, defaultValue = "0") int page
     ) {
         List<PokemonCard> result = cardService.getPokemonCardByParameters(name, rarity, set, artist, page);
         String msg;

@@ -22,28 +22,23 @@ public class YugiohCardServiceImpl implements YugiohCardService {
 
     @Override
     public List<YugiohCard> getYugiohCardPage(int page) {
-        Pageable pageable = PageRequest.of(page, 20, Sort.by("id").ascending());
+        Pageable pageable = PageRequest.of(page, 20, Sort.by("name").ascending());
         Page<YugiohCard> result = yugiohCardMongoRepository.findAll(pageable);
         return result.getContent();
     }
 
     @Override
     public List<YugiohCard> getYugiohCardByParameters(
-            Optional<String> name,
-            Optional<String> attribute,
-            Optional<String> race,
-            Optional<String> printing,
+            String name,
+            String attribute,
+            String race,
+            String printing,
             int page
     ) {
-        Pageable pageable = PageRequest.of(page, Constants.PAGE_SIZE, Sort.by("id").ascending());
-
-        String n = name.orElse(".*");
-        String a = attribute.orElse(".*");
-        String r = race.orElse(".*");
-        String p = printing.orElse(".*");
+        Pageable pageable = PageRequest.of(page, Constants.PAGE_SIZE, Sort.by("name").ascending());
 
         try {
-            Page<YugiohCard> result = yugiohCardMongoRepository.findByParameters(n, a, r, p, pageable);
+            Page<YugiohCard> result = yugiohCardMongoRepository.findByParameters(name, attribute, race, printing, pageable);
             return result.getContent();
         } catch (Exception e){
             return null;

@@ -21,28 +21,23 @@ public class PokemonCardServiceImpl implements PokemonCardService {
 
     @Override
     public List<PokemonCard> getPokemonCardPage(int page) {
-        Pageable pageable = PageRequest.of(page, 20, Sort.by("id").ascending());
+        Pageable pageable = PageRequest.of(page, 20, Sort.by("name").ascending());
         Page<PokemonCard> result = pokemonCardMongoRepository.findAll(pageable);
         return result.getContent();
     }
 
     @Override
     public List<PokemonCard> getPokemonCardByParameters(
-            Optional<String> name,
-            Optional<String> rarity,
-            Optional<String> set,
-            Optional<String> artist,
+            String name,
+            String rarity,
+            String set,
+            String artist,
             int page
     ) {
-        Pageable pageable = PageRequest.of(page, Constants.PAGE_SIZE, Sort.by("id").ascending());
-
-        String n = name.orElse(".*");
-        String r = rarity.orElse(".*");
-        String s = set.orElse(".*");
-        String a = artist.orElse(".*");
+        Pageable pageable = PageRequest.of(page, Constants.PAGE_SIZE, Sort.by("name").ascending());
 
         try {
-            Page<PokemonCard> result = pokemonCardMongoRepository.findByParameters(n, r, s, a, pageable);
+            Page<PokemonCard> result = pokemonCardMongoRepository.findByParameters(name, rarity, set, artist, pageable);
             return result.getContent();
         } catch (Exception e){
             System.out.println(e.getMessage());

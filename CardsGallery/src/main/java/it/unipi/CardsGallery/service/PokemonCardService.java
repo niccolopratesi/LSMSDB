@@ -10,10 +10,10 @@ public interface PokemonCardService {
     List<PokemonCard> getPokemonCardPage(int page);
 
     List<PokemonCard> getPokemonCardByParameters(
-            Optional<String> name,
-            Optional<String> rarity,
-            Optional<String> set,
-            Optional<String> artist,
+            String name,
+            String rarity,
+            String set,
+            String artist,
             int page
     );
 }

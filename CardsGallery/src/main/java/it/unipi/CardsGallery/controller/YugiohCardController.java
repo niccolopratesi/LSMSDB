@@ -19,11 +19,11 @@ public class YugiohCardController {
 
     @GetMapping("/search")
     public ResponseEntity<ResponseWrapper<List<YugiohCard>>> getYugiohCardByParameters(
-            @RequestParam(required = false) Optional<String> name,
-            @RequestParam(required = false) Optional<String> attribute,
-            @RequestParam(required = false) Optional<String> race,
-            @RequestParam(required = false) Optional<String> printing,
-            @RequestParam(defaultValue = "0") int page
+            @RequestParam(required = false, defaultValue = ".*") String name,
+            @RequestParam(required = false, defaultValue = ".*") String attribute,
+            @RequestParam(required = false, defaultValue = ".*") String race,
+            @RequestParam(required = false, defaultValue = ".*") String printing,
+            @RequestParam(required = false, defaultValue = "0") int page
     ) {
         List<YugiohCard> result = cardService.getYugiohCardByParameters(name, attribute, race, printing, page);
         String msg;

@@ -25,28 +25,23 @@ public class MagicCardServiceImpl implements MagicCardService {
         if(page < 0) {
             page = 0;
         }
-        Pageable pageable = PageRequest.of(page, Constants.PAGE_SIZE, Sort.by("id").ascending());
+        Pageable pageable = PageRequest.of(page, Constants.PAGE_SIZE, Sort.by("name").ascending());
         Page<MagicCard> result = magicCardMongoRepository.findAll(pageable);
         return result.getContent();
     }
 
     @Override
     public List<MagicCard> getMagicCardByParameters(
-            Optional<String> name,
-            Optional<String> type,
-            Optional<String> firstPrinting,
-            Optional<String> manaCost,
+            String name,
+            String type,
+            String firstPrinting,
+            String manaCost,
             int page
     ) {
-        Pageable pageable = PageRequest.of(page, 20, Sort.by("id").ascending());
-
-        String n = name.orElse(".*");
-        String t = type.orElse(".*");
-        String f = firstPrinting.orElse(".*");
-        String m = manaCost.orElse(".*");
+        Pageable pageable = PageRequest.of(page, Constants.PAGE_SIZE, Sort.by("name").ascending());
 
         try {
-            Page<MagicCard> result = magicCardMongoRepository.findByParameters(n, t, f, m, pageable);
+            Page<MagicCard> result = magicCardMongoRepository.findByParameters(name, type, firstPrinting, manaCost, pageable);
             return result.getContent();
         } catch (Exception e){
             return null;
