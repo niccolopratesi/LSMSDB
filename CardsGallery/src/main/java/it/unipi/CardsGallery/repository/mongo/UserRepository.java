@@ -54,7 +54,7 @@ public interface UserRepository extends MongoRepository<User, String> {
 
     void deleteByUsername(String username);
 
-    @Query("{ 'username': ?0 }")
+    @Query(value = "{ 'username': ?0 }" , fields = "{'password': 1, 'admin': 1, 'id': 1}")
     User getUserByUsername(String username);
 
     @Query("{ '_id': ?0, 'username': ?1 }")

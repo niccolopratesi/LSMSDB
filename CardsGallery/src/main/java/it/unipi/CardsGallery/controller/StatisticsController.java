@@ -12,11 +12,9 @@ public class StatisticsController {
 
     @GetMapping
     public String getStatistics() {
-        //????? bisogna capire come restituire la roba in json
 
         //non credo convenga fare 1 richiesta http per ogni statistica xD
 
         return null;
     }
-
 }

@@ -22,7 +22,7 @@ public class YugiohCardServiceImpl implements YugiohCardService {
 
     @Override
     public List<YugiohCard> getYugiohCardPage(int page) {
-        Pageable pageable = PageRequest.of(page, 20, Sort.by("id").ascending()); // Sorting optional
+        Pageable pageable = PageRequest.of(page, 20, Sort.by("id").ascending());
         Page<YugiohCard> result = yugiohCardMongoRepository.findAll(pageable);
         return result.getContent();
     }
@@ -35,7 +35,7 @@ public class YugiohCardServiceImpl implements YugiohCardService {
             Optional<String> printing,
             int page
     ) {
-        Pageable pageable = PageRequest.of(page, Constants.PAGE_SIZE, Sort.by("id").ascending()); // Sorting optional
+        Pageable pageable = PageRequest.of(page, Constants.PAGE_SIZE, Sort.by("id").ascending());
 
         String n = name.orElse(".*");
         String a = attribute.orElse(".*");

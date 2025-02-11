@@ -11,6 +11,7 @@ import it.unipi.CardsGallery.service.AuthenticationService;
 import it.unipi.CardsGallery.service.CardListService;
 import it.unipi.CardsGallery.service.exception.AuthenticationException;
 import it.unipi.CardsGallery.service.exception.ExistingEntityException;
+import it.unipi.CardsGallery.utilities.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -56,8 +57,6 @@ public class CardListServiceImpl implements CardListService {
     public void updateCardList(UpdateCardListDTO list) throws AuthenticationException {
         auth.authenticate(list.getAuth());
         auth.listOwnership(list.getAuth().getId(), list.getCardListId());
-
-        //cardListMongoTemplate.updateCardListStatus(list.getCardListId(),list.isStatus());
         cardListRepository.updateCardListStatus(list.getCardListId(),list.isStatus());
     }
 
@@ -65,32 +64,32 @@ public class CardListServiceImpl implements CardListService {
     public void deleteCardList(DeleteCardListDTO list) throws AuthenticationException {
         auth.authenticate(list.getAuth());
         auth.listOwnership(list.getAuth().getId(), list.getCardListId());
-
         cardListRepository.deleteById(list.getCardListId());
     }
 
     @Override
     public List<CardList> searchCardList(String cardListName, int page) {
-        Pageable pageable = PageRequest.of(page, 3, Sort.by("id").ascending()); // Sorting optional
+        if(page < 0) {
+            page = 0;
+        }
+        Pageable pageable = PageRequest.of(page, Constants.CARDLIST_PAGE_SIZE, Sort.by("id").ascending());
         Page<CardList> result = cardListRepository.findByName(cardListName, pageable);
         return result.getContent();
     }
 
     @Override
     public List<CardList> userCardList(String owner, int page, String username, String password) throws AuthenticationException {
-
-        Pageable pageable = PageRequest.of(page, 3, Sort.by("id").ascending()); // Sorting optional
+        if(page < 0) {
+            page = 0;
+        }
+        Pageable pageable = PageRequest.of(page, Constants.CARDLIST_PAGE_SIZE, Sort.by("id").ascending());
         Page<CardList> result;
 
-        if(username == null || password == null) {
-            result = cardListRepository.findByOwner(owner, pageable);
-        } else {
+        if(username != null && password != null && username.equals(owner)) {
             auth.authenticate(new AuthDTO(username, password));
-            if(username.equals(owner)) {
-                result = cardListRepository.findOwnedLists(owner, pageable);
-            } else {
-                result = cardListRepository.findByOwner(owner, pageable);
-            }
+            result = cardListRepository.findOwnedLists(owner, pageable);
+        } else {
+            result = cardListRepository.findByOwner(owner, pageable);
         }
         return result.getContent();
     }
@@ -107,19 +106,19 @@ public class CardListServiceImpl implements CardListService {
 
         switch (card.getCard().getTcg()) {
             case MAGIC:
-                result = magicCardMongoRepository.existsByCardId(card.getCard().getId());
+                result = magicCardMongoRepository.existsById(card.getCard().getId());
                 card.getCard().setType(null);
                 card.getCard().setAttribute(null);
                 card.getCard().setPokedexNumber(null);
                 break;
             case POKEMON:
-                result = pokemonCardMongoRepository.existsByCardId(card.getCard().getId());
+                result = pokemonCardMongoRepository.existsById(card.getCard().getId());
                 card.getCard().setType(null);
                 card.getCard().setAttribute(null);
                 card.getCard().setColors(null);
                 break;
             case YUGIOH:
-                result = yugiohCardMongoRepository.existsByCardId(card.getCard().getId());
+                result = yugiohCardMongoRepository.existsById(card.getCard().getId());
                 card.getCard().setPokedexNumber(null);
                 card.getCard().setColors(null);
                 break;
@@ -138,8 +137,6 @@ public class CardListServiceImpl implements CardListService {
     public void removeFromCardList(DeleteCardDTO card) throws AuthenticationException {
         auth.authenticate(card.getAuth());
         auth.listOwnership(card.getAuth().getId(), card.getCardListId());
-
-        //cardListMongoTemplate.removeCardFromCardList(card.getCardListId(),card.getCardId());
         cardListRepository.removeCardFromCardList(card.getCardListId(),card.getCardId());
     }
 }

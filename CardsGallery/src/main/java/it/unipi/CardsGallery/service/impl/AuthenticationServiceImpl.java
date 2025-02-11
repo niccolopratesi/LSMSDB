@@ -45,7 +45,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     @Override
     public void listOwnership(String userId, String cardListId) throws AuthenticationException {
         if(!cardListRepository.existsByIdAndUserId(cardListId,userId)) {
-            throw new AuthenticationException("User is not the owner of the card list");
+            throw new AuthenticationException("You are not the owner of the card list");
         }
     }
 
@@ -69,8 +69,9 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         if(
                 u == null ||
                 !BCrypt.verifyer().verify(password.toCharArray(), u.getPassword().toCharArray()).verified
-        )
-            throw new AuthenticationException("User not found");
+        ) {
+            throw new AuthenticationException("Username or password is incorrect");
+        }
         boolean isAdmin = u.getAdmin();
         if(!isAdmin)
             throw new NoAdminException("User is not admin");

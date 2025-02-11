@@ -22,7 +22,10 @@ public class MagicCardServiceImpl implements MagicCardService {
 
     @Override
     public List<MagicCard> getMagicCardPage(int page) {
-        Pageable pageable = PageRequest.of(page, Constants.PAGE_SIZE, Sort.by("id").ascending()); // Sorting optional
+        if(page < 0) {
+            page = 0;
+        }
+        Pageable pageable = PageRequest.of(page, Constants.PAGE_SIZE, Sort.by("id").ascending());
         Page<MagicCard> result = magicCardMongoRepository.findAll(pageable);
         return result.getContent();
     }
@@ -35,7 +38,7 @@ public class MagicCardServiceImpl implements MagicCardService {
             Optional<String> manaCost,
             int page
     ) {
-        Pageable pageable = PageRequest.of(page, 20, Sort.by("id").ascending()); // Sorting optional
+        Pageable pageable = PageRequest.of(page, 20, Sort.by("id").ascending());
 
         String n = name.orElse(".*");
         String t = type.orElse(".*");

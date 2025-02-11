@@ -21,14 +21,27 @@ public class CardListController {
     CardListService cardListService;
 
     @GetMapping("/name")
-    public ResponseEntity<ResponseWrapper<List<CardList>>> getCardList(@RequestParam("cardListName") String cardListName, @RequestParam("page") int page) {
+    public ResponseEntity<ResponseWrapper<List<CardList>>> getCardList(
+            @RequestParam("cardListName") String cardListName,
+            @RequestParam(value = "page", defaultValue = "0") int page
+    ) {
         List<CardList> list = cardListService.searchCardList(cardListName, page);
-        String response = (list != null) ? "Lists found successfully" : "No lists found";
+        String response;
+        if(list == null) {
+            response = "search failed";
+        } else {
+            response = (!list.isEmpty()) ? "Card lists found successfully" : "No lists found";
+        }
         return ResponseEntity.ok(new ResponseWrapper<>(response,list));
     }
 
     @GetMapping
-    public ResponseEntity<ResponseWrapper<List<CardList>>> listsUser(@RequestParam("owner") String owner, @RequestParam("page") int page, @RequestParam(value = "username",required = false) String username, @RequestParam(value = "password", required = false) String password) throws AuthenticationException {
+    public ResponseEntity<ResponseWrapper<List<CardList>>> listsUser(
+            @RequestParam("owner") String owner,
+            @RequestParam(value = "page", defaultValue = "0") int page,
+            @RequestParam(value = "username",required = false) String username,
+            @RequestParam(value = "password", required = false) String password
+    ) {
         try{
             List<CardList> list = cardListService.userCardList(owner, page, username, password);
             String response = (list != null) ? "User's lists found successfully" : "User has no lists";
@@ -44,10 +57,9 @@ public class CardListController {
             cardListService.createCardList(cardListDTO);
             return ResponseEntity.ok(new ResponseWrapper<>("Card List created successfully",null));
         }catch(AuthenticationException e){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseWrapper<>("Failed to create Card List",null));
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseWrapper<>("No registered account found",null));
         }catch(ExistingEntityException e){
             return ResponseEntity.ok(new ResponseWrapper<>(e.getMessage(),null));
-
         }
     }
 
@@ -69,7 +81,7 @@ public class CardListController {
         }catch(AuthenticationException e){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseWrapper<>(e.getMessage(),null));
         }catch(ExistingEntityException e){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseWrapper<>(e.getMessage(),null));
+            return ResponseEntity.ok(new ResponseWrapper<>(e.getMessage(),null));
         }
     }
 
@@ -90,7 +102,7 @@ public class CardListController {
             cardListService.updateCardList(updateCardListDTO);
             return ResponseEntity.ok(new ResponseWrapper<>("List set to " + status + " successfully",null));
         }catch(AuthenticationException e){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseWrapper<>("Failed to set Card List status",null));
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseWrapper<>(e.getMessage(),null));
         }
     }
 }

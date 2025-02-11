@@ -25,11 +25,14 @@ public class PostController {
 
     @GetMapping
     public ResponseEntity<ResponseWrapper<List<Post>>> postsUser (
-            @RequestParam(required = true) String username,
+            @RequestParam String username,
             @RequestParam(defaultValue = "0") int page
     ) {
+        if(page < 0) {
+            page = 0;
+        }
         List<Post> posts = postService.getPostsByUser(username, page);
-        String msg = (posts == null) ? "empty page" : "search completed successfully";
+        String msg = (posts.isEmpty()) ? "empty page" : "search completed successfully";
         return ResponseEntity.ok(new ResponseWrapper<>(msg, posts));
     }
 
@@ -54,5 +57,4 @@ public class PostController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseWrapper<>(e.getMessage(),null));
         }
     }
-
 }

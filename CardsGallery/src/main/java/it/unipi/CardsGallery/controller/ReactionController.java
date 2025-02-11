@@ -23,13 +23,15 @@ public class ReactionController {
     @GetMapping("/card")
     public ResponseEntity<ResponseWrapper<Reaction>> reactCard (@RequestParam("username") String username, @RequestParam("cardId") String cardId, @RequestParam("tcg") TCG tcg) {
         Reaction reaction = userService.getCardReact(username, cardId, tcg);
-        return ResponseEntity.ok(new ResponseWrapper<>("React found", reaction));
+        String response = (reaction == null) ? "React not found" : "React found";
+        return ResponseEntity.ok(new ResponseWrapper<>(response, reaction));
     }
 
     @GetMapping("/post")
     public ResponseEntity<ResponseWrapper<ResultPostReactionDTO>> reactPost (@RequestParam("username") String username, @RequestParam("owner") String owner, @RequestParam("title") String title) {
         ResultPostReactionDTO resultPostReactionDTO = userService.getPostReact(username, owner, title);
-        return ResponseEntity.ok(new ResponseWrapper<>("Reactions found", resultPostReactionDTO));
+        String response = (resultPostReactionDTO == null) ? "Reactions not found" : "Reactions found";
+        return ResponseEntity.ok(new ResponseWrapper<>(response, resultPostReactionDTO));
     }
 
     @PostMapping("/card")

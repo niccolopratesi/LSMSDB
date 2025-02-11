@@ -14,7 +14,7 @@ public interface UserService {
     public void deleteUser(AuthDTO authDTO) throws AuthenticationException;
     public String loginUser(LoginDTO loginDTO) throws AuthenticationException;
     public void updateUser(UpdateUserDTO user) throws AuthenticationException, ExistingEntityException;
-    public User profileUser(String username) throws AuthenticationException, ExistingEntityException;
+    public User profileUser(String username) throws ExistingEntityException;
     public void followUser(UserDTO userDTO) throws AuthenticationException;
     public void unfollowUser(UserDTO userDTO) throws AuthenticationException;
     public void reactCard(CardReactionDTO cardReactionDTO) throws AuthenticationException;
@@ -23,5 +23,6 @@ public interface UserService {
     public void deleteReactPost(PostReactionDTO postReactionDTO) throws AuthenticationException;
     public Reaction getCardReact(String username, String cardId, TCG tcg);
     public ResultPostReactionDTO getPostReact(String username, String owner, String title);
+    public DetailsUserDTO detailsUser(String username);
 }
 

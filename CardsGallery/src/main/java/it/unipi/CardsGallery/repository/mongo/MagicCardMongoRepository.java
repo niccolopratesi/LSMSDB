@@ -8,8 +8,6 @@ import org.springframework.data.mongodb.repository.Query;
 import org.springframework.data.mongodb.repository.Update;
 import org.springframework.stereotype.Repository;
 
-import java.util.Optional;
-
 @Repository
 public interface MagicCardMongoRepository extends MongoRepository<MagicCard,String>  {
     Page<MagicCard> findAll(Pageable pageable);
@@ -31,8 +29,6 @@ public interface MagicCardMongoRepository extends MongoRepository<MagicCard,Stri
     );
 
     @Query("{ 'id': ?0 }")
-    //@Update("{ '$inc': { 'likeCount' : ?1, 'dislikeCount': ?2, 'loveCount': ?3, 'laughCount': ?4 } }")
+    @Update("{ '$inc': { 'likeCount' : ?1, 'dislikeCount': ?2, 'loveCount': ?3, 'laughCount': ?4 } }")
     void updateReactions(String cardId, int likeCount, int dislikeCount, int loveCount, int laughCount);
-
-    boolean existsByCardId(String cardId);
 }

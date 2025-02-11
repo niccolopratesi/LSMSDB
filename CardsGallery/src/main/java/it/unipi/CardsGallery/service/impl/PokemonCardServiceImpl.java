@@ -21,7 +21,7 @@ public class PokemonCardServiceImpl implements PokemonCardService {
 
     @Override
     public List<PokemonCard> getPokemonCardPage(int page) {
-        Pageable pageable = PageRequest.of(page, 20, Sort.by("id").ascending()); // Sorting optional
+        Pageable pageable = PageRequest.of(page, 20, Sort.by("id").ascending());
         Page<PokemonCard> result = pokemonCardMongoRepository.findAll(pageable);
         return result.getContent();
     }
@@ -34,7 +34,7 @@ public class PokemonCardServiceImpl implements PokemonCardService {
             Optional<String> artist,
             int page
     ) {
-        Pageable pageable = PageRequest.of(page, Constants.PAGE_SIZE, Sort.by("id").ascending()); // Sorting optional
+        Pageable pageable = PageRequest.of(page, Constants.PAGE_SIZE, Sort.by("id").ascending());
 
         String n = name.orElse(".*");
         String r = rarity.orElse(".*");

@@ -6,8 +6,6 @@ import it.unipi.CardsGallery.model.enums.Reaction;
 import it.unipi.CardsGallery.model.enums.RequestType;
 import it.unipi.CardsGallery.model.enums.TCG;
 import it.unipi.CardsGallery.model.mongo.User;
-import it.unipi.CardsGallery.model.neo4j.CardNode;
-import it.unipi.CardsGallery.model.neo4j.PostNode;
 import it.unipi.CardsGallery.model.neo4j.UserNode;
 import it.unipi.CardsGallery.pendingRequests.PendingRequests;
 import it.unipi.CardsGallery.pendingRequests.ReactionRequest;
@@ -22,15 +20,13 @@ import it.unipi.CardsGallery.service.AuthenticationService;
 import it.unipi.CardsGallery.service.UserService;
 import it.unipi.CardsGallery.service.exception.AuthenticationException;
 import it.unipi.CardsGallery.service.exception.ExistingEntityException;
+import it.unipi.CardsGallery.utilities.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-
-import static it.unipi.CardsGallery.utilities.Constants.DECREMENT;
-import static it.unipi.CardsGallery.utilities.Constants.INCREMENT;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -65,7 +61,8 @@ public class UserServiceImpl implements UserService {
         }
         user.setId(null);
         user.setPosts(new ArrayList<>());
-        String hash = BCrypt.withDefaults().hashToString(10, user.getPassword().toCharArray());
+        user.setAdmin(false);
+        String hash = BCrypt.withDefaults().hashToString(Constants.BCRYPT_ROUNDS, user.getPassword().toCharArray());
         user.setPassword(hash);
         userRepository.save(user);
 
@@ -76,7 +73,6 @@ public class UserServiceImpl implements UserService {
     @Override
     public void deleteUser(AuthDTO authDTO) throws AuthenticationException {
         auth.accountOwnership(authDTO);
-        //delete all lists of this user
         cardListRepository.deleteAllByUserId(authDTO.getId());
         userRepository.deleteById(authDTO.getId());
 
@@ -86,17 +82,11 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public String loginUser(LoginDTO loginDTO) throws AuthenticationException{
-        /*Optional<User> userOptional = userRepository.findUserByUsernameAndPassword(loginDTO.getUsername(), loginDTO.getPassword());
-        if(userOptional.isEmpty()) {
-            throw new AuthenticationException("Username or Password wrong");
-        }*/
         return authenticationService.authenticate(new AuthDTO(loginDTO.getUsername(), loginDTO.getPassword()));
     }
 
     @Override
-    public User profileUser(String username) throws AuthenticationException, ExistingEntityException {
-        //auth.authenticate(authDTO);
-        //User user = userMongoTemplate.findUserByUsername(username);
+    public User profileUser(String username) throws ExistingEntityException {
         List<User> user = userRepository.findUserByUsername(username);
         if(user.isEmpty()) {
             throw new ExistingEntityException("User not found");
@@ -105,10 +95,17 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void updateUser(UpdateUserDTO userDTO) throws AuthenticationException, ExistingEntityException {
-        //auth.accountOwnership(new AuthDTO(user.getUsername(),user.getPassword(), user.getId()));
-        //!!! update password????? !!!
+    public DetailsUserDTO detailsUser(String username) {
+        int followersCount = userNodeRepository.getFollowersCount(username);
+        int followingCount = userNodeRepository.getFollowingCount(username);
+        int friendsCount = userNodeRepository.getFriendsCount(username);
+        int postsCount = userNodeRepository.getPostsCount(username);
 
+        return new DetailsUserDTO(followersCount, followingCount, friendsCount, postsCount);
+    }
+
+    @Override
+    public void updateUser(UpdateUserDTO userDTO) throws AuthenticationException, ExistingEntityException {
         User user = userRepository.findById(userDTO.getAuth().getId()).orElse(null);
         if(user == null) {
             throw new ExistingEntityException("User not found");
@@ -121,10 +118,6 @@ public class UserServiceImpl implements UserService {
             throw new AuthenticationException("You are not the owner of the account");
         }
 
-        if(userDTO.getNewPassword() != null){
-            String hash = BCrypt.withDefaults().hashToString(10, userDTO.getNewPassword().toCharArray());
-            user.setPassword(hash);
-        }
         if(userDTO.getNewUsername() != null){
             if(userRepository.existsUserByUsername(userDTO.getNewUsername())){
                 throw new AuthenticationException("Username already registered");
@@ -134,6 +127,11 @@ public class UserServiceImpl implements UserService {
             user.setUsername(userDTO.getNewUsername());
 
             PendingRequests.pendingRequests.add(new Request(RequestType.UPDATE, userNode, userDTO.getNewUsername()));
+        }
+
+        if(userDTO.getNewPassword() != null){
+            String hash = BCrypt.withDefaults().hashToString(Constants.BCRYPT_ROUNDS, userDTO.getNewPassword().toCharArray());
+            user.setPassword(hash);
         }
 
         user.setBirthDate(userDTO.getBirthDate());
@@ -149,13 +147,13 @@ public class UserServiceImpl implements UserService {
     @Override
     public void followUser(UserDTO userDTO) throws AuthenticationException{
         auth.authenticate(userDTO.getAuth());
-        userNodeRepository.follow(userDTO.getAuth().getId(), userDTO.getUsername());
+        userNodeRepository.follow(userDTO.getAuth().getUsername(), userDTO.getUsername());
     }
 
     @Override
     public void unfollowUser(UserDTO userDTO) throws AuthenticationException{
         auth.authenticate(userDTO.getAuth());
-        userNodeRepository.unfollow(userDTO.getAuth().getId(), userDTO.getUsername());
+        userNodeRepository.unfollow(userDTO.getAuth().getUsername(), userDTO.getUsername());
     }
 
     @Override
@@ -165,15 +163,16 @@ public class UserServiceImpl implements UserService {
 
         ReactionRequest reactionRequest = new ReactionRequest(cardReactionDTO.getCardId(), cardReactionDTO.getType());
         ReactionRequestData reactionRequestData = new ReactionRequestData(cardReactionDTO.getReaction());
-        PendingRequests.addOrUpdateReaction(reactionRequest, reactionRequestData, cardReactionDTO.getReaction(), INCREMENT);
+        PendingRequests.addOrUpdateReaction(reactionRequest, reactionRequestData, cardReactionDTO.getReaction(), Constants.INCREMENT);
     }
 
     @Override
     public void deleteReactCard(CardReactionDTO cardReactionDTO) throws AuthenticationException {
         auth.authenticate(cardReactionDTO.getAuth());
         cardNodeRepository.reactDelete(cardReactionDTO.getAuth().getUsername(), cardReactionDTO.getCardId(), cardReactionDTO.getType(), cardReactionDTO.getReaction());
+
         ReactionRequest reactionRequest = new ReactionRequest(cardReactionDTO.getCardId(), cardReactionDTO.getType());
-        PendingRequests.addOrUpdateReaction(reactionRequest, null, cardReactionDTO.getReaction(), DECREMENT);
+        PendingRequests.addOrUpdateReaction(reactionRequest, null, cardReactionDTO.getReaction(), Constants.DECREMENT);
     }
 
     @Override

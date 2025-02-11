@@ -29,4 +29,21 @@ public interface UserNodeRepository extends Neo4jRepository<UserNode,Long> {
     @Query("MATCH (follower:User {username: $username})-[r:FOLLOWS]->(followee:User {username: $unfollowingUsername}) " +
             "DELETE r")
     void unfollow(String username, String unfollowingUsername);
+
+    @Query("MATCH (follower:User)-[:FOLLOWS]->(u:User {username: $username}) " +
+            "RETURN count(follower)")
+    int getFollowersCount(String username);
+
+    @Query("MATCH (u:User {username: $username})-[:FOLLOWS]->(followed:User) " +
+            "RETURN count(followed)")
+    int getFollowingCount(String username);
+
+    @Query("MATCH (u:User {username: $username})-[:FOLLOWS]->(friend:User) " +
+            "WHERE (friend)-[:FOLLOWS]->(u) " +
+            "RETURN count(friend) ")
+    int getFriendsCount(String username);
+
+    @Query("MATCH (u:User {username: $username})-[:CREATED]->(p:Post) " +
+            "RETURN count(p)")
+    int getPostsCount(String username);
 }

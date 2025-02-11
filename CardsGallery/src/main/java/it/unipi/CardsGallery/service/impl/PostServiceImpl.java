@@ -46,8 +46,10 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public List<Post> getPostsByUser(String username, int page) {
-        List<Post> result = userRepository.findPostsByUsername(username, page*Constants.PAGE_SIZE, Constants.PAGE_SIZE);
-        return result;
+        if(page < 0) {
+            page = 0;
+        }
+        return userRepository.findPostsByUsername(username, page*Constants.POST_PAGE_SIZE, Constants.POST_PAGE_SIZE);
     }
 
     @Override
@@ -63,13 +65,13 @@ public class PostServiceImpl implements PostService {
 
         switch (post.getType()) {
             case MAGIC:
-                result = magicCardMongoRepository.existsByCardId(post.getCardId());
+                result = magicCardMongoRepository.existsById(post.getCardId());
                 break;
             case POKEMON:
-                result = pokemonCardMongoRepository.existsByCardId(post.getCardId());
+                result = pokemonCardMongoRepository.existsById(post.getCardId());
                 break;
             case YUGIOH:
-                result = yugiohCardMongoRepository.existsByCardId(post.getCardId());
+                result = yugiohCardMongoRepository.existsById(post.getCardId());
                 break;
             default:
                 throw new ExistingEntityException("Please enter card's Tcg correctly");
@@ -88,14 +90,11 @@ public class PostServiceImpl implements PostService {
     @Override
     public void deletePostMember(DeletePostDTO dpDTO) throws AuthenticationException, OwnershipException {
         authenticationService.authenticate(dpDTO.getAuth());
-        if(userRepository.existsByUsernameAndPostsTitle(dpDTO.getAuth().getUsername(), dpDTO.getPostTitle())){
-            userRepository.deletePostFromUser(dpDTO.getAuth().getUsername(), dpDTO.getPostTitle());
-        } else {
+        if(!userRepository.existsByUsernameAndPostsTitle(dpDTO.getAuth().getUsername(), dpDTO.getPostTitle())){
             throw new OwnershipException("post not found");
         }
-
+        userRepository.deletePostFromUser(dpDTO.getAuth().getUsername(), dpDTO.getPostTitle());
         PostNode postNode = new PostNode(dpDTO.getPostTitle());
         PendingRequests.pendingRequests.add(new Request(RequestType.DELETE, postNode, dpDTO.getAuth().getUsername()));
     }
-
 }
