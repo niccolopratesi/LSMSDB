@@ -17,10 +17,6 @@ import java.util.Optional;
 @Repository
 public interface UserRepository extends MongoRepository<User, String> {
 
-    //public Optional<User> findUserByUsernameAndPassword(String username, String password);
-
-    boolean existsUserByUsernameAndPassword(String username, String password);
-
     @Aggregation(pipeline = {
             "{ '$match': { 'username': ?0 } }",
             "{ '$project': { 'posts': 1, '_id': 0 } }",
@@ -39,12 +35,6 @@ public interface UserRepository extends MongoRepository<User, String> {
     List<User> findUserByUsername(String username);
 
     boolean existsUserByUsername(String username);
-
-    @Query(value = "{ 'id': ?0,'username': ?1, 'password': ?2}" , fields = "{'admin': 1, '_id': 0}")
-    User findByIdAndUsernameAndPassword(String id, String username, String password);
-
-    @Query(value = "{ 'username': ?0, 'password': ?1}" , fields = "{'admin': 1, '_id': 0}")
-    User findByUsernameAndPassword(String username, String password);
 
     boolean existsByUsernameAndPostsTitle(String username, String postTitle);
 

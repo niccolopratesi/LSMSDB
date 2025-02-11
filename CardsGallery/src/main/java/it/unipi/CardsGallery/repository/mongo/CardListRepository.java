@@ -1,22 +1,26 @@
 package it.unipi.CardsGallery.repository.mongo;
 
+import it.unipi.CardsGallery.DTO.statistics.YugiohAttributeListDTO;
 import it.unipi.CardsGallery.model.enums.TCG;
 import it.unipi.CardsGallery.model.mongo.Card;
 import it.unipi.CardsGallery.model.mongo.CardList;
 import it.unipi.CardsGallery.model.mongo.MagicCard;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.mongodb.repository.Aggregation;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
 import org.springframework.data.mongodb.repository.Update;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 @Repository
 public interface CardListRepository extends MongoRepository<CardList, String> {
 
     boolean existsByIdAndUserId(String id, String userId);
 
-    @Query("{ 'id': ?0, 'cards.id': ?1 }")
+    //@Query("{ 'id': ?0, 'cards.id': ?1 }")
     boolean existsByIdAndCardsId(String id, String cardsId);
 
     @Query("{'username': ?0}")
@@ -60,4 +64,14 @@ public interface CardListRepository extends MongoRepository<CardList, String> {
     void updateUsername(String oldUsername, String newUsername);
 
     void deleteAllByUsername(String username);
+
+    @Aggregation({
+            "{ '$match': { 'status': true } }",
+            "{ '$unwind': '$cards' }",
+            "{ '$match': { 'cards.attribute': { '$exists': true, '$ne': null } } }",
+            "{ '$group': { '_id': '$cards.attribute', 'count': { '$sum': 1 } } }",
+            "{ '$sort': { 'count': -1 } }",
+            "{ '$project': { '_id': 0, 'attribute': '$_id', 'count': '$count' } }"
+    })
+    List<YugiohAttributeListDTO> getYugiohlistsStatistics();
 }

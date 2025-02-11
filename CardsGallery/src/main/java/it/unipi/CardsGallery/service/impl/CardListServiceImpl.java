@@ -98,7 +98,7 @@ public class CardListServiceImpl implements CardListService {
     public void insertIntoCardList(CardDTO card) throws AuthenticationException, ExistingEntityException {
         auth.authenticate(card.getAuth());
         auth.listOwnership(card.getAuth().getId(), card.getCardListId());
-        if(!cardListRepository.existsByIdAndCardsId(card.getCardListId(),card.getCard().getId())) {
+        if(cardListRepository.existsByIdAndCardsId(card.getCardListId(),card.getCard().getId())) {
             throw new ExistingEntityException("Card already in the card list");
         }
 
