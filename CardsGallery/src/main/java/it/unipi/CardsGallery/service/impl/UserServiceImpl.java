@@ -145,6 +145,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public List<String> reccomandedUser(String username) {
+        return userNodeRepository.getReccomandedUsers(username);
+    }
+
+    @Override
     public void followUser(UserDTO userDTO) throws AuthenticationException{
         auth.authenticate(userDTO.getAuth());
         userNodeRepository.follow(userDTO.getAuth().getUsername(), userDTO.getUsername());

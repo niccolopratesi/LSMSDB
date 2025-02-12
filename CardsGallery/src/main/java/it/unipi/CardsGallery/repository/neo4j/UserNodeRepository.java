@@ -53,7 +53,7 @@ public interface UserNodeRepository extends Neo4jRepository<UserNode,Long> {
             "OPTIONAL MATCH (other:User)-[r:REACTED]->(p)" +
             "RETURN followed.username AS username, COUNT(DISTINCT p) AS posts, COUNT(DISTINCT r) AS reacts" +
             "ORDER BY posts + reactions DESC" +
-            "LIMIT 5;")
+            "LIMIT 5")
     List<MostActiveUsersDTO> getMostActiveUsersStatistics(String username);
 
     @Query("MATCH (u:User {username: $username})-[r1:REACTED]->(c:Card)<-[r2:REACTED]-(other:User)" +
@@ -61,6 +61,13 @@ public interface UserNodeRepository extends Neo4jRepository<UserNode,Long> {
             "WITH other, COUNT(DISTINCT c) AS commonCards" +
             "RETURN DISTINCT other.username" +
             "ORDER BY commonCards DESC"+
-            "LIMIT 5;")
+            "LIMIT 5")
     List<String> getUsersCommonReactStatistics(String username);
+
+    @Query("MATCH (u:User {username: $username})-[:FOLLOWS]->(friend:User)-[:FOLLOWS]->(u) " +
+            "MATCH (friend)-[:FOLLOWS]->(fof:User)-[:FOLLOWS]->(friend) " +
+            "WHERE fof <> u " +
+            "RETURN DISTINCT fof.username"+
+            "LIMIT 10")
+    List<String> getReccomandedUsers(String username);
 }

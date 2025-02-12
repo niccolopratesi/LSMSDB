@@ -66,7 +66,6 @@ public class StatisticsController {
         return ResponseEntity.ok(new ResponseWrapper<>("User with the most number of posts",result));
     }
 
-
     @GetMapping("/card/friend/react")
     public ResponseEntity<ResponseWrapper<List<CardNode>>> getCardFriendReactStatistics(@RequestParam("username") String username) {
         List<CardNode> result = statisticsService.cardFriendReactStatistics(username);

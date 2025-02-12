@@ -7,22 +7,23 @@ import it.unipi.CardsGallery.model.mongo.User;
 import it.unipi.CardsGallery.service.exception.AuthenticationException;
 import it.unipi.CardsGallery.service.exception.ExistingEntityException;
 
-import java.util.Optional;
+import java.util.List;
 
 public interface UserService {
-    public void insertUser(User user) throws AuthenticationException;
-    public void deleteUser(AuthDTO authDTO) throws AuthenticationException;
-    public String loginUser(LoginDTO loginDTO) throws AuthenticationException;
-    public void updateUser(UpdateUserDTO user) throws AuthenticationException, ExistingEntityException;
-    public User profileUser(String username) throws ExistingEntityException;
-    public void followUser(UserDTO userDTO) throws AuthenticationException;
-    public void unfollowUser(UserDTO userDTO) throws AuthenticationException;
-    public void reactCard(CardReactionDTO cardReactionDTO) throws AuthenticationException;
-    public void deleteReactCard(CardReactionDTO cardReactionDTO) throws AuthenticationException;
-    public void reactPost(PostReactionDTO postReactionDTO) throws AuthenticationException;
-    public void deleteReactPost(PostReactionDTO postReactionDTO) throws AuthenticationException;
-    public Reaction getCardReact(String username, String cardId, TCG tcg);
-    public ResultPostReactionDTO getPostReact(String username, String owner, String title);
-    public DetailsUserDTO detailsUser(String username);
+    void insertUser(User user) throws AuthenticationException;
+    void deleteUser(AuthDTO authDTO) throws AuthenticationException;
+    String loginUser(LoginDTO loginDTO) throws AuthenticationException;
+    void updateUser(UpdateUserDTO user) throws AuthenticationException, ExistingEntityException;
+    User profileUser(String username) throws ExistingEntityException;
+    void followUser(UserDTO userDTO) throws AuthenticationException;
+    void unfollowUser(UserDTO userDTO) throws AuthenticationException;
+    void reactCard(CardReactionDTO cardReactionDTO) throws AuthenticationException;
+    void deleteReactCard(CardReactionDTO cardReactionDTO) throws AuthenticationException;
+    void reactPost(PostReactionDTO postReactionDTO) throws AuthenticationException;
+    void deleteReactPost(PostReactionDTO postReactionDTO) throws AuthenticationException;
+    Reaction getCardReact(String username, String cardId, TCG tcg);
+    ResultPostReactionDTO getPostReact(String username, String owner, String title);
+    DetailsUserDTO detailsUser(String username);
+    List<String> reccomandedUser(String username);
 }
 
