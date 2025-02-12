@@ -1,6 +1,7 @@
 package it.unipi.CardsGallery.repository.mongo;
 
 import it.unipi.CardsGallery.DTO.AuthDTO;
+import it.unipi.CardsGallery.DTO.statistics.UserMostPostsDTO;
 import it.unipi.CardsGallery.model.mongo.Post;
 import it.unipi.CardsGallery.model.mongo.User;
 import org.springframework.data.domain.Page;
@@ -49,4 +50,12 @@ public interface UserRepository extends MongoRepository<User, String> {
 
     @Query("{ '_id': ?0, 'username': ?1 }")
     User getUserByIdAndUsername(String id, String username);
+
+    @Aggregation(pipeline = {
+            "{ $project: { username: 1, posts: { $size: '$posts' } } }",
+            "{ $sort: { posts: -1 } }",
+            "{ $limit: 1 }",
+            "{ $project: { _id: 0, username: 1, posts: 1 } }"
+    })
+    UserMostPostsDTO getUserMostPostsStatistics();
 }

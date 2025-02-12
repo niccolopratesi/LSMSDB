@@ -1,8 +1,8 @@
 package it.unipi.CardsGallery.service.impl;
 
-import it.unipi.CardsGallery.DTO.statistics.MagicCostColorDTO;
-import it.unipi.CardsGallery.DTO.statistics.YugiohAttributeListDTO;
+import it.unipi.CardsGallery.DTO.statistics.*;
 import it.unipi.CardsGallery.model.mongo.YugiohCard;
+import it.unipi.CardsGallery.model.neo4j.CardNode;
 import it.unipi.CardsGallery.repository.mongo.*;
 import it.unipi.CardsGallery.repository.neo4j.CardNodeRepository;
 import it.unipi.CardsGallery.repository.neo4j.PostNodeRepository;
@@ -58,5 +58,39 @@ public class StatisticsServiceImpl implements StatisticsService {
     @Override
     public List<MagicCostColorDTO> magicCardStatistics() {
         return magicCardMongoRepository.getMagicCardStatistics();
+    }
+
+    @Override
+    public MagicColorRatioDTO magicRatioStatistics() {
+        return cardListRepository.getMagicRatioStatistics();
+    }
+
+    public PokemonFirstGenDTO pokemonListsStatistics() {
+        return cardListRepository.getPokemonListsStatistics();
+    }
+
+    @Override
+    public UserMostListsDTO userMostListsStatistics() {
+        return cardListRepository.getUserMostListsStatistics();
+    }
+
+    @Override
+    public UserMostPostsDTO userMostPostsStatistics() {
+        return userRepository.getUserMostPostsStatistics();
+    }
+
+    @Override
+    public List<CardNode> cardFriendReactStatistics(String username) {
+        return cardNodeRepository.getCardFriendReactStatistics(username);
+    }
+
+    @Override
+    public List<MostActiveUsersDTO> mostActiveUsersStatistics(String username) {
+        return userNodeRepository.getMostActiveUsersStatistics(username);
+    }
+
+    @Override
+    public List<String> usersCommonReactStatistics(String username) {
+        return userNodeRepository.getUsersCommonReactStatistics(username);
     }
 }

@@ -1,5 +1,6 @@
 package it.unipi.CardsGallery.repository.mongo;
 
+import it.unipi.CardsGallery.DTO.statistics.MagicColorRatioDTO;
 import it.unipi.CardsGallery.DTO.statistics.MagicCostColorDTO;
 import it.unipi.CardsGallery.model.mongo.MagicCard;
 import org.springframework.data.domain.Page;
@@ -36,7 +37,7 @@ public interface MagicCardMongoRepository extends MongoRepository<MagicCard,Stri
     @Update("{ '$inc': { 'likeCount' : ?1, 'dislikeCount': ?2, 'loveCount': ?3, 'laughCount': ?4 } }")
     void updateReactions(String cardId, int likeCount, int dislikeCount, int loveCount, int laughCount);
 
-    @Aggregation({
+    @Aggregation(pipeline = {
             "{ '$unwind': '$colors' }",
             "{ '$group': { '_id': '$colors', 'avgManaValue': { '$avg': '$manaValue' } } }",
             "{ '$project': { '_id': 0, 'color': '$_id', 'avgManaValue': 1 } }"
