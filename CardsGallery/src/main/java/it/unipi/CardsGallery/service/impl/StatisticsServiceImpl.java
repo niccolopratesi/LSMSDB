@@ -5,9 +5,7 @@ import it.unipi.CardsGallery.model.mongo.YugiohCard;
 import it.unipi.CardsGallery.model.neo4j.CardNode;
 import it.unipi.CardsGallery.repository.mongo.*;
 import it.unipi.CardsGallery.repository.neo4j.CardNodeRepository;
-import it.unipi.CardsGallery.repository.neo4j.PostNodeRepository;
 import it.unipi.CardsGallery.repository.neo4j.UserNodeRepository;
-import it.unipi.CardsGallery.service.AuthenticationService;
 import it.unipi.CardsGallery.service.StatisticsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,9 +19,6 @@ public class StatisticsServiceImpl implements StatisticsService {
     private UserRepository userRepository;
 
     @Autowired
-    private AuthenticationService authenticationService;
-
-    @Autowired
     private CardListRepository cardListRepository;
 
     @Autowired
@@ -33,13 +28,7 @@ public class StatisticsServiceImpl implements StatisticsService {
     private CardNodeRepository cardNodeRepository;
 
     @Autowired
-    private PostNodeRepository postNodeRepository;
-
-    @Autowired
     private MagicCardMongoRepository magicCardMongoRepository;
-
-    @Autowired
-    private PokemonCardMongoRepository pokemonCardMongoRepository;
 
     @Autowired
     private YugiohCardMongoRepository yugiohCardMongoRepository;

@@ -7,7 +7,6 @@ import it.unipi.CardsGallery.DTO.statistics.YugiohAttributeListDTO;
 import it.unipi.CardsGallery.model.enums.TCG;
 import it.unipi.CardsGallery.model.mongo.Card;
 import it.unipi.CardsGallery.model.mongo.CardList;
-import it.unipi.CardsGallery.model.mongo.MagicCard;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.repository.Aggregation;

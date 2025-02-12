@@ -2,7 +2,6 @@ package it.unipi.CardsGallery.service.impl;
 
 import at.favre.lib.crypto.bcrypt.BCrypt;
 import it.unipi.CardsGallery.DTO.AuthDTO;
-import it.unipi.CardsGallery.model.mongo.CardList;
 import it.unipi.CardsGallery.model.mongo.User;
 import it.unipi.CardsGallery.repository.mongo.CardListRepository;
 import it.unipi.CardsGallery.repository.mongo.UserRepository;
@@ -11,10 +10,6 @@ import it.unipi.CardsGallery.service.exception.AuthenticationException;
 import it.unipi.CardsGallery.service.exception.NoAdminException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
 
 @Service
 public class AuthenticationServiceImpl implements AuthenticationService {

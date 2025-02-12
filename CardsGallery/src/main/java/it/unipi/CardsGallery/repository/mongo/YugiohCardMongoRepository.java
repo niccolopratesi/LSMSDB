@@ -1,6 +1,5 @@
 package it.unipi.CardsGallery.repository.mongo;
 
-import it.unipi.CardsGallery.DTO.statistics.YugiohAttributeListDTO;
 import it.unipi.CardsGallery.model.mongo.YugiohCard;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -14,6 +13,7 @@ import java.util.List;
 
 @Repository
 public interface YugiohCardMongoRepository extends MongoRepository<YugiohCard,String> {
+
     Page<YugiohCard> findAll(Pageable pageable);
 
     @Query(

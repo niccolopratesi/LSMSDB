@@ -1,6 +1,5 @@
 package it.unipi.CardsGallery.repository.mongo;
 
-import it.unipi.CardsGallery.DTO.statistics.MagicColorRatioDTO;
 import it.unipi.CardsGallery.DTO.statistics.MagicCostColorDTO;
 import it.unipi.CardsGallery.model.mongo.MagicCard;
 import org.springframework.data.domain.Page;
@@ -15,6 +14,7 @@ import java.util.List;
 
 @Repository
 public interface MagicCardMongoRepository extends MongoRepository<MagicCard,String>  {
+
     Page<MagicCard> findAll(Pageable pageable);
 
     @Query(

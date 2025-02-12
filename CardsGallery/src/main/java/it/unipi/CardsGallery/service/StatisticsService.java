@@ -7,14 +7,14 @@ import it.unipi.CardsGallery.model.neo4j.CardNode;
 import java.util.List;
 
 public interface StatisticsService {
-    public List<YugiohCard> yugiohCardStatistics();
-    public List<YugiohAttributeListDTO> yugiohListsStatistics();
-    public PokemonFirstGenDTO pokemonListsStatistics();
-    public List<MagicCostColorDTO> magicCardStatistics();
-    public MagicColorRatioDTO magicRatioStatistics();
-    public UserMostListsDTO userMostListsStatistics();
-    public UserMostPostsDTO userMostPostsStatistics();
-    public List<CardNode> cardFriendReactStatistics(String username);
-    public List<MostActiveUsersDTO> mostActiveUsersStatistics(String username);
-    public List<String> usersCommonReactStatistics(String username);
+    List<YugiohCard> yugiohCardStatistics();
+    List<YugiohAttributeListDTO> yugiohListsStatistics();
+    PokemonFirstGenDTO pokemonListsStatistics();
+    List<MagicCostColorDTO> magicCardStatistics();
+    MagicColorRatioDTO magicRatioStatistics();
+    UserMostListsDTO userMostListsStatistics();
+    UserMostPostsDTO userMostPostsStatistics();
+    List<CardNode> cardFriendReactStatistics(String username);
+    List<MostActiveUsersDTO> mostActiveUsersStatistics(String username);
+    List<String> usersCommonReactStatistics(String username);
 }

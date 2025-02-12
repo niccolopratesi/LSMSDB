@@ -1,7 +1,6 @@
 package it.unipi.CardsGallery.service.impl;
 
 import it.unipi.CardsGallery.DTO.*;
-import it.unipi.CardsGallery.model.enums.TCG;
 import it.unipi.CardsGallery.model.mongo.CardList;
 import it.unipi.CardsGallery.repository.mongo.CardListRepository;
 import it.unipi.CardsGallery.repository.mongo.MagicCardMongoRepository;
