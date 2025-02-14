@@ -9,8 +9,8 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.neo4j.core.schema.GeneratedValue;
 
-import java.util.ArrayList;
-import java.util.Date;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Data
@@ -32,7 +32,11 @@ public class User {
     private String registrationDate;
     private String profession;
     private List<Post> posts;
-
-    //Admin bool?????
     private Boolean admin;
+
+    public void createRegistrationDate(){
+        LocalDateTime currentDate = LocalDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        registrationDate = currentDate.format(formatter);
+    }
 }

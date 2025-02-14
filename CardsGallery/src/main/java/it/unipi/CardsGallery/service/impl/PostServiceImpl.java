@@ -79,6 +79,8 @@ public class PostServiceImpl implements PostService {
             throw new ExistingEntityException("Card does not exist");
         }
 
+        post.createCreationDate();
+
         userRepository.addPostToUser(id, post);
 
         PostNode postNode = new PostNode(post.getTitle());

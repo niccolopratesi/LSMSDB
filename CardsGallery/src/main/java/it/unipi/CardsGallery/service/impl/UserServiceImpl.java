@@ -63,6 +63,7 @@ public class UserServiceImpl implements UserService {
             throw new AuthenticationException("Username already registered");
         }
         user.setId(null);
+        user.createRegistrationDate();
         user.setPosts(new ArrayList<>());
         user.setAdmin(false);
         String hash = BCrypt.withDefaults().hashToString(Constants.BCRYPT_ROUNDS, user.getPassword().toCharArray());
