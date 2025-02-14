@@ -117,7 +117,7 @@ public class UserServiceImpl implements UserService {
 
         if(
                 !user.getUsername().equals(userDTO.getAuth().getUsername())  ||
-                !BCrypt.verifyer().verify(user.getPassword().toCharArray(), user.getPassword().toCharArray()).verified
+                !BCrypt.verifyer().verify(userDTO.getAuth().getPassword().toCharArray(), user.getPassword().toCharArray()).verified
         ){
             throw new AuthenticationException("You are not the owner of the account");
         }
@@ -142,7 +142,6 @@ public class UserServiceImpl implements UserService {
         user.setFirstName(userDTO.getFirstName());
         user.setLastName(userDTO.getLastName());
         user.setProfession(userDTO.getProfession());
-        user.setRegistrationDate(userDTO.getRegistrationDate());
         user.setSex(userDTO.getSex());
 
         userRepository.save(user);
