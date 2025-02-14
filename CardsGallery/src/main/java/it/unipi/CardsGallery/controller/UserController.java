@@ -11,6 +11,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/user")
 public class UserController {
@@ -25,6 +27,8 @@ public class UserController {
             return ResponseEntity.ok(new ResponseWrapper<>("Registration successful",null));
         }catch(AuthenticationException e){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseWrapper<>(e.getMessage(),null));
+        }catch(ExistingEntityException e){
+            return ResponseEntity.ok(new ResponseWrapper<>(e.getMessage(),null));
         }
     }
 
@@ -53,6 +57,15 @@ public class UserController {
     public ResponseEntity<ResponseWrapper<DetailsUserDTO>> detailsUser(@RequestParam("username") String username) {
         DetailsUserDTO detailsUserDTO = userService.detailsUser(username);
         return ResponseEntity.ok(new ResponseWrapper<>(username + " details",detailsUserDTO));
+    }
+
+    @GetMapping("/reccomandation")
+    public  ResponseEntity<ResponseWrapper<List<String>>> reccomandedUser(@RequestParam("username") String username) {
+        if(username == null) {
+            return ResponseEntity.ok(new ResponseWrapper<>("No suggestions found", null));
+        }
+        List<String> result = userService.reccomandedUser(username);
+        return ResponseEntity.ok(new ResponseWrapper<>("Suggested users to "+ username, result));
     }
 
     @DeleteMapping

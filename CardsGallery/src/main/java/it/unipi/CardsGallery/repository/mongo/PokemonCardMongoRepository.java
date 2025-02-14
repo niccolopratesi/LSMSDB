@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface PokemonCardMongoRepository extends MongoRepository<PokemonCard,String> {
+
     Page<PokemonCard> findAll(Pageable pageable);
 
     @Query(

@@ -5,14 +5,12 @@ import it.unipi.CardsGallery.DTO.PostDTO;
 import it.unipi.CardsGallery.model.enums.RequestType;
 import it.unipi.CardsGallery.model.mongo.Post;
 import it.unipi.CardsGallery.model.neo4j.PostNode;
-import it.unipi.CardsGallery.model.neo4j.UserNode;
 import it.unipi.CardsGallery.pendingRequests.PendingRequests;
 import it.unipi.CardsGallery.pendingRequests.Request;
 import it.unipi.CardsGallery.repository.mongo.MagicCardMongoRepository;
 import it.unipi.CardsGallery.repository.mongo.PokemonCardMongoRepository;
 import it.unipi.CardsGallery.repository.mongo.UserRepository;
 import it.unipi.CardsGallery.repository.mongo.YugiohCardMongoRepository;
-import it.unipi.CardsGallery.repository.neo4j.UserNodeRepository;
 import it.unipi.CardsGallery.service.AuthenticationService;
 import it.unipi.CardsGallery.service.PostService;
 import it.unipi.CardsGallery.service.exception.AuthenticationException;
@@ -20,9 +18,6 @@ import it.unipi.CardsGallery.service.exception.ExistingEntityException;
 import it.unipi.CardsGallery.service.exception.OwnershipException;
 import it.unipi.CardsGallery.utilities.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -57,6 +52,9 @@ public class PostServiceImpl implements PostService {
         authenticationService.accountOwnership(postDTO.getAuth());
         Post post = postDTO.getPost();
         String id = postDTO.getAuth().getId();
+        if(postDTO.getPost().getTitle() == null || postDTO.getPost().getTitle().trim().equals("")) {
+            throw new ExistingEntityException("Please enter a title");
+        }
         if(userRepository.existsByUsernameAndPostsTitle(postDTO.getAuth().getUsername(), postDTO.getPost().getTitle())) {
             throw new ExistingEntityException("post already exists");
         }

@@ -1,7 +1,5 @@
 package it.unipi.CardsGallery.service.tasks;
 
-import it.unipi.CardsGallery.model.enums.Reaction;
-import it.unipi.CardsGallery.model.enums.RequestType;
 import it.unipi.CardsGallery.model.neo4j.CardNode;
 import it.unipi.CardsGallery.model.neo4j.PostNode;
 import it.unipi.CardsGallery.model.neo4j.UserNode;
@@ -18,7 +16,6 @@ import it.unipi.CardsGallery.repository.neo4j.UserNodeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Iterator;
 import java.util.Map;

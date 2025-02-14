@@ -55,7 +55,10 @@ public class UserServiceImpl implements UserService {
     public UserServiceImpl() {}
 
     @Override
-    public void insertUser(User user) throws AuthenticationException{
+    public void insertUser(User user) throws AuthenticationException, ExistingEntityException{
+        if(user.getUsername() == null || user.getUsername().trim().equals("")) {
+            throw new ExistingEntityException("Please enter a username");
+        }
         if(userRepository.existsUserByUsername(user.getUsername())){
             throw new AuthenticationException("Username already registered");
         }
@@ -142,6 +145,11 @@ public class UserServiceImpl implements UserService {
         user.setSex(userDTO.getSex());
 
         userRepository.save(user);
+    }
+
+    @Override
+    public List<String> reccomandedUser(String username) {
+        return userNodeRepository.getReccomandedUsers(username);
     }
 
     @Override

@@ -1,7 +1,6 @@
 package it.unipi.CardsGallery.service.impl;
 
 import it.unipi.CardsGallery.DTO.*;
-import it.unipi.CardsGallery.model.enums.TCG;
 import it.unipi.CardsGallery.model.mongo.CardList;
 import it.unipi.CardsGallery.repository.mongo.CardListRepository;
 import it.unipi.CardsGallery.repository.mongo.MagicCardMongoRepository;
@@ -98,7 +97,7 @@ public class CardListServiceImpl implements CardListService {
     public void insertIntoCardList(CardDTO card) throws AuthenticationException, ExistingEntityException {
         auth.authenticate(card.getAuth());
         auth.listOwnership(card.getAuth().getId(), card.getCardListId());
-        if(!cardListRepository.existsByIdAndCardsId(card.getCardListId(),card.getCard().getId())) {
+        if(cardListRepository.existsByIdAndCardsId(card.getCardListId(),card.getCard().getId())) {
             throw new ExistingEntityException("Card already in the card list");
         }
 
