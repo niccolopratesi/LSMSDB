@@ -52,6 +52,9 @@ public class PostServiceImpl implements PostService {
         authenticationService.accountOwnership(postDTO.getAuth());
         Post post = postDTO.getPost();
         String id = postDTO.getAuth().getId();
+        if(postDTO.getPost().getTitle() == null || postDTO.getPost().getTitle().trim().equals("")) {
+            throw new ExistingEntityException("Please enter a title");
+        }
         if(userRepository.existsByUsernameAndPostsTitle(postDTO.getAuth().getUsername(), postDTO.getPost().getTitle())) {
             throw new ExistingEntityException("post already exists");
         }

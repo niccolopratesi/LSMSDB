@@ -10,7 +10,7 @@ import it.unipi.CardsGallery.service.exception.ExistingEntityException;
 import java.util.List;
 
 public interface UserService {
-    void insertUser(User user) throws AuthenticationException;
+    void insertUser(User user) throws AuthenticationException, ExistingEntityException;
     void deleteUser(AuthDTO authDTO) throws AuthenticationException;
     String loginUser(LoginDTO loginDTO) throws AuthenticationException;
     void updateUser(UpdateUserDTO user) throws AuthenticationException, ExistingEntityException;
