@@ -2,13 +2,12 @@ package it.unipi.CardsGallery.pendingRequests;
 
 import it.unipi.CardsGallery.model.enums.Reaction;
 
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.Queue;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class PendingRequests {
-    public static Queue<Request> pendingRequests = new LinkedList<>();
-    public static HashMap<ReactionRequest, ReactionRequestData> pendingReactions = new HashMap<>();
+    public static ConcurrentLinkedQueue<Request> pendingRequests = new ConcurrentLinkedQueue<>();
+    public static ConcurrentHashMap<ReactionRequest, ReactionRequestData> pendingReactions = new ConcurrentHashMap<>();
 
     public static void addOrUpdateReaction(ReactionRequest reactionRequest, ReactionRequestData reactionRequestData, Reaction reaction, boolean action) {
 
