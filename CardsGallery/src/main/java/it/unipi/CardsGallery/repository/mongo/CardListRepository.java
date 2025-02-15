@@ -22,8 +22,8 @@ public interface CardListRepository extends MongoRepository<CardList, String> {
 
     boolean existsByIdAndUserId(String id, String userId);
 
-    //@Query("{ 'id': ?0, 'cards.id': ?1 }")
-    boolean existsByIdAndCardsId(String id, String cardsId);
+    //@Query("{ 'id': ?0, 'cards.id': ?1 'cards.tcg': ?2 }")
+    boolean existsByIdAndCardsIdAndCardsTcg(String id, String cardsId, TCG tcg);
 
     @Query("{'username': ?0}")
     Page<CardList> findOwnedLists(
@@ -52,8 +52,8 @@ public interface CardListRepository extends MongoRepository<CardList, String> {
     void insertCardIntoCardList(String cardListId, Card card);
 
     @Query("{ 'id': ?0 }")
-    @Update("{ '$pull': { 'cards': {'id': ?1} } }")
-    void removeCardFromCardList(String cardListId, String cardId);
+    @Update("{ '$pull': { 'cards': {'id': ?1, 'tcg': ?2} } }")
+    void removeCardFromCardList(String cardListId, String cardId, TCG tcg);
 
     @Query("{}")
     @Update("{ '$pull': { 'cards': {'id': ?0, 'tcg': ?1} } }")

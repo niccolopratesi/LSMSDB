@@ -1,7 +1,7 @@
 package it.unipi.CardsGallery.service.impl;
 
 import it.unipi.CardsGallery.DTO.*;
-import it.unipi.CardsGallery.model.mongo.CardList;
+import it.unipi.CardsGallery.model.mongo.*;
 import it.unipi.CardsGallery.repository.mongo.CardListRepository;
 import it.unipi.CardsGallery.repository.mongo.MagicCardMongoRepository;
 import it.unipi.CardsGallery.repository.mongo.PokemonCardMongoRepository;
@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CardListServiceImpl implements CardListService {
@@ -42,14 +43,14 @@ public class CardListServiceImpl implements CardListService {
     public CardListServiceImpl() {}
 
     @Override
-    public void createCardList(CardListDTO list) throws AuthenticationException, ExistingEntityException {
+    public String createCardList(CardListDTO list) throws AuthenticationException, ExistingEntityException {
         if(list.getCardListName() == null || list.getCardListName().trim().equals("")) {
             throw new ExistingEntityException("Please enter card list name");
         }
         auth.accountOwnership(list.getAuth());
         CardList cardList = new CardList(list.getCardListName(),list.isStatus(),new ArrayList<>(),list.getAuth().getId(),list.getAuth().getUsername());
         cardList.setId(null);
-        cardListRepository.save(cardList);
+        return cardListRepository.save(cardList).getId();
     }
 
     @Override
@@ -95,47 +96,58 @@ public class CardListServiceImpl implements CardListService {
 
     @Override
     public void insertIntoCardList(CardDTO card) throws AuthenticationException, ExistingEntityException {
-        auth.authenticate(card.getAuth());
+        auth.accountOwnership(card.getAuth());
         auth.listOwnership(card.getAuth().getId(), card.getCardListId());
-        if(cardListRepository.existsByIdAndCardsId(card.getCardListId(),card.getCard().getId())) {
+        if(cardListRepository.existsByIdAndCardsIdAndCardsTcg(card.getCardListId(), card.getCardId(), card.getTcg())) {
             throw new ExistingEntityException("Card already in the card list");
         }
 
-        boolean result;
+        Card c = new Card();
+        c.setId(card.getCardId());
+        c.setTcg(card.getTcg());
+        boolean exist = false;
 
-        switch (card.getCard().getTcg()) {
+        switch (card.getTcg()) {
             case MAGIC:
-                result = magicCardMongoRepository.existsById(card.getCard().getId());
-                card.getCard().setType(null);
-                card.getCard().setAttribute(null);
-                card.getCard().setPokedexNumber(null);
+                MagicCard mc = magicCardMongoRepository.findById(card.getCardId()).orElse(null);
+                if(mc != null) {
+                    exist = true;
+                    c.setPrintingSet(mc.getFirstPrinting());
+                    c.setColors(List.of(mc.getColors()));
+                }
                 break;
             case POKEMON:
-                result = pokemonCardMongoRepository.existsById(card.getCard().getId());
-                card.getCard().setType(null);
-                card.getCard().setAttribute(null);
-                card.getCard().setColors(null);
+                PokemonCard pc = pokemonCardMongoRepository.findById(card.getCardId()).orElse(null);
+                if(pc != null) {
+                    exist = true;
+                    c.setPrintingSet(pc.getSet());
+                    c.setPokedexNumber(pc.getNationalPokedexNumbers());
+                }
                 break;
             case YUGIOH:
-                result = yugiohCardMongoRepository.existsById(card.getCard().getId());
-                card.getCard().setPokedexNumber(null);
-                card.getCard().setColors(null);
+                YugiohCard yc = yugiohCardMongoRepository.findById(card.getCardId()).orElse(null);
+                if(yc != null) {
+                    exist = true;
+                    c.setPrintingSet(yc.getPrintings().length != 0 ? yc.getPrintings()[0] : null);
+                    c.setAttribute(yc.getAttribute());
+                    c.setType(yc.getType());
+                }
                 break;
             default:
                 throw new ExistingEntityException("Please enter card's Tcg correctly");
         }
 
-        if (!result) {
+        if (!exist) {
             throw new ExistingEntityException("Card does not exist");
         }
 
-        cardListRepository.insertCardIntoCardList(card.getCardListId(), card.getCard());
+        cardListRepository.insertCardIntoCardList(card.getCardListId(), c);
     }
 
     @Override
-    public void removeFromCardList(DeleteCardDTO card) throws AuthenticationException {
+    public void removeFromCardList(CardDTO card) throws AuthenticationException {
         auth.authenticate(card.getAuth());
         auth.listOwnership(card.getAuth().getId(), card.getCardListId());
-        cardListRepository.removeCardFromCardList(card.getCardListId(),card.getCardId());
+        cardListRepository.removeCardFromCardList(card.getCardListId(),card.getCardId(), card.getTcg());
     }
 }

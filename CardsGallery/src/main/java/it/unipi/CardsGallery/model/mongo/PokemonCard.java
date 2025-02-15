@@ -18,8 +18,8 @@ public class PokemonCard {
     private String id;
 
     private String name;
-    private int level;
-    private int hp;
+    private String level;
+    private String hp;
     private int[] nationalPokedexNumbers;
     private int convertedRetreatCost;
     private String[] retreatCost;

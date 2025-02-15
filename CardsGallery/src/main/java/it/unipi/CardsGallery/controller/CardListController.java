@@ -52,10 +52,10 @@ public class CardListController {
     }
 
     @PostMapping
-    public ResponseEntity<ResponseWrapper<Void>> createList (@RequestBody CardListDTO cardListDTO) {
+    public ResponseEntity<ResponseWrapper<String>> createList (@RequestBody CardListDTO cardListDTO) {
         try{
-            cardListService.createCardList(cardListDTO);
-            return ResponseEntity.ok(new ResponseWrapper<>("Card List created successfully",null));
+            String listId = cardListService.createCardList(cardListDTO);
+            return ResponseEntity.ok(new ResponseWrapper<>("Card List created successfully",listId));
         }catch(AuthenticationException e){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseWrapper<>("No registered account found",null));
         }catch(ExistingEntityException e){
@@ -86,9 +86,9 @@ public class CardListController {
     }
 
     @DeleteMapping("/card")
-    public ResponseEntity<ResponseWrapper<Void>> deleteCard (@RequestBody DeleteCardDTO deleteCardDTO) {
+    public ResponseEntity<ResponseWrapper<Void>> deleteCard (@RequestBody CardDTO cardDTO) {
         try{
-            cardListService.removeFromCardList(deleteCardDTO);
+            cardListService.removeFromCardList(cardDTO);
             return ResponseEntity.ok(new ResponseWrapper<>("Card removed from the list",null));
         }catch(AuthenticationException e){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseWrapper<>(e.getMessage(),null));

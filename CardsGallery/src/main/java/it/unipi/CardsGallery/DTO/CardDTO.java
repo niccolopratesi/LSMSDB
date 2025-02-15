@@ -1,6 +1,6 @@
 package it.unipi.CardsGallery.DTO;
 
-import it.unipi.CardsGallery.model.mongo.Card;
+import it.unipi.CardsGallery.model.enums.TCG;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -11,5 +11,6 @@ import lombok.NoArgsConstructor;
 public class CardDTO {
     private AuthDTO auth;
     private String cardListId;
-    private Card card;
+    private String cardId;
+    private TCG tcg;
 }
