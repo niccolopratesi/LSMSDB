@@ -12,7 +12,7 @@ import java.util.List;
 public interface UserService {
     void insertUser(User user) throws AuthenticationException, ExistingEntityException;
     void deleteUser(AuthDTO authDTO) throws AuthenticationException;
-    String loginUser(LoginDTO loginDTO) throws AuthenticationException;
+    String loginUser(LoginDTO loginDTO) throws AuthenticationException, ExistingEntityException;
     void updateUser(UpdateUserDTO user) throws AuthenticationException, ExistingEntityException;
     User profileUser(String username) throws ExistingEntityException;
     void followUser(UserDTO userDTO) throws AuthenticationException;
@@ -24,6 +24,6 @@ public interface UserService {
     Reaction getCardReact(String username, String cardId, TCG tcg);
     ResultPostReactionDTO getPostReact(String username, String owner, String title);
     DetailsUserDTO detailsUser(String username);
-    List<String> reccomandedUser(String username);
+    List<String> recommendedUser(String username);
 }
 

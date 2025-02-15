@@ -59,6 +59,9 @@ public class UserServiceImpl implements UserService {
         if(user.getUsername() == null || user.getUsername().trim().equals("")) {
             throw new ExistingEntityException("Please enter a username");
         }
+        if(user.getPassword() == null || user.getPassword().trim().equals("")) {
+            throw new ExistingEntityException("Please enter a password");
+        }
         if(userRepository.existsUserByUsername(user.getUsername())){
             throw new AuthenticationException("Username already registered");
         }
@@ -85,7 +88,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public String loginUser(LoginDTO loginDTO) throws AuthenticationException{
+    public String loginUser(LoginDTO loginDTO) throws AuthenticationException, ExistingEntityException{
+        if(loginDTO.getUsername() == null || loginDTO.getUsername().trim().equals("")) {
+            throw new ExistingEntityException("Please enter a username");
+        }
+        if(loginDTO.getPassword() == null || loginDTO.getPassword().trim().equals("")) {
+            throw new ExistingEntityException("Please enter a password");
+        }
         return authenticationService.authenticate(new AuthDTO(loginDTO.getUsername(), loginDTO.getPassword()));
     }
 
@@ -122,7 +131,7 @@ public class UserServiceImpl implements UserService {
             throw new AuthenticationException("You are not the owner of the account");
         }
 
-        if(userDTO.getNewUsername() != null){
+        if(userDTO.getNewUsername() != null && !userDTO.getNewUsername().trim().equals("")){
             if(userRepository.existsUserByUsername(userDTO.getNewUsername())){
                 throw new AuthenticationException("Username already registered");
             }
@@ -133,23 +142,25 @@ public class UserServiceImpl implements UserService {
             PendingRequests.pendingRequests.add(new Request(RequestType.UPDATE, userNode, userDTO.getNewUsername()));
         }
 
-        if(userDTO.getNewPassword() != null){
+        if(userDTO.getNewPassword() != null && !userDTO.getNewPassword().trim().equals("")){
             String hash = BCrypt.withDefaults().hashToString(Constants.BCRYPT_ROUNDS, userDTO.getNewPassword().toCharArray());
             user.setPassword(hash);
         }
 
-        user.setBirthDate(userDTO.getBirthDate());
-        user.setFirstName(userDTO.getFirstName());
-        user.setLastName(userDTO.getLastName());
-        user.setProfession(userDTO.getProfession());
-        user.setSex(userDTO.getSex());
+        user.updateUser(userDTO);
+
+        /*user.setBirthDate(userDTO.getNewBirthDate());
+        user.setFirstName(userDTO.getNewFirstName());
+        user.setLastName(userDTO.getNewLastName());
+        user.setProfession(userDTO.getNewProfession());
+        user.setSex(userDTO.getNewSex());*/
 
         userRepository.save(user);
     }
 
     @Override
-    public List<String> reccomandedUser(String username) {
-        return userNodeRepository.getReccomandedUsers(username);
+    public List<String> recommendedUser(String username) {
+        return userNodeRepository.getRecommendedUsers(username);
     }
 
     @Override

@@ -7,6 +7,7 @@ import it.unipi.CardsGallery.repository.mongo.CardListRepository;
 import it.unipi.CardsGallery.repository.mongo.UserRepository;
 import it.unipi.CardsGallery.service.AuthenticationService;
 import it.unipi.CardsGallery.service.exception.AuthenticationException;
+import it.unipi.CardsGallery.service.exception.ExistingEntityException;
 import it.unipi.CardsGallery.service.exception.NoAdminException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,6 +27,9 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     @Override
     public String authenticate(AuthDTO authDTO) throws AuthenticationException {
         String password = authDTO.getPassword();
+        if(authDTO.getPassword() == null || authDTO.getPassword().trim().equals("")) {
+            throw new AuthenticationException("No password provided");
+        }
 
         User u = userRepository.getUserByUsername(authDTO.getUsername());
         if(
@@ -46,6 +50,9 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     @Override
     public Boolean accountOwnership(AuthDTO authDTO) throws AuthenticationException {
+        if(authDTO.getPassword() == null || authDTO.getPassword().trim().equals("")) {
+            throw new AuthenticationException("No password provided");
+        }
         String password = authDTO.getPassword();
         User u = userRepository.getUserByIdAndUsername(authDTO.getId(), authDTO.getUsername());
         if(
@@ -59,6 +66,9 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     @Override
     public void authenticateAdmin(AuthDTO authDTO) throws AuthenticationException, NoAdminException {
+        if(authDTO.getPassword() == null || authDTO.getPassword().trim().equals("")) {
+            throw new AuthenticationException("No password provided");
+        }
         String password = authDTO.getPassword();
         User u = userRepository.getUserByUsername(authDTO.getUsername());
         if(

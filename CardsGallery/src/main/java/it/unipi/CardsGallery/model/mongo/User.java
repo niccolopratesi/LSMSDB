@@ -1,6 +1,7 @@
 package it.unipi.CardsGallery.model.mongo;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import it.unipi.CardsGallery.DTO.UpdateUserDTO;
 import it.unipi.CardsGallery.model.enums.Sex;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -38,5 +39,23 @@ public class User {
         LocalDateTime currentDate = LocalDateTime.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
         registrationDate = currentDate.format(formatter);
+    }
+
+    public void updateUser(UpdateUserDTO userDTO){
+        if(userDTO.getNewSex() != null) {
+            this.sex = userDTO.getNewSex();
+        }
+        if(userDTO.getNewBirthDate() != null){
+            this.birthDate = userDTO.getNewBirthDate();
+        }
+        if(userDTO.getNewFirstName() != null){
+            this.firstName = userDTO.getNewFirstName();
+        }
+        if(userDTO.getNewLastName() != null){
+            this.lastName = userDTO.getNewLastName();
+        }
+        if(userDTO.getNewProfession() != null){
+            this.profession = userDTO.getNewProfession();
+        }
     }
 }
