@@ -6,6 +6,7 @@ import it.unipi.CardsGallery.model.enums.TCG;
 import it.unipi.CardsGallery.model.mongo.User;
 import it.unipi.CardsGallery.service.exception.AuthenticationException;
 import it.unipi.CardsGallery.service.exception.ExistingEntityException;
+import it.unipi.CardsGallery.service.exception.ParametersException;
 
 import java.util.List;
 
@@ -15,8 +16,8 @@ public interface UserService {
     String loginUser(LoginDTO loginDTO) throws AuthenticationException, ExistingEntityException;
     void updateUser(UpdateUserDTO user) throws AuthenticationException, ExistingEntityException;
     User profileUser(String username) throws ExistingEntityException;
-    void followUser(UserDTO userDTO) throws AuthenticationException;
-    void unfollowUser(UserDTO userDTO) throws AuthenticationException;
+    void followUser(UserDTO userDTO) throws AuthenticationException, ParametersException, ExistingEntityException;
+    void unfollowUser(UserDTO userDTO) throws AuthenticationException, ParametersException, ExistingEntityException;
     void reactCard(CardReactionDTO cardReactionDTO) throws AuthenticationException;
     void deleteReactCard(CardReactionDTO cardReactionDTO) throws AuthenticationException;
     void reactPost(PostReactionDTO postReactionDTO) throws AuthenticationException;

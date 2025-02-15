@@ -20,6 +20,7 @@ import it.unipi.CardsGallery.service.AuthenticationService;
 import it.unipi.CardsGallery.service.UserService;
 import it.unipi.CardsGallery.service.exception.AuthenticationException;
 import it.unipi.CardsGallery.service.exception.ExistingEntityException;
+import it.unipi.CardsGallery.service.exception.ParametersException;
 import it.unipi.CardsGallery.utilities.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -148,13 +149,6 @@ public class UserServiceImpl implements UserService {
         }
 
         user.updateUser(userDTO);
-
-        /*user.setBirthDate(userDTO.getNewBirthDate());
-        user.setFirstName(userDTO.getNewFirstName());
-        user.setLastName(userDTO.getNewLastName());
-        user.setProfession(userDTO.getNewProfession());
-        user.setSex(userDTO.getNewSex());*/
-
         userRepository.save(user);
     }
 
@@ -164,13 +158,25 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void followUser(UserDTO userDTO) throws AuthenticationException{
+    public void followUser(UserDTO userDTO) throws AuthenticationException, ParametersException, ExistingEntityException{
+        if(
+                userDTO.getUsername() == null
+                || userDTO.getUsername().trim().equals("")
+        ) {
+            throw new ExistingEntityException("Insert a valid username to follow");
+        }
+        if(userDTO.getUsername().equals(userDTO.getAuth().getUsername())) {
+            throw new ParametersException("You cannot follow yourself");
+        }
         auth.authenticate(userDTO.getAuth());
-        userNodeRepository.follow(userDTO.getAuth().getUsername(), userDTO.getUsername());
+        Boolean result = userNodeRepository.follow(userDTO.getAuth().getUsername(), userDTO.getUsername());
+        if(result == null || !result) {
+            throw new ExistingEntityException(userDTO.getUsername() + " not found");
+        }
     }
 
     @Override
-    public void unfollowUser(UserDTO userDTO) throws AuthenticationException{
+    public void unfollowUser(UserDTO userDTO) throws AuthenticationException, ParametersException{
         auth.authenticate(userDTO.getAuth());
         userNodeRepository.unfollow(userDTO.getAuth().getUsername(), userDTO.getUsername());
     }

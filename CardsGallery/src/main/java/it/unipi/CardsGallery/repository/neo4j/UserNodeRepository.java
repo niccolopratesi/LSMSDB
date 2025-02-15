@@ -23,8 +23,10 @@ public interface UserNodeRepository extends Neo4jRepository<UserNode,Long> {
     void update(String oldUsername, String newUsername);
 
     @Query("MATCH (follower:User {username: $username}), (followee:User {username: $followingUsername}) " +
-            "MERGE (follower)-[r:FOLLOWS]->(followee)")
-    void follow(String username, String followingUsername);
+            "WHERE followee IS NOT NULL " +
+            "MERGE (follower)-[r:FOLLOWS]->(followee) " +
+            "RETURN CASE WHEN r IS NOT NULL THEN true ELSE false END")
+    Boolean follow(String username, String followingUsername);
 
     @Query("MATCH (follower:User {username: $username})-[r:FOLLOWS]->(followee:User {username: $unfollowingUsername}) " +
             "DELETE r")

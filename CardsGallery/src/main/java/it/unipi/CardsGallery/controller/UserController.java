@@ -6,6 +6,7 @@ import it.unipi.CardsGallery.model.mongo.User;
 import it.unipi.CardsGallery.service.UserService;
 import it.unipi.CardsGallery.service.exception.AuthenticationException;
 import it.unipi.CardsGallery.service.exception.ExistingEntityException;
+import it.unipi.CardsGallery.service.exception.ParametersException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -98,8 +99,10 @@ public class UserController {
         try{
             userService.followUser(userDTO);
             return ResponseEntity.ok(new ResponseWrapper<>("You now follow " + userDTO.getUsername(),null));
-        } catch(AuthenticationException e){
+        }catch(AuthenticationException e){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseWrapper<>(e.getMessage(),null));
+        }catch(ParametersException | ExistingEntityException e){
+            return ResponseEntity.ok(new ResponseWrapper<>(e.getMessage(),null));
         }
     }
 
@@ -108,8 +111,10 @@ public class UserController {
         try{
             userService.unfollowUser(userDTO);
             return ResponseEntity.ok(new ResponseWrapper<>("You no longer follow " + userDTO.getUsername(),null));
-        } catch(AuthenticationException e){
+        }catch(AuthenticationException e){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseWrapper<>(e.getMessage(),null));
+        }catch(ParametersException | ExistingEntityException e){
+            return ResponseEntity.ok(new ResponseWrapper<>(e.getMessage(),null));
         }
     }
 }
