@@ -68,7 +68,7 @@ public interface UserNodeRepository extends Neo4jRepository<UserNode,Long> {
 
     @Query("MATCH (u:User {username: $username})-[:FOLLOWS]->(friend:User)-[:FOLLOWS]->(u) " +
             "MATCH (friend)-[:FOLLOWS]->(fof:User)-[:FOLLOWS]->(friend) " +
-            "WHERE fof <> u " +
+            "WHERE fof <> u AND NOT (u)-[:FOLLOWS]->(fof) " +
             "RETURN DISTINCT fof.username "+
             "LIMIT 10")
     List<String> getRecommendedUsers(String username);
