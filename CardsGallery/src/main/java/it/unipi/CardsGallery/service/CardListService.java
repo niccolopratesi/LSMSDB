@@ -8,11 +8,11 @@ import it.unipi.CardsGallery.service.exception.ExistingEntityException;
 import java.util.List;
 
 public interface CardListService {
-    void createCardList(CardListDTO list) throws AuthenticationException, ExistingEntityException;
+    String createCardList(CardListDTO list) throws AuthenticationException, ExistingEntityException;
     void updateCardList(UpdateCardListDTO list) throws AuthenticationException;
     void deleteCardList(DeleteCardListDTO list) throws AuthenticationException;
     List<CardList> userCardList(String owner, int page, String username, String password) throws AuthenticationException;
     void insertIntoCardList(CardDTO card) throws AuthenticationException, ExistingEntityException;
-    void removeFromCardList(DeleteCardDTO card) throws AuthenticationException;
+    void removeFromCardList(CardDTO card) throws AuthenticationException;
     List<CardList> searchCardList(String cardListName, int page);
 }

@@ -60,16 +60,6 @@
 			<artifactId>json</artifactId>
 			<version>20230227</version>
 		</dependency>
-		<dependency>
-			<groupId>org.mongodb</groupId>
-			<artifactId>mongodb-driver-sync</artifactId>
-			<version>5.2.0</version>
-		</dependency>
-		<dependency>
-			<groupId>org.neo4j.driver</groupId>
-			<artifactId>neo4j-java-driver</artifactId>
-			<version>5.27.0</version>
-		</dependency>
 
 		<!-- ROBA IN PIù PER REPOSITORY NOSQL-->
 		<dependency>
