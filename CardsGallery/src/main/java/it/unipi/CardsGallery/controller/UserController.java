@@ -39,6 +39,8 @@ public class UserController {
             return ResponseEntity.ok(new ResponseWrapper<>("Login successful",id));
         }catch(AuthenticationException e){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseWrapper<>("Username or Password wrong",null));
+        }catch(ExistingEntityException e){
+            return ResponseEntity.ok(new ResponseWrapper<>(e.getMessage(),null));
         }
     }
 
@@ -59,12 +61,12 @@ public class UserController {
         return ResponseEntity.ok(new ResponseWrapper<>(username + " details",detailsUserDTO));
     }
 
-    @GetMapping("/reccomandation")
+    @GetMapping("/recommendation")
     public  ResponseEntity<ResponseWrapper<List<String>>> reccomandedUser(@RequestParam("username") String username) {
         if(username == null) {
             return ResponseEntity.ok(new ResponseWrapper<>("No suggestions found", null));
         }
-        List<String> result = userService.reccomandedUser(username);
+        List<String> result = userService.recommendedUser(username);
         return ResponseEntity.ok(new ResponseWrapper<>("Suggested users to "+ username, result));
     }
 

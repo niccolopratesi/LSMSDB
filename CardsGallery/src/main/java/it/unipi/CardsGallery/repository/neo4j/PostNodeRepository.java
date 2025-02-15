@@ -19,14 +19,14 @@ public interface PostNodeRepository extends Neo4jRepository<PostNode,Long> {
     )
     void createPost(String username, String title);
 
-    @Query("MATCH (u:User)-[:CREATED]->(p:Post)" +
-           "WHERE u.username = $username AND p.title = $title" +
+    @Query("MATCH (u:User)-[:CREATED]->(p:Post) " +
+           "WHERE u.username = $username AND p.title = $title " +
            "DETACH DELETE p")
     void delete(String username, String title);
 
-    @Query("MATCH (u:User {username: $username}), (p:Post {title: $title}), (o:User {username: $postOwner})" +
-            "WHERE EXISTS((o)-[:CREATED]->(p))" +
-            "MERGE (u)-[r:REACTED]->(p)" +
+    @Query("MATCH (u:User {username: $username}), (p:Post {title: $title}), (o:User {username: $postOwner}) " +
+            "WHERE EXISTS((o)-[:CREATED]->(p)) " +
+            "MERGE (u)-[r:REACTED]->(p) " +
             "SET r.reaction = $reaction")
     void react(String username, String title, String postOwner, Reaction reaction);
 
@@ -36,13 +36,13 @@ public interface PostNodeRepository extends Neo4jRepository<PostNode,Long> {
             "DELETE r")
     void reactDelete(String username, String title, String postOwner, Reaction reaction);
 
-    @Query("MATCH (p:Post)<-[r:REACTED]-(u:User), (o:User)-[:CREATED]->(p)" +
-            "WHERE p.title = $title AND o.username = $owner" +
+    @Query("MATCH (p:Post)<-[r:REACTED]-(u:User), (o:User)-[:CREATED]->(p) " +
+            "WHERE p.title = $title AND o.username = $owner " +
             "RETURN r.reaction, COUNT(r)")
     List<Map<Reaction, Integer>>  getCounts(String owner, String title);
 
-    @Query("MATCH (p:Post)<-[r:REACTED]-(u:User), (o:User)-[:CREATED]->(p)" +
-            "WHERE p.title = $title AND o.username = $owner AND u.username = $username" +
+    @Query("MATCH (p:Post)<-[r:REACTED]-(u:User), (o:User)-[:CREATED]->(p) " +
+            "WHERE p.title = $title AND o.username = $owner AND u.username = $username " +
             "RETURN r.reaction")
     Reaction getReact(String username, String owner, String title);
 }

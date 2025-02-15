@@ -11,14 +11,14 @@ import java.util.List;
 @Repository
 public interface UserNodeRepository extends Neo4jRepository<UserNode,Long> {
 
-    @Query("MATCH (u:User) " +
+    @Query("MATCH (u:User {username: $username}) " +
            "OPTIONAL MATCH (u)-[:CREATED]->(p:Post) " +
-           "WHERE u.username = $username " +
+           //"WHERE u.username = $username " +
            "DETACH DELETE u, p")
     void delete(String username);
 
-    @Query("MATCH (u:User)" +
-           "WHERE u.username = $oldUsername" +
+    @Query("MATCH (u:User) " +
+           "WHERE u.username = $oldUsername " +
            "SET u.username = $newUsername")
     void update(String oldUsername, String newUsername);
 
@@ -47,26 +47,26 @@ public interface UserNodeRepository extends Neo4jRepository<UserNode,Long> {
             "RETURN count(p)")
     int getPostsCount(String username);
 
-    @Query("MATCH (me:User {username: $username})-[:FOLLOWS]->(followed:User)" +
-            "OPTIONAL MATCH (followed)-[:CREATED]->(p:Post)" +
-            "OPTIONAL MATCH (other:User)-[r:REACTED]->(p)" +
-            "RETURN followed.username AS username, COUNT(DISTINCT p) AS posts, COUNT(DISTINCT r) AS reacts" +
-            "ORDER BY posts + reactions DESC" +
+    @Query("MATCH (me:User {username: $username})-[:FOLLOWS]->(followed:User) " +
+            "OPTIONAL MATCH (followed)-[:CREATED]->(p:Post) " +
+            "OPTIONAL MATCH (other:User)-[r:REACTED]->(p) " +
+            "RETURN followed.username AS username, COUNT(DISTINCT p) AS posts, COUNT(DISTINCT r) AS reacts " +
+            "ORDER BY posts + reactions DESC " +
             "LIMIT 5")
     List<MostActiveUsersDTO> getMostActiveUsersStatistics(String username);
 
-    @Query("MATCH (u:User {username: $username})-[r1:REACTED]->(c:Card)<-[r2:REACTED]-(other:User)" +
-            "WHERE u <> other AND r1.type = r2.type" +
-            "WITH other, COUNT(DISTINCT c) AS commonCards" +
-            "RETURN DISTINCT other.username" +
-            "ORDER BY commonCards DESC"+
+    @Query("MATCH (u:User {username: $username})-[r1:REACTED]->(c:Card)<-[r2:REACTED]-(other:User) " +
+            "WHERE u <> other AND r1.type = r2.type " +
+            "WITH other, COUNT(DISTINCT c) AS commonCards " +
+            "RETURN DISTINCT other.username " +
+            "ORDER BY commonCards DESC "+
             "LIMIT 5")
     List<String> getUsersCommonReactStatistics(String username);
 
     @Query("MATCH (u:User {username: $username})-[:FOLLOWS]->(friend:User)-[:FOLLOWS]->(u) " +
             "MATCH (friend)-[:FOLLOWS]->(fof:User)-[:FOLLOWS]->(friend) " +
             "WHERE fof <> u " +
-            "RETURN DISTINCT fof.username"+
+            "RETURN DISTINCT fof.username "+
             "LIMIT 10")
-    List<String> getReccomandedUsers(String username);
+    List<String> getRecommendedUsers(String username);
 }
