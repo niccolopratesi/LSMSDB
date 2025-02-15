@@ -113,7 +113,7 @@ public class UserController {
             return ResponseEntity.ok(new ResponseWrapper<>("You no longer follow " + userDTO.getUsername(),null));
         }catch(AuthenticationException e){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseWrapper<>(e.getMessage(),null));
-        }catch(ParametersException | ExistingEntityException e){
+        }catch(ExistingEntityException e){
             return ResponseEntity.ok(new ResponseWrapper<>(e.getMessage(),null));
         }
     }

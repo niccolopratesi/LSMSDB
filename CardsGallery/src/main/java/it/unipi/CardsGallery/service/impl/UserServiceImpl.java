@@ -176,9 +176,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void unfollowUser(UserDTO userDTO) throws AuthenticationException, ParametersException{
+    public void unfollowUser(UserDTO userDTO) throws AuthenticationException, ExistingEntityException{
         auth.authenticate(userDTO.getAuth());
-        userNodeRepository.unfollow(userDTO.getAuth().getUsername(), userDTO.getUsername());
+        Boolean result = userNodeRepository.unfollow(userDTO.getAuth().getUsername(), userDTO.getUsername());
+        if(result == null || !result) {
+            throw new ExistingEntityException("You were not following " + userDTO.getUsername());
+        }
     }
 
     @Override

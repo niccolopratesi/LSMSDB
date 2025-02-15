@@ -17,7 +17,7 @@ public interface UserService {
     void updateUser(UpdateUserDTO user) throws AuthenticationException, ExistingEntityException;
     User profileUser(String username) throws ExistingEntityException;
     void followUser(UserDTO userDTO) throws AuthenticationException, ParametersException, ExistingEntityException;
-    void unfollowUser(UserDTO userDTO) throws AuthenticationException, ParametersException, ExistingEntityException;
+    void unfollowUser(UserDTO userDTO) throws AuthenticationException, ExistingEntityException;
     void reactCard(CardReactionDTO cardReactionDTO) throws AuthenticationException;
     void deleteReactCard(CardReactionDTO cardReactionDTO) throws AuthenticationException;
     void reactPost(PostReactionDTO postReactionDTO) throws AuthenticationException;
