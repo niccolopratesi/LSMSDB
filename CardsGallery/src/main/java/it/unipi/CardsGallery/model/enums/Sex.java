@@ -7,6 +7,7 @@ public enum Sex {
 
     @JsonCreator
     public static Sex fromString(String value) {
+        if (value == null) return NOT_SPECIFIED;
         for (Sex sex : Sex.values()) {
             if (sex.name().equalsIgnoreCase(value)) {
                 return sex;

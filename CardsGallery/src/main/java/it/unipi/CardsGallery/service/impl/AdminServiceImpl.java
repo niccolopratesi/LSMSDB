@@ -51,9 +51,6 @@ public class AdminServiceImpl implements AdminService {
         TCG type = adminCardNoFieldsDTO.getType();
         String id = adminCardNoFieldsDTO.getId();
 
-        CardNode cardNode = new CardNode();
-        cardNode.setIdentifier(id);
-
         switch (type) {
             case MAGIC:
             if(!magicCardMongoRepository.existsById(id))
@@ -78,6 +75,8 @@ public class AdminServiceImpl implements AdminService {
         }
         cardListRepository.removeCardFromAllCardList(id, type);
 
+        CardNode cardNode = new CardNode();
+        cardNode.setIdentifier(id);
         PendingRequests.pendingRequests.add(new Request(RequestType.DELETE, cardNode));
     }
 

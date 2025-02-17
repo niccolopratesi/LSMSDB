@@ -27,4 +27,8 @@ public class Post {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
         creationDate = currentDate.format(formatter);
     }
+
+    public TCG getType() {
+        return type != null ? type : TCG.UNDEFINED;
+    }
 }

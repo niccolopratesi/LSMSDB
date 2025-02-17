@@ -7,6 +7,7 @@ public enum TCG {
 
     @JsonCreator
     public static TCG fromString(String value) {
+        if(value == null) return UNDEFINED;
         for (TCG tcg : TCG.values()) {
             if (tcg.name().equalsIgnoreCase(value)) {
                 return tcg;
