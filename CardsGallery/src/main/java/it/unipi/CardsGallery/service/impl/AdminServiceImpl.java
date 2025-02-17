@@ -83,11 +83,6 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     public void insertMagicCard(MagicCardDTO newMagicCardDTO) throws AuthenticationException, NoAdminException, ExistingEntityException {
-
-        if( newMagicCardDTO.getMagic() == null ) {
-            throw new ExistingEntityException("No card inserted");
-        }
-
         AuthDTO authDTO = newMagicCardDTO.getAuth();
         authenticationService.authenticateAdmin(authDTO);
 
@@ -105,10 +100,6 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     public void insertPokemonCard(PokemonCardDTO newPokemonCardDTO) throws AuthenticationException, NoAdminException, ExistingEntityException {
-        if(newPokemonCardDTO.getPokemon() == null ) {
-            throw new ExistingEntityException("No card inserted");
-        }
-
         AuthDTO authDTO = newPokemonCardDTO.getAuth();
         authenticationService.authenticateAdmin(authDTO);
 
@@ -126,10 +117,6 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     public void insertYugiohCard(YugiohCardDTO newYugiohCardDTO) throws AuthenticationException, NoAdminException, ExistingEntityException {
-        if(newYugiohCardDTO.getYugioh() == null ) {
-            throw new ExistingEntityException("No card inserted");
-        }
-
         AuthDTO authDTO = newYugiohCardDTO.getAuth();
         authenticationService.authenticateAdmin(authDTO);
 
@@ -234,8 +221,6 @@ public class AdminServiceImpl implements AdminService {
         yugiohCard.updateCard(yugiohCardDTO.getYugioh());
         yugiohCardMongoRepository.save(yugiohCard);
     }
-
-
 
     @Override
     public void deletePost(AdminDeletePostDTO dpDTO) throws AuthenticationException, NoAdminException {
