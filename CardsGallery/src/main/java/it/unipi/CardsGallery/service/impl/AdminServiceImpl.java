@@ -77,6 +77,7 @@ public class AdminServiceImpl implements AdminService {
 
         CardNode cardNode = new CardNode();
         cardNode.setIdentifier(id);
+        cardNode.setType(type);
         PendingRequests.pendingRequests.add(new Request(RequestType.DELETE, cardNode));
     }
 
