@@ -8,6 +8,7 @@ import it.unipi.CardsGallery.model.enums.Reaction;
 import it.unipi.CardsGallery.model.enums.TCG;
 import it.unipi.CardsGallery.service.UserService;
 import it.unipi.CardsGallery.service.exception.AuthenticationException;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -35,7 +36,7 @@ public class ReactionController {
     }
 
     @PostMapping("/card")
-    public ResponseEntity<ResponseWrapper<Void>> reactCard (@RequestBody CardReactionDTO cardReactionDTO) {
+    public ResponseEntity<ResponseWrapper<Void>> reactCard (@Valid @RequestBody CardReactionDTO cardReactionDTO) {
         try{
             userService.reactCard(cardReactionDTO);
             return ResponseEntity.ok(new ResponseWrapper<>("React added",null));
@@ -45,7 +46,7 @@ public class ReactionController {
     }
 
     @DeleteMapping("/card")
-    public ResponseEntity<ResponseWrapper<Void>> deleteReactCard (@RequestBody CardReactionDTO cardReactionDTO) {
+    public ResponseEntity<ResponseWrapper<Void>> deleteReactCard (@Valid @RequestBody CardReactionDTO cardReactionDTO) {
         try{
             userService.deleteReactCard(cardReactionDTO);
             return ResponseEntity.ok(new ResponseWrapper<>("React removed",null));
@@ -55,7 +56,7 @@ public class ReactionController {
     }
 
     @PostMapping("/post")
-    public ResponseEntity<ResponseWrapper<Void>> reactPost (@RequestBody PostReactionDTO postReactionDTO) {
+    public ResponseEntity<ResponseWrapper<Void>> reactPost (@Valid @RequestBody PostReactionDTO postReactionDTO) {
         try{
             userService.reactPost(postReactionDTO);
             return ResponseEntity.ok(new ResponseWrapper<>("React added",null));
@@ -65,7 +66,7 @@ public class ReactionController {
     }
 
     @DeleteMapping("/post")
-    public ResponseEntity<ResponseWrapper<Void>> deleteReactPost (@RequestBody PostReactionDTO postReactionDTO) {
+    public ResponseEntity<ResponseWrapper<Void>> deleteReactPost (@Valid @RequestBody PostReactionDTO postReactionDTO) {
         try{
             userService.deleteReactPost(postReactionDTO);
             return ResponseEntity.ok(new ResponseWrapper<>("React removed",null));

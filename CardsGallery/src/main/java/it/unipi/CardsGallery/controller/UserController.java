@@ -7,6 +7,7 @@ import it.unipi.CardsGallery.service.UserService;
 import it.unipi.CardsGallery.service.exception.AuthenticationException;
 import it.unipi.CardsGallery.service.exception.ExistingEntityException;
 import it.unipi.CardsGallery.service.exception.ParametersException;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,7 +23,7 @@ public class UserController {
     UserService userService;
 
     @PostMapping("/registration")
-    public ResponseEntity<ResponseWrapper<Void>> registerUser(@RequestBody User user) {
+    public ResponseEntity<ResponseWrapper<Void>> registerUser(@Valid @RequestBody User user) {
         try{
             userService.insertUser(user);
             return ResponseEntity.ok(new ResponseWrapper<>("Registration successful",null));
@@ -34,7 +35,7 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<ResponseWrapper<String>> loginUser(@RequestBody LoginDTO loginDTO) {
+    public ResponseEntity<ResponseWrapper<String>> loginUser(@Valid @RequestBody LoginDTO loginDTO) {
         try{
             String id = userService.loginUser(loginDTO);
             return ResponseEntity.ok(new ResponseWrapper<>("Login successful",id));
@@ -72,7 +73,7 @@ public class UserController {
     }
 
     @DeleteMapping
-    public ResponseEntity<ResponseWrapper<Void>> deleteUser(@RequestBody AuthDTO authDTO) {
+    public ResponseEntity<ResponseWrapper<Void>> deleteUser(@Valid @RequestBody AuthDTO authDTO) {
         try{
             userService.deleteUser(authDTO);
             return ResponseEntity.ok(new ResponseWrapper<>("Account deleted correctly",null));
@@ -83,7 +84,7 @@ public class UserController {
 
     @PutMapping
     @ResponseBody
-    public ResponseEntity<ResponseWrapper<Void>> updateUser(@RequestBody UpdateUserDTO user) {
+    public ResponseEntity<ResponseWrapper<Void>> updateUser(@Valid @RequestBody UpdateUserDTO user) {
         try{
             userService.updateUser(user);
             return ResponseEntity.ok(new ResponseWrapper<>("Account updated correctly",null));
@@ -95,7 +96,7 @@ public class UserController {
     }
 
     @PostMapping("/follow")
-    public ResponseEntity<ResponseWrapper<Void>> followUser(@RequestBody UserDTO userDTO) {
+    public ResponseEntity<ResponseWrapper<Void>> followUser(@Valid @RequestBody UserDTO userDTO) {
         try{
             userService.followUser(userDTO);
             return ResponseEntity.ok(new ResponseWrapper<>("You now follow " + userDTO.getUsername(),null));
@@ -107,7 +108,7 @@ public class UserController {
     }
 
     @DeleteMapping("/follow")
-    public ResponseEntity<ResponseWrapper<Void>>unfollowUser(@RequestBody UserDTO userDTO) {
+    public ResponseEntity<ResponseWrapper<Void>>unfollowUser(@Valid @RequestBody UserDTO userDTO) {
         try{
             userService.unfollowUser(userDTO);
             return ResponseEntity.ok(new ResponseWrapper<>("You no longer follow " + userDTO.getUsername(),null));

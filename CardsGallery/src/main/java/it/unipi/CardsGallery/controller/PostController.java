@@ -9,6 +9,7 @@ import it.unipi.CardsGallery.service.PostService;
 import it.unipi.CardsGallery.service.exception.AuthenticationException;
 import it.unipi.CardsGallery.service.exception.ExistingEntityException;
 import it.unipi.CardsGallery.service.exception.OwnershipException;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -38,7 +39,7 @@ public class PostController {
 
     @PostMapping
     @ResponseBody
-    public ResponseEntity<ResponseWrapper<Void>> createPost (@RequestBody PostDTO postDTO) {
+    public ResponseEntity<ResponseWrapper<Void>> createPost (@Valid @RequestBody PostDTO postDTO) {
         try{
             postService.createPost(postDTO);
             return ResponseEntity.ok(new ResponseWrapper<>("post created",null));
@@ -49,7 +50,7 @@ public class PostController {
 
     @DeleteMapping
     @ResponseBody
-    public ResponseEntity<ResponseWrapper<Void>> deletePostMember(@RequestBody DeletePostDTO deletePostDTO) {
+    public ResponseEntity<ResponseWrapper<Void>> deletePostMember(@Valid @RequestBody DeletePostDTO deletePostDTO) {
         try {
             postService.deletePostMember(deletePostDTO);
             return ResponseEntity.ok(new ResponseWrapper<>("post deleted successfully",null));

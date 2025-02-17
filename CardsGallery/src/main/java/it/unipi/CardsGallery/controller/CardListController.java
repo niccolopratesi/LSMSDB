@@ -6,6 +6,7 @@ import it.unipi.CardsGallery.service.CardListService;
 import it.unipi.CardsGallery.service.exception.AuthenticationException;
 import it.unipi.CardsGallery.service.exception.ExistingEntityException;
 import it.unipi.CardsGallery.utilities.Constants;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -52,7 +53,7 @@ public class CardListController {
     }
 
     @PostMapping
-    public ResponseEntity<ResponseWrapper<String>> createList (@RequestBody CardListDTO cardListDTO) {
+    public ResponseEntity<ResponseWrapper<String>> createList (@Valid @RequestBody CardListDTO cardListDTO) {
         try{
             String listId = cardListService.createCardList(cardListDTO);
             return ResponseEntity.ok(new ResponseWrapper<>("Card List created successfully",listId));
@@ -64,7 +65,7 @@ public class CardListController {
     }
 
     @DeleteMapping
-    public ResponseEntity<ResponseWrapper<Void>> deleteList (@RequestBody DeleteCardListDTO deleteCardListDTO) {
+    public ResponseEntity<ResponseWrapper<Void>> deleteList (@Valid @RequestBody DeleteCardListDTO deleteCardListDTO) {
         try{
             cardListService.deleteCardList(deleteCardListDTO);
             return ResponseEntity.ok(new ResponseWrapper<>("Card List deleted successfully",null));
@@ -74,7 +75,7 @@ public class CardListController {
     }
 
     @PostMapping("/card")
-    public ResponseEntity<ResponseWrapper<Void>> addCard (@RequestBody CardDTO cardDTO) {
+    public ResponseEntity<ResponseWrapper<Void>> addCard (@Valid @RequestBody CardDTO cardDTO) {
         try{
             cardListService.insertIntoCardList(cardDTO);
             return ResponseEntity.ok(new ResponseWrapper<>("Card added to the list",null));
@@ -86,7 +87,7 @@ public class CardListController {
     }
 
     @DeleteMapping("/card")
-    public ResponseEntity<ResponseWrapper<Void>> deleteCard (@RequestBody CardDTO cardDTO) {
+    public ResponseEntity<ResponseWrapper<Void>> deleteCard (@Valid @RequestBody CardDTO cardDTO) {
         try{
             cardListService.removeFromCardList(cardDTO);
             return ResponseEntity.ok(new ResponseWrapper<>("Card removed from the list",null));
@@ -96,7 +97,7 @@ public class CardListController {
     }
 
     @PutMapping("/status")
-    public ResponseEntity<ResponseWrapper<Void>> updateStatus (@RequestBody UpdateCardListDTO updateCardListDTO) {
+    public ResponseEntity<ResponseWrapper<Void>> updateStatus (@Valid @RequestBody UpdateCardListDTO updateCardListDTO) {
         try{
             String status = (updateCardListDTO.isStatus() == Constants.PUBLIC) ? "public" : "private";
             cardListService.updateCardList(updateCardListDTO);
