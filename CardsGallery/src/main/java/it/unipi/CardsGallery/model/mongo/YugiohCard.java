@@ -29,15 +29,48 @@ public class YugiohCard {
     private String[] typeLine;
     private String[] printings;
 
-    private int likeCount;
-    private int dislikeCount;
-    private int loveCount;
-    private int laughCount;
+    private Integer likeCount;
+    private Integer dislikeCount;
+    private Integer loveCount;
+    private Integer laughCount;
 
     public void defaultCounts() {
         likeCount = 0;
         dislikeCount = 0;
         loveCount = 0;
         laughCount = 0;
+    }
+
+    public void updateCard(YugiohCard card) {
+        if(card.getName() != null) {
+            this.name = card.getName();
+        }
+        if(card.getDesc() != null) {
+            this.desc = card.getDesc();
+        }
+        if(card.getRace() != null) {
+            this.race = card.getRace();
+        }
+        if(card.getAttribute() != null) {
+            this.attribute = card.getAttribute();
+        }
+        if(card.getType() != null) {
+            this.type = card.getType();
+        }
+        if(card.getLevel() != null) {
+            this.level = card.getLevel();
+        }
+        if(card.getAtk() != null) {
+            this.atk = card.getAtk();
+        }
+        if(card.getDef() != null) {
+            this.def = card.getDef();
+        }
+        if(card.getTypeLine() != null) {
+            this.typeLine = card.getTypeLine();
+        }
+        if(card.getPrintings() != null) {
+            this.printings = card.getPrintings();
+        }
     }
 }

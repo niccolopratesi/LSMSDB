@@ -20,6 +20,8 @@ import it.unipi.CardsGallery.model.enums.TCG;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class AdminServiceImpl implements AdminService {
 
@@ -87,12 +89,12 @@ public class AdminServiceImpl implements AdminService {
         String id;
 
         CardNode cardNode = new CardNode();
+        cardNode.setType(type);
 
         switch (type) {
             case MAGIC:
             id = adminCardDTO.getMagic().getId();
             cardNode.setIdentifier(id);
-            cardNode.setType(TCG.MAGIC);
             cardNode.setName(adminCardDTO.getMagic().getName());
             if(!magicCardMongoRepository.existsById(id))
                 throw new ExistingEntityException("Card not found");
@@ -102,7 +104,6 @@ public class AdminServiceImpl implements AdminService {
             case POKEMON:
             id = adminCardDTO.getPokemon().getId();
             cardNode.setIdentifier(id);
-            cardNode.setType(TCG.POKEMON);
             cardNode.setName(adminCardDTO.getPokemon().getName());
             if(!pokemonCardMongoRepository.existsById(id))
                 throw new ExistingEntityException("Card not found");
@@ -112,7 +113,6 @@ public class AdminServiceImpl implements AdminService {
             case YUGIOH:
             id = adminCardDTO.getYugioh().getId();
             cardNode.setIdentifier(id);
-            cardNode.setType(TCG.YUGIOH);
             cardNode.setName(adminCardDTO.getYugioh().getName());
             if(!yugiohCardMongoRepository.existsById(id))
                 throw new ExistingEntityException("Card not found");
@@ -133,6 +133,7 @@ public class AdminServiceImpl implements AdminService {
         TCG type = adminCardDTO.getType();
 
         CardNode cardNode = new CardNode();
+        cardNode.setType(type);
 
         switch (type) {
             case MAGIC:
@@ -168,6 +169,162 @@ public class AdminServiceImpl implements AdminService {
 
         PendingRequests.pendingRequests.add(new Request(RequestType.CREATE, cardNode));
     }
+
+    @Override
+    public void insertMagicCard(MagicCardDTO newMagicCardDTO) throws AuthenticationException, NoAdminException, ExistingEntityException {
+
+        if( newMagicCardDTO.getMagic() == null ) {
+            throw new ExistingEntityException("No card inserted");
+        }
+
+        AuthDTO authDTO = newMagicCardDTO.getAuth();
+        authenticationService.authenticateAdmin(authDTO);
+
+        newMagicCardDTO.getMagic().setId(null);
+        newMagicCardDTO.getMagic().defaultCounts();
+        MagicCard magicCard = magicCardMongoRepository.save(newMagicCardDTO.getMagic());
+
+        CardNode cardNode = new CardNode();
+        cardNode.setType(TCG.MAGIC);
+        cardNode.setName(newMagicCardDTO.getMagic().getName());
+        cardNode.setIdentifier(magicCard.getId());
+
+        PendingRequests.pendingRequests.add(new Request(RequestType.CREATE, cardNode));
+    }
+
+    @Override
+    public void insertPokemonCard(PokemonCardDTO newPokemonCardDTO) throws AuthenticationException, NoAdminException, ExistingEntityException {
+        if(newPokemonCardDTO.getPokemon() == null ) {
+            throw new ExistingEntityException("No card inserted");
+        }
+
+        AuthDTO authDTO = newPokemonCardDTO.getAuth();
+        authenticationService.authenticateAdmin(authDTO);
+
+        newPokemonCardDTO.getPokemon().setId(null);
+        newPokemonCardDTO.getPokemon().defaultCounts();
+        PokemonCard pokemonCard = pokemonCardMongoRepository.save(newPokemonCardDTO.getPokemon());
+
+        CardNode cardNode = new CardNode();
+        cardNode.setType(TCG.POKEMON);
+        cardNode.setName(newPokemonCardDTO.getPokemon().getName());
+        cardNode.setIdentifier(pokemonCard.getId());
+
+        PendingRequests.pendingRequests.add(new Request(RequestType.CREATE, cardNode));
+    }
+
+    @Override
+    public void insertYugiohCard(YugiohCardDTO newYugiohCardDTO) throws AuthenticationException, NoAdminException, ExistingEntityException {
+        if(newYugiohCardDTO.getYugioh() == null ) {
+            throw new ExistingEntityException("No card inserted");
+        }
+
+        AuthDTO authDTO = newYugiohCardDTO.getAuth();
+        authenticationService.authenticateAdmin(authDTO);
+
+        newYugiohCardDTO.getYugioh().setId(null);
+        newYugiohCardDTO.getYugioh().defaultCounts();
+        YugiohCard yugiohCard = yugiohCardMongoRepository.save(newYugiohCardDTO.getYugioh());
+
+        CardNode cardNode = new CardNode();
+        cardNode.setType(TCG.YUGIOH);
+        cardNode.setName(newYugiohCardDTO.getYugioh().getName());
+        cardNode.setIdentifier(yugiohCard.getId());
+
+        PendingRequests.pendingRequests.add(new Request(RequestType.CREATE, cardNode));
+    }
+
+    @Override
+    public void updateMagicCard(MagicCardDTO magicCardDTO) throws AuthenticationException, NoAdminException, ExistingEntityException {
+        AuthDTO authDTO = magicCardDTO.getAuth();
+        authenticationService.authenticateAdmin(authDTO);
+
+        String id = magicCardDTO.getMagic().getId();
+        Optional<MagicCard> card = magicCardMongoRepository.findById(id);
+
+        if(card.isEmpty()) {
+            throw new ExistingEntityException("Card not found");
+        }
+
+        MagicCard magicCard = card.get();
+        String newName = magicCardDTO.getMagic().getName();
+        if(
+            newName != null &&
+            newName.equals(magicCard.getName())
+        ) {
+            CardNode cardNode = new CardNode();
+            cardNode.setType(TCG.MAGIC);
+            cardNode.setIdentifier(id);
+            cardNode.setName(newName);
+
+            PendingRequests.pendingRequests.add(new Request(RequestType.UPDATE, cardNode));
+        }
+
+        magicCard.updateCard(magicCardDTO.getMagic());
+        magicCardMongoRepository.save(magicCard);
+    }
+
+    @Override
+    public void updatePokemonCard(PokemonCardDTO pokemonCardDTO) throws AuthenticationException, NoAdminException, ExistingEntityException {
+        AuthDTO authDTO = pokemonCardDTO.getAuth();
+        authenticationService.authenticateAdmin(authDTO);
+
+        String id = pokemonCardDTO.getPokemon().getId();
+        Optional<PokemonCard> card = pokemonCardMongoRepository.findById(id);
+
+        if(card.isEmpty()) {
+            throw new ExistingEntityException("Card not found");
+        }
+
+        PokemonCard pokemonCard = card.get();
+        String newName = pokemonCardDTO.getPokemon().getName();
+        if(
+                newName != null &&
+                newName.equals(pokemonCard.getName())
+        ) {
+            CardNode cardNode = new CardNode();
+            cardNode.setType(TCG.POKEMON);
+            cardNode.setIdentifier(id);
+            cardNode.setName(newName);
+
+            PendingRequests.pendingRequests.add(new Request(RequestType.UPDATE, cardNode));
+        }
+
+        pokemonCard.updateCard(pokemonCardDTO.getPokemon());
+        pokemonCardMongoRepository.save(pokemonCard);
+    }
+
+    @Override
+    public void updateYugiohCard(YugiohCardDTO yugiohCardDTO) throws AuthenticationException, NoAdminException, ExistingEntityException {
+        AuthDTO authDTO = yugiohCardDTO.getAuth();
+        authenticationService.authenticateAdmin(authDTO);
+
+        String id = yugiohCardDTO.getYugioh().getId();
+        Optional<YugiohCard> card = yugiohCardMongoRepository.findById(id);
+
+        if(card.isEmpty()) {
+            throw new ExistingEntityException("Card not found");
+        }
+
+        YugiohCard yugiohCard = card.get();
+        String newName = yugiohCardDTO.getYugioh().getName();
+        if(
+                newName != null &&
+                newName.equals(yugiohCard.getName())
+        ) {
+            CardNode cardNode = new CardNode();
+            cardNode.setType(TCG.YUGIOH);
+            cardNode.setIdentifier(id);
+            cardNode.setName(newName);
+
+            PendingRequests.pendingRequests.add(new Request(RequestType.UPDATE, cardNode));
+        }
+
+        yugiohCard.updateCard(yugiohCardDTO.getYugioh());
+        yugiohCardMongoRepository.save(yugiohCard);
+    }
+
+
 
     @Override
     public void deletePost(AdminDeletePostDTO dpDTO) throws AuthenticationException, NoAdminException {

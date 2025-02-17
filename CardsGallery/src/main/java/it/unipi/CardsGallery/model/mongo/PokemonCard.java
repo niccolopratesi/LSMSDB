@@ -21,7 +21,7 @@ public class PokemonCard {
     private String level;
     private String hp;
     private int[] nationalPokedexNumbers;
-    private int convertedRetreatCost;
+    private Integer convertedRetreatCost;
     private String[] retreatCost;
     private String[] weaknesses;
     private String[] resistances;
@@ -35,15 +35,69 @@ public class PokemonCard {
     private String rarity;
     private String flavourText;
 
-    private int likeCount;
-    private int dislikeCount;
-    private int loveCount;
-    private int laughCount;
+    private Integer likeCount;
+    private Integer dislikeCount;
+    private Integer loveCount;
+    private Integer laughCount;
 
     public void defaultCounts() {
         likeCount = 0;
         dislikeCount = 0;
         loveCount = 0;
         laughCount = 0;
+    }
+
+    public void updateCard(PokemonCard card) {
+        if(card.getName() != null) {
+            this.name = card.getName();
+        }
+        if(card.getLevel() != null) {
+            this.level = card.getLevel();
+        }
+        if(card.getHp() != null) {
+            this.hp = card.getHp();
+        }
+        if(card.getNationalPokedexNumbers() != null) {
+            this.nationalPokedexNumbers = card.getNationalPokedexNumbers();
+        }
+        if(card.getConvertedRetreatCost() != null) {
+            this.convertedRetreatCost = card.getConvertedRetreatCost();
+        }
+        if(card.getRetreatCost() != null) {
+            this.retreatCost = card.getRetreatCost();
+        }
+        if(card.getWeaknesses() != null) {
+            this.weaknesses = card.getWeaknesses();
+        }
+        if(card.getResistances() != null) {
+            this.resistances = card.getResistances();
+        }
+        if(card.getAttacks() != null) {
+            this.attacks = card.getAttacks();
+        }
+        if(card.getAbilities() != null) {
+            this.abilities = card.getAbilities();
+        }
+        if(card.getTypes() != null) {
+            this.types = card.getTypes();
+        }
+        if(card.getSubTypes() != null) {
+            this.subTypes = card.getSubTypes();
+        }
+        if(card.getEvolvesFrom() != null) {
+            this.evolvesFrom = card.getEvolvesFrom();
+        }
+        if(card.getSet() != null) {
+            this.set = card.getSet();
+        }
+        if(card.getArtist() != null) {
+            this.artist = card.getArtist();
+        }
+        if(card.getRarity() != null) {
+            this.rarity = card.getRarity();
+        }
+        if(card.getFlavourText() != null) {
+            this.flavourText = card.getFlavourText();
+        }
     }
 }

@@ -9,10 +9,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UpdateUserDTO {
+    private AuthDTO auth;
     private String newUsername;
     private String newPassword;
-
-    private AuthDTO auth;
     private String newFirstName;
     private String newLastName;
     private Sex newSex;

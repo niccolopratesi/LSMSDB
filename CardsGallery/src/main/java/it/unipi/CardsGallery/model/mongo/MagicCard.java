@@ -29,18 +29,60 @@ public class MagicCard {
     private String[] printings;
     private String[] colors;
     private String[] colorIdentity;
-    private float manaValue;
-    private boolean isFunny;
+    private Float manaValue;
+    private Boolean isFunny;
 
-    private int likeCount;
-    private int dislikeCount;
-    private int loveCount;
-    private int laughCount;
+    private Integer likeCount;
+    private Integer dislikeCount;
+    private Integer loveCount;
+    private Integer laughCount;
 
     public void defaultCounts() {
         likeCount = 0;
         dislikeCount = 0;
         loveCount = 0;
         laughCount = 0;
+    }
+
+    public void updateCard(MagicCard card) {
+        if(card.getName() != null) {
+            this.name = card.getName();
+        }
+        if(card.getText() != null) {
+            this.text = card.getText();
+        }
+        if(card.getType() != null) {
+            this.type = card.getType();
+        }
+        if(card.getLayout() != null) {
+            this.layout = card.getLayout();
+        }
+        if(card.getManaCost() != null) {
+            this.manaCost = card.getManaCost();
+        }
+        if(card.getPower() != null) {
+            this.power = card.getPower();
+        }
+        if(card.getThoughness() != null) {
+            this.thoughness = card.getThoughness();
+        }
+        if(card.getFirstPrinting() != null) {
+            this.firstPrinting = card.getFirstPrinting();
+        }
+        if(card.getPrintings() != null) {
+            this.printings = card.getPrintings();
+        }
+        if(card.getColors() != null) {
+            this.colors = card.getColors();
+        }
+        if(card.getColorIdentity() != null) {
+            this.colorIdentity = card.getColorIdentity();
+        }
+        if(card.getManaValue() != null) {
+            this.manaValue = card.getManaValue();
+        }
+        if(card.getIsFunny() != null) {
+            this.isFunny = card.getIsFunny();
+        }
     }
 }

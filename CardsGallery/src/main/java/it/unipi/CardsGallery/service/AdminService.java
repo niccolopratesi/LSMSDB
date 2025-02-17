@@ -11,4 +11,10 @@ public interface AdminService {
     void insertCard(AdminCardDTO adminCardDTO) throws AuthenticationException, NoAdminException, ExistingEntityException;
     void deletePost(AdminDeletePostDTO dpDTO) throws AuthenticationException, NoAdminException;
     void deleteUser(UserDTO userDTO) throws AuthenticationException, NoAdminException, ExistingEntityException;
+    void insertMagicCard(MagicCardDTO newMagicCardDTO) throws AuthenticationException, NoAdminException, ExistingEntityException;
+    void insertPokemonCard(PokemonCardDTO newPokemonCardDTO) throws AuthenticationException, NoAdminException, ExistingEntityException;
+    void insertYugiohCard(YugiohCardDTO newYugiohCardDTO) throws AuthenticationException, NoAdminException, ExistingEntityException;
+    void updateMagicCard(MagicCardDTO magicCardDTO) throws AuthenticationException, NoAdminException, ExistingEntityException;
+    void updatePokemonCard(PokemonCardDTO pokemonCardDTO) throws AuthenticationException, NoAdminException, ExistingEntityException;
+    void updateYugiohCard(YugiohCardDTO yugiohCardDTO) throws AuthenticationException, NoAdminException, ExistingEntityException;
 }

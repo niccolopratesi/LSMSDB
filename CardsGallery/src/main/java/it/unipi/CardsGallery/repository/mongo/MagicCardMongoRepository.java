@@ -11,6 +11,7 @@ import org.springframework.data.mongodb.repository.Update;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface MagicCardMongoRepository extends MongoRepository<MagicCard,String>  {
@@ -32,6 +33,9 @@ public interface MagicCardMongoRepository extends MongoRepository<MagicCard,Stri
             String manaCost,
             Pageable pageable
     );
+
+    //@Query("{ 'id': ?0 }")
+    //Optional<MagicCard> findById(String id);
 
     @Query("{ 'id': ?0 }")
     @Update("{ '$inc': { 'likeCount' : ?1, 'dislikeCount': ?2, 'loveCount': ?3, 'laughCount': ?4 } }")
