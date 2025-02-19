@@ -25,7 +25,7 @@ public interface UserRepository extends MongoRepository<User, String> {
     List<Post> findPostsByUsername(String username, int skip, int limit);
 
     @Query("{ 'id': ?0 }")
-    @Update("{ '$push': { 'posts': ?1 } }")
+    @Update("{ '$push': { 'posts': {$each: [?1], '$position':  0} } }")
     void addPostToUser(String id, Post post);
 
     @Query(value = "{ 'username': ?0}" , fields = "{'password': 0, 'admin': 0}")
