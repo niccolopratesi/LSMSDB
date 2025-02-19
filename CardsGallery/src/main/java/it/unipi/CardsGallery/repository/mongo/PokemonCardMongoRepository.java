@@ -8,6 +8,8 @@ import org.springframework.data.mongodb.repository.Query;
 import org.springframework.data.mongodb.repository.Update;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 @Repository
 public interface PokemonCardMongoRepository extends MongoRepository<PokemonCard,String> {
 
@@ -28,6 +30,11 @@ public interface PokemonCardMongoRepository extends MongoRepository<PokemonCard,
             String artist,
             Pageable pageable
     );
+
+    @Query("{ 'id': ?0 }")
+    Optional<PokemonCard> findById(String id);
+
+    Boolean existsCardById(String id);
 
     @Query("{ 'id': ?0 }")
     @Update("{ '$inc': { 'likeCount' : ?1, 'dislikeCount': ?2, 'loveCount': ?3, 'laughCount': ?4 } }")

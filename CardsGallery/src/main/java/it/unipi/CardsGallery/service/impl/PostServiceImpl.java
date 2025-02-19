@@ -59,23 +59,23 @@ public class PostServiceImpl implements PostService {
             throw new ExistingEntityException("post already exists");
         }
 
-        boolean result;
+        Boolean result;
 
         switch (post.getType()) {
             case MAGIC:
-                result = magicCardMongoRepository.existsById(post.getCardId());
+                result = magicCardMongoRepository.existsCardById(post.getCardId());
                 break;
             case POKEMON:
-                result = pokemonCardMongoRepository.existsById(post.getCardId());
+                result = pokemonCardMongoRepository.existsCardById(post.getCardId());
                 break;
             case YUGIOH:
-                result = yugiohCardMongoRepository.existsById(post.getCardId());
+                result = yugiohCardMongoRepository.existsCardById(post.getCardId());
                 break;
             default:
                 throw new ExistingEntityException("Please enter card's Tcg correctly");
         }
 
-        if (!result) {
+        if (result == null || !result) {
             throw new ExistingEntityException("Card does not exist");
         }
 

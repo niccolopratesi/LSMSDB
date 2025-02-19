@@ -10,6 +10,7 @@ import org.springframework.data.mongodb.repository.Update;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface YugiohCardMongoRepository extends MongoRepository<YugiohCard,String> {
@@ -31,6 +32,11 @@ public interface YugiohCardMongoRepository extends MongoRepository<YugiohCard,St
             String printing,
             Pageable pageable
     );
+
+    @Query("{ 'id': ?0 }")
+    Optional<YugiohCard> findById(String id);
+
+    Boolean existsCardById(String id);
 
     @Query("{ 'id': ?0 }")
     @Update("{ '$inc': { 'likeCount' : ?1, 'dislikeCount': ?2, 'loveCount': ?3, 'laughCount': ?4 } }")

@@ -21,7 +21,7 @@ public interface CardNodeRepository  extends Neo4jRepository<CardNode,Long> {
     void update(String identifier, TCG type, String name);
 
     @Query("MATCH (u:User {username: $username}), (c:Card {identifier: $identifier, type: $type}) " +
-            "MERGE (u)-[r:REACTED {reaction: $reaction}]->(c) " +
+            "MERGE (u)-[r:REACTED]->(c) " +
             "SET r.reaction = $reaction")
     void react(String username, String identifier, TCG type, Reaction reaction);
 

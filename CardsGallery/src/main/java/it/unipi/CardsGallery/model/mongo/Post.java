@@ -5,8 +5,6 @@ import it.unipi.CardsGallery.model.enums.TCG;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.neo4j.core.schema.GeneratedValue;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;

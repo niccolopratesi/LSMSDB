@@ -114,6 +114,7 @@ public class CardListServiceImpl implements CardListService {
                     exist = true;
                     c.setPrintingSet(mc.getFirstPrinting());
                     c.setColors(List.of(mc.getColors()));
+                    c.setName(mc.getName());
                 }
                 break;
             case POKEMON:
@@ -122,6 +123,7 @@ public class CardListServiceImpl implements CardListService {
                     exist = true;
                     c.setPrintingSet(pc.getSet());
                     c.setPokedexNumber(pc.getNationalPokedexNumbers());
+                    c.setName(pc.getName());
                 }
                 break;
             case YUGIOH:
@@ -131,6 +133,7 @@ public class CardListServiceImpl implements CardListService {
                     c.setPrintingSet(yc.getPrintings().length != 0 ? yc.getPrintings()[0] : null);
                     c.setAttribute(yc.getAttribute());
                     c.setType(yc.getType());
+                    c.setName(yc.getName());
                 }
                 break;
             default:

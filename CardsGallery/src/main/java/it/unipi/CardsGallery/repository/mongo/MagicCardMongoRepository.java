@@ -34,8 +34,10 @@ public interface MagicCardMongoRepository extends MongoRepository<MagicCard,Stri
             Pageable pageable
     );
 
-    //@Query("{ 'id': ?0 }")
-    //Optional<MagicCard> findById(String id);
+    @Query("{ 'id': ?0 }")
+    Optional<MagicCard> findById(String id);
+
+    Boolean existsCardById(String id);
 
     @Query("{ 'id': ?0 }")
     @Update("{ '$inc': { 'likeCount' : ?1, 'dislikeCount': ?2, 'loveCount': ?3, 'laughCount': ?4 } }")
