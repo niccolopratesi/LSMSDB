@@ -1,5 +1,6 @@
 package it.unipi.CardsGallery.repository.neo4j;
 
+import it.unipi.CardsGallery.DTO.ReactionCount;
 import it.unipi.CardsGallery.model.enums.Reaction;
 import it.unipi.CardsGallery.model.neo4j.PostNode;
 import org.springframework.data.neo4j.repository.Neo4jRepository;
@@ -38,8 +39,8 @@ public interface PostNodeRepository extends Neo4jRepository<PostNode,Long> {
 
     @Query("MATCH (p:Post)<-[r:REACTED]-(u:User), (o:User)-[:CREATED]->(p) " +
             "WHERE p.title = $title AND o.username = $owner " +
-            "RETURN r.reaction, COUNT(r)")
-    List<Map<Reaction, Integer>>  getCounts(String owner, String title);
+            "RETURN r.reaction AS reaction, COUNT(r) AS count")
+    List<ReactionCount>  getCounts(String owner, String title);
 
     @Query("MATCH (p:Post)<-[r:REACTED]-(u:User), (o:User)-[:CREATED]->(p) " +
             "WHERE p.title = $title AND o.username = $owner AND u.username = $username " +

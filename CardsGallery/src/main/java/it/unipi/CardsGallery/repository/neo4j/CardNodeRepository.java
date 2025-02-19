@@ -8,6 +8,7 @@ import org.springframework.data.neo4j.repository.query.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface CardNodeRepository  extends Neo4jRepository<CardNode,Long> {
@@ -32,7 +33,7 @@ public interface CardNodeRepository  extends Neo4jRepository<CardNode,Long> {
 
     @Query("MATCH (u:User {username: $username})-[r:REACTED]->(c:Card {identifier: $identifier, type: $tcg}) " +
             "RETURN r.reaction")
-    Reaction getReact(String username, String cardId, TCG tcg);
+    Optional<Reaction> getReact(String username, String identifier, TCG tcg);
 
     @Query("MATCH (user:User {username: $username})-[:FOLLOW]->(friend:User)-[:FOLLOW]->(user) " +
             "MATCH (friend)-[:REACTED]->(card:Card) " +

@@ -112,7 +112,7 @@ public class AdminController {
         try {
             adminService.deletePost(dto);
             return ResponseEntity.ok(new ResponseWrapper<>("post deleted successfully", null));
-        } catch (AuthenticationException | NoAdminException e) {
+        } catch (AuthenticationException | NoAdminException | ExistingEntityException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseWrapper<>(e.getMessage(), null));
         }
     }

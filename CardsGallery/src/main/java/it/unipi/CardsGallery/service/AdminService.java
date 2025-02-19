@@ -7,7 +7,7 @@ import it.unipi.CardsGallery.service.exception.NoAdminException;
 
 public interface AdminService {
     void deleteCard(AdminCardNoFieldsDTO adminCardNoFieldsDTO) throws AuthenticationException, NoAdminException, ExistingEntityException;
-    void deletePost(AdminDeletePostDTO dpDTO) throws AuthenticationException, NoAdminException;
+    void deletePost(AdminDeletePostDTO dpDTO) throws AuthenticationException, NoAdminException, ExistingEntityException;
     void deleteUser(UserDTO userDTO) throws AuthenticationException, NoAdminException, ExistingEntityException;
     void insertMagicCard(MagicCardDTO newMagicCardDTO) throws AuthenticationException, NoAdminException, ExistingEntityException;
     void insertPokemonCard(PokemonCardDTO newPokemonCardDTO) throws AuthenticationException, NoAdminException, ExistingEntityException;

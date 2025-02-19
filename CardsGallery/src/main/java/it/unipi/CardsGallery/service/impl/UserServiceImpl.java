@@ -217,17 +217,16 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Reaction getCardReact(String username, String cardId, TCG tcg) {
-        return cardNodeRepository.getReact(username, cardId, tcg);
+        return cardNodeRepository.getReact(username, cardId, tcg).orElse(null);
     }
 
     @Override
     public ResultPostReactionDTO getPostReact(String username, String owner, String title) {
-        List<Map<Reaction, Integer>> list = postNodeRepository.getCounts(owner, title);
-        if(list.isEmpty()){
+        List<ReactionCount> resultSet = postNodeRepository.getCounts(owner, title);
+        if(resultSet.isEmpty()){
             return null;
         }
-        Map<Reaction, Integer> map = list.get(0);
         Reaction reaction = postNodeRepository.getReact(username, owner, title);
-        return new ResultPostReactionDTO(map.get(Reaction.LIKE),map.get(Reaction.DISLIKE),map.get(Reaction.LOVE),map.get(Reaction.LAUGH),reaction);
+        return new ResultPostReactionDTO(resultSet, reaction);
     }
 }

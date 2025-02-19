@@ -223,10 +223,13 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
-    public void deletePost(AdminDeletePostDTO dpDTO) throws AuthenticationException, NoAdminException {
+    public void deletePost(AdminDeletePostDTO dpDTO) throws AuthenticationException, NoAdminException, ExistingEntityException {
         AuthDTO authDTO = dpDTO.getAuth();
         authenticationService.authenticateAdmin(authDTO);
-        userRepository.deletePostFromUser(dpDTO.getUsername(), dpDTO.getPostTitle());
+        int deleted = userRepository.deletePostFromUser(dpDTO.getUsername(), dpDTO.getPostTitle());
+
+        if(deleted == 0)
+            throw new ExistingEntityException("post does not exist");
 
         PostNode postNode = new PostNode(dpDTO.getPostTitle());
         PendingRequests.pendingRequests.add(new Request(RequestType.DELETE, postNode, dpDTO.getUsername()));
