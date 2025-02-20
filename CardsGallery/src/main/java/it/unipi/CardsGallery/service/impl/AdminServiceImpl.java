@@ -239,9 +239,12 @@ public class AdminServiceImpl implements AdminService {
     public void deleteUser(UserDTO dto) throws AuthenticationException, NoAdminException, ExistingEntityException {
         AuthDTO authDTO = dto.getAuth();
         authenticationService.authenticateAdmin(authDTO);
-        if(!userRepository.existsUserByUsername(dto.getUsername()))
+        /*if(!userRepository.existsUserByUsername(dto.getUsername()))
             throw new ExistingEntityException("User not found");
-        userRepository.deleteByUsername(dto.getUsername());
+        */
+        if(userRepository.deleteByUsername(dto.getUsername()) == 0) {
+            throw new ExistingEntityException("User not found");
+        }
         cardListRepository.deleteAllByUsername(dto.getUsername());
 
         UserNode userNode = new UserNode(dto.getUsername());

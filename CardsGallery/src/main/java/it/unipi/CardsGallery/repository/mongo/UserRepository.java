@@ -40,7 +40,7 @@ public interface UserRepository extends MongoRepository<User, String> {
     @Update("{ '$pull': { 'posts': { 'title': ?1 } } }")
     int deletePostFromUser(String username, String postTitle);
 
-    void deleteByUsername(String username);
+    int deleteByUsername(String username);
 
     @Query(value = "{ 'username': ?0 }" , fields = "{'password': 1, 'admin': 1, 'id': 1}")
     User getUserByUsername(String username);

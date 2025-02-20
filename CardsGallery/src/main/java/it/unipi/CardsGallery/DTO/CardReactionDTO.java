@@ -22,6 +22,6 @@ public class CardReactionDTO {
     @NotNull(message = NOT_NULL_MSG)
     private TCG type;
 
-    @NotNull(message = NOT_NULL_MSG)
+    //@NotNull(message = NOT_NULL_MSG)
     private Reaction reaction;
 }

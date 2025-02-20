@@ -7,7 +7,6 @@ import it.unipi.CardsGallery.repository.mongo.CardListRepository;
 import it.unipi.CardsGallery.repository.mongo.UserRepository;
 import it.unipi.CardsGallery.service.AuthenticationService;
 import it.unipi.CardsGallery.service.exception.AuthenticationException;
-import it.unipi.CardsGallery.service.exception.ExistingEntityException;
 import it.unipi.CardsGallery.service.exception.NoAdminException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -43,14 +42,14 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     @Override
     public void listOwnership(String userId, String cardListId) throws AuthenticationException {
-        if(!cardListRepository.existsByIdAndUserId(cardListId,userId)) {
+        if(!cardListRepository.existsByIdAndUserId(cardListId, userId)) {
             throw new AuthenticationException("You are not the owner of the card list");
         }
     }
 
     @Override
     public Boolean accountOwnership(AuthDTO authDTO) throws AuthenticationException {
-        if(authDTO.getPassword() == null || authDTO.getPassword().trim().equals("")) {
+        if(authDTO.getPassword().trim().equals("")) {
             throw new AuthenticationException("No password provided");
         }
         String password = authDTO.getPassword();

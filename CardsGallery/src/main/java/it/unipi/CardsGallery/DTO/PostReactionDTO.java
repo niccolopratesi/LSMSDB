@@ -21,6 +21,6 @@ public class PostReactionDTO {
     @NotNull(message = NOT_NULL_MSG)
     private String owner;
 
-    @NotNull(message = NOT_NULL_MSG)
+    //@NotNull(message = NOT_NULL_MSG)
     private Reaction reaction;
 }

@@ -20,7 +20,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class CardListServiceImpl implements CardListService {
@@ -148,9 +147,11 @@ public class CardListServiceImpl implements CardListService {
     }
 
     @Override
-    public void removeFromCardList(CardDTO card) throws AuthenticationException {
+    public void removeFromCardList(CardDTO card) throws AuthenticationException, ExistingEntityException {
         auth.authenticate(card.getAuth());
         auth.listOwnership(card.getAuth().getId(), card.getCardListId());
-        cardListRepository.removeCardFromCardList(card.getCardListId(),card.getCardId(), card.getTcg());
+        if(cardListRepository.removeCardFromCardList(card.getCardListId(),card.getCardId(), card.getTcg()) == 0) {
+            throw new ExistingEntityException("Card not found in the list");
+        }
     }
 }

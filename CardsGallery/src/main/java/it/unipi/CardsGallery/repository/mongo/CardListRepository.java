@@ -20,6 +20,7 @@ import java.util.List;
 @Repository
 public interface CardListRepository extends MongoRepository<CardList, String> {
 
+    //@Query(" {'id': ?0, 'userId': ?1} ")
     boolean existsByIdAndUserId(String id, String userId);
 
     //@Query("{ 'id': ?0, 'cards.id': ?1 'cards.tcg': ?2 }")
@@ -53,7 +54,7 @@ public interface CardListRepository extends MongoRepository<CardList, String> {
 
     @Query("{ 'id': ?0 }")
     @Update("{ '$pull': { 'cards': {'id': ?1, 'tcg': ?2} } }")
-    void removeCardFromCardList(String cardListId, String cardId, TCG tcg);
+    int removeCardFromCardList(String cardListId, String cardId, TCG tcg);
 
     @Query("{}")
     @Update("{ '$pull': { 'cards': {'id': ?0, 'tcg': ?1} } }")
