@@ -39,8 +39,6 @@ public class CardListServiceImpl implements CardListService {
     @Autowired
     private YugiohCardMongoRepository yugiohCardMongoRepository;
 
-    public CardListServiceImpl() {}
-
     @Override
     public String createCardList(CardListDTO list) throws AuthenticationException, ExistingEntityException {
         if(list.getCardListName().trim().equals("")) {

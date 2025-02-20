@@ -20,9 +20,6 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     @Autowired
     private CardListRepository cardListRepository;
 
-    public AuthenticationServiceImpl() {
-    }
-
     @Override
     public String authenticate(AuthDTO authDTO) throws AuthenticationException {
         String password = authDTO.getPassword();

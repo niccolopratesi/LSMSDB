@@ -54,19 +54,19 @@ public class AdminServiceImpl implements AdminService {
         switch (type) {
             case MAGIC:
             if(!magicCardMongoRepository.existsById(id))
-                throw new ExistingEntityException("magic card not found");
+                throw new ExistingEntityException("Magic card not found");
             magicCardMongoRepository.deleteById(id);
             break;
 
             case POKEMON:
             if(!pokemonCardMongoRepository.existsById(id))
-                throw new ExistingEntityException("pokemon card not found");
+                throw new ExistingEntityException("Pokemon card not found");
             pokemonCardMongoRepository.deleteById(id);
             break;
 
             case YUGIOH:
             if(!yugiohCardMongoRepository.existsById(id))
-                throw new ExistingEntityException("yugioh card not found");
+                throw new ExistingEntityException("Yugioh card not found");
             yugiohCardMongoRepository.deleteById(id);
             break;
 
@@ -229,7 +229,7 @@ public class AdminServiceImpl implements AdminService {
         int deleted = userRepository.deletePostFromUser(dpDTO.getUsername(), dpDTO.getPostTitle());
 
         if(deleted == 0)
-            throw new ExistingEntityException("post does not exist");
+            throw new ExistingEntityException("Post does not exist");
 
         PostNode postNode = new PostNode(dpDTO.getPostTitle());
         PendingRequests.pendingRequests.add(new Request(RequestType.DELETE, postNode, dpDTO.getUsername()));
