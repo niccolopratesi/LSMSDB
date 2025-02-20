@@ -41,8 +41,10 @@ public class ReactionController {
         try{
             userService.reactCard(cardReactionDTO);
             return ResponseEntity.ok(new ResponseWrapper<>("React added",null));
-        }catch(AuthenticationException | ExistingEntityException e){
+        }catch(AuthenticationException e){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseWrapper<>(e.getMessage(),null));
+        } catch (ExistingEntityException e) {
+            return ResponseEntity.ok(new ResponseWrapper<>(e.getMessage(),null));
         }
     }
 
@@ -53,6 +55,8 @@ public class ReactionController {
             return ResponseEntity.ok(new ResponseWrapper<>("React removed",null));
         }catch(AuthenticationException e){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseWrapper<>(e.getMessage(),null));
+        } catch (ExistingEntityException e) {
+            return ResponseEntity.ok(new ResponseWrapper<>(e.getMessage(),null));
         }
     }
 
@@ -63,7 +67,7 @@ public class ReactionController {
             return ResponseEntity.ok(new ResponseWrapper<>("React added",null));
         }catch(AuthenticationException e){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseWrapper<>(e.getMessage(),null));
-        }catch(ExistingEntityException e){
+        } catch(ExistingEntityException e){
             return ResponseEntity.ok(new ResponseWrapper<>(e.getMessage(),null));
         }
     }
@@ -75,6 +79,8 @@ public class ReactionController {
             return ResponseEntity.ok(new ResponseWrapper<>("React removed",null));
         }catch(AuthenticationException e){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseWrapper<>(e.getMessage(),null));
+        } catch (ExistingEntityException e) {
+            return ResponseEntity.ok(new ResponseWrapper<>(e.getMessage(),null));
         }
     }
 }

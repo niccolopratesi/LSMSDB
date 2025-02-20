@@ -196,10 +196,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void deleteReactCard(CardReactionDTO cardReactionDTO) throws AuthenticationException {
+    public void deleteReactCard(CardReactionDTO cardReactionDTO) throws AuthenticationException, ExistingEntityException {
         auth.authenticate(cardReactionDTO.getAuth());
-        cardNodeRepository.reactDelete(cardReactionDTO.getAuth().getUsername(), cardReactionDTO.getCardId(), cardReactionDTO.getType(), cardReactionDTO.getReaction());
-
+        boolean ok = cardNodeRepository.reactDelete(cardReactionDTO.getAuth().getUsername(), cardReactionDTO.getCardId(), cardReactionDTO.getType(), cardReactionDTO.getReaction());
+        if(!ok){
+            throw new ExistingEntityException("reaction does not exist");
+        }
         ReactionRequest reactionRequest = new ReactionRequest(cardReactionDTO.getCardId(), cardReactionDTO.getType());
         PendingRequests.addOrUpdateReaction(reactionRequest, null, cardReactionDTO.getReaction(), Constants.DECREMENT);
     }
@@ -214,9 +216,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void deleteReactPost(PostReactionDTO postReactionDTO) throws AuthenticationException {
+    public void deleteReactPost(PostReactionDTO postReactionDTO) throws AuthenticationException, ExistingEntityException {
         auth.authenticate(postReactionDTO.getAuth());
-        postNodeRepository.reactDelete(postReactionDTO.getAuth().getUsername(), postReactionDTO.getTitle(), postReactionDTO.getOwner(), postReactionDTO.getReaction());
+        boolean ok = postNodeRepository.reactDelete(postReactionDTO.getAuth().getUsername(), postReactionDTO.getTitle(), postReactionDTO.getOwner(), postReactionDTO.getReaction());
+        if(!ok){
+            throw new ExistingEntityException("reaction does not exist");
+        }
     }
 
     @Override

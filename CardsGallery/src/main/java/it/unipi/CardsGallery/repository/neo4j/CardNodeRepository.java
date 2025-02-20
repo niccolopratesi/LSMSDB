@@ -28,10 +28,10 @@ public interface CardNodeRepository  extends Neo4jRepository<CardNode,Long> {
     )
     boolean react(String username, String identifier, TCG type, Reaction reaction);
 
-    @Query("MATCH (u:User {username: $username}), (c:Card {identifier: $identifier, type: $type}) " +
-            "AND EXISTS((u)-[r:REACTED {reaction: $reaction}]-(c)) " +
-            "DELETE r")
-    void reactDelete(String username, String identifier, TCG type, Reaction reaction);
+    @Query("MATCH (u:User {username: $username})-[r:REACTED {reaction: $reaction}]->(c:Card {identifier: $identifier, type: $type}) " +
+            "DELETE r " +
+            "RETURN COUNT(r) > 0")
+    boolean reactDelete(String username, String identifier, TCG type, Reaction reaction);
 
     @Query("MATCH (u:User {username: $username})-[r:REACTED]->(c:Card {identifier: $identifier, type: $tcg}) " +
             "RETURN r.reaction")
