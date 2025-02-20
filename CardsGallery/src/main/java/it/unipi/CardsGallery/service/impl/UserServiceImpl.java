@@ -187,9 +187,6 @@ public class UserServiceImpl implements UserService {
     @Override
     public void reactCard(CardReactionDTO cardReactionDTO) throws AuthenticationException, ExistingEntityException {
         auth.authenticate(cardReactionDTO.getAuth());
-        if(cardReactionDTO.getReaction() == null) {
-            throw new ExistingEntityException("Reaction not valid");
-        }
         cardNodeRepository.react(cardReactionDTO.getAuth().getUsername(), cardReactionDTO.getCardId(), cardReactionDTO.getType(), cardReactionDTO.getReaction());
 
         ReactionRequest reactionRequest = new ReactionRequest(cardReactionDTO.getCardId(), cardReactionDTO.getType());

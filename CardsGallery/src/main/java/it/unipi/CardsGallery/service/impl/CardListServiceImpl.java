@@ -44,7 +44,7 @@ public class CardListServiceImpl implements CardListService {
 
     @Override
     public String createCardList(CardListDTO list) throws AuthenticationException, ExistingEntityException {
-        if(list.getCardListName() == null || list.getCardListName().trim().equals("")) {
+        if(list.getCardListName().trim().equals("")) {
             throw new ExistingEntityException("Please enter card list name");
         }
         auth.accountOwnership(list.getAuth());
