@@ -186,7 +186,7 @@ public class UserServiceImpl implements UserService {
         }
         auth.authenticate(cardReactionDTO.getAuth());
         OldUserReact oldUserReact = cardNodeRepository.react(cardReactionDTO.getAuth().getUsername(), cardReactionDTO.getCardId(), cardReactionDTO.getType(), cardReactionDTO.getReaction());
-        if(!oldUserReact.isResult()) {
+        if(oldUserReact == null || !oldUserReact.isResult()) {
             throw new ExistingEntityException("Card id: " + cardReactionDTO.getCardId() + " not found");
         }
 
