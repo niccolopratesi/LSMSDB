@@ -18,7 +18,7 @@ public interface UserNodeRepository extends Neo4jRepository<UserNode,Long> {
     void delete(String username);
 
     @Query("MATCH (u:User {username: $username})-[r:REACTED]->(c:Card) " +
-            "RETURN r.reaction AS reaction, c.identifier AS id, c.tcg AS tcg")
+            "RETURN c.identifier AS id, c.type AS tcg, r.reaction AS reaction")
     List<PendingReactions> getAllUserCardReactions(String username);
 
     @Query("MATCH (u:User) " +
