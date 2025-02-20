@@ -30,7 +30,7 @@ public class ReactionController {
     }
 
     @GetMapping("/post")
-    public ResponseEntity<ResponseWrapper<ResultPostReactionDTO>> reactPost (@RequestParam("username") String username, @RequestParam("owner") String owner, @RequestParam("title") String title) {
+    public ResponseEntity<ResponseWrapper<ResultPostReactionDTO>> reactPost (@RequestParam(name="username", defaultValue="", required=false) String username, @RequestParam("owner") String owner, @RequestParam("title") String title) {
         ResultPostReactionDTO resultPostReactionDTO = userService.getPostReact(username, owner, title);
         String response = (resultPostReactionDTO == null) ? "Reactions not found" : "Reactions found";
         return ResponseEntity.ok(new ResponseWrapper<>(response, resultPostReactionDTO));
