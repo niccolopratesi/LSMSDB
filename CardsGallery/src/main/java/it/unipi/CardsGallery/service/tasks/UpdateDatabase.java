@@ -65,7 +65,7 @@ public class UpdateDatabase {
                     if(request.getData() instanceof UserNode) {
                         List<PendingReactions> pendingReactions = userNodeRepository.getAllUserCardReactions(((UserNode) request.getData()).getUsername());
                         for(PendingReactions pendingReaction : pendingReactions) {
-                            ReactionRequest reactionRequest = new ReactionRequest(pendingReaction.getId(), pendingReaction.getTcg());
+                            ReactionRequest reactionRequest = new ReactionRequest(pendingReaction.getCardId(), pendingReaction.getTcg());
                             ReactionRequestData reactionRequestData = new ReactionRequestData(pendingReaction.getReaction());
                             PendingRequests.addOrUpdateReaction(reactionRequest, reactionRequestData, pendingReaction.getReaction(), Constants.DECREMENT);
                         }

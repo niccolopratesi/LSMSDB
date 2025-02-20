@@ -3,6 +3,7 @@ package it.unipi.CardsGallery.repository.neo4j;
 import it.unipi.CardsGallery.model.enums.Reaction;
 import it.unipi.CardsGallery.model.enums.TCG;
 import it.unipi.CardsGallery.model.neo4j.CardNode;
+import it.unipi.CardsGallery.utilities.OldUserReact;
 import org.springframework.data.neo4j.repository.Neo4jRepository;
 import org.springframework.data.neo4j.repository.query.Query;
 import org.springframework.stereotype.Repository;
@@ -21,12 +22,17 @@ public interface CardNodeRepository  extends Neo4jRepository<CardNode,Long> {
            "SET c.name = $name")
     void update(String identifier, TCG type, String name);
 
-    @Query("MATCH (u:User {username: $username}), (c:Card {identifier: $identifier, type: $type}) " +
+    /*@Query("MATCH (u:User {username: $username}), (c:Card {identifier: $identifier, type: $type}) " +
             "MERGE (u)-[r:REACTED]->(c) " +
             "SET r.reaction = $reaction " +
             "RETURN COUNT(r) > 0"
-    )
-    boolean react(String username, String identifier, TCG type, Reaction reaction);
+    )*/
+    @Query("MATCH (u:User {username: $username})-[r:REACTED]->(c:Card {identifier: $identifier, type: $type}) " +
+            "WITH r.reaction AS oldReaction " +
+            "MERGE (u)-[r:REACTED]->(c) " +
+            "SET r.reaction = $reaction " +
+            "RETURN oldReaction AS oldReaction, ( Count(r)>0 ) AS result")
+    OldUserReact react(String username, String identifier, TCG type, Reaction reaction);
 
     @Query("MATCH (u:User {username: $username})-[r:REACTED {reaction: $reaction}]->(c:Card {identifier: $identifier, type: $type}) " +
             "DELETE r " +

@@ -22,6 +22,7 @@ import it.unipi.CardsGallery.service.exception.AuthenticationException;
 import it.unipi.CardsGallery.service.exception.ExistingEntityException;
 import it.unipi.CardsGallery.service.exception.ParametersException;
 import it.unipi.CardsGallery.utilities.Constants;
+import it.unipi.CardsGallery.utilities.OldUserReact;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -181,14 +182,18 @@ public class UserServiceImpl implements UserService {
     @Override
     public void reactCard(CardReactionDTO cardReactionDTO) throws AuthenticationException, ExistingEntityException {
         auth.authenticate(cardReactionDTO.getAuth());
-        boolean ok = cardNodeRepository.react(cardReactionDTO.getAuth().getUsername(), cardReactionDTO.getCardId(), cardReactionDTO.getType(), cardReactionDTO.getReaction());
-        if(!ok) {
+        OldUserReact oldUserReact = cardNodeRepository.react(cardReactionDTO.getAuth().getUsername(), cardReactionDTO.getCardId(), cardReactionDTO.getType(), cardReactionDTO.getReaction());
+        if(!oldUserReact.isResult()) {
             throw new ExistingEntityException("Card id: " + cardReactionDTO.getCardId() + " not found");
         }
 
         ReactionRequest reactionRequest = new ReactionRequest(cardReactionDTO.getCardId(), cardReactionDTO.getType());
         ReactionRequestData reactionRequestData = new ReactionRequestData(cardReactionDTO.getReaction());
         PendingRequests.addOrUpdateReaction(reactionRequest, reactionRequestData, cardReactionDTO.getReaction(), Constants.INCREMENT);
+        if(oldUserReact.getOldReaction() != null) {
+            ReactionRequestData oldReactionRequestData = new ReactionRequestData(oldUserReact.getOldReaction());
+            PendingRequests.addOrUpdateReaction(reactionRequest, oldReactionRequestData, oldUserReact.getOldReaction(), Constants.DECREMENT);
+        }
     }
 
     @Override

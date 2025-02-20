@@ -8,7 +8,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class PendingReactions {
-    String id;
+    String cardId;
     TCG tcg;
     Reaction reaction;
 }
