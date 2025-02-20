@@ -93,6 +93,8 @@ public class CardListController {
             return ResponseEntity.ok(new ResponseWrapper<>("Card removed from the list",null));
         }catch(AuthenticationException e){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseWrapper<>(e.getMessage(),null));
+        }catch(ExistingEntityException e){
+            return ResponseEntity.ok(new ResponseWrapper<>(e.getMessage(),null));
         }
     }
 

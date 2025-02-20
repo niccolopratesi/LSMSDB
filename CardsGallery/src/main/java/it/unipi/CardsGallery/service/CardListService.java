@@ -13,6 +13,6 @@ public interface CardListService {
     void deleteCardList(DeleteCardListDTO list) throws AuthenticationException;
     List<CardList> userCardList(String owner, int page, String username, String password) throws AuthenticationException;
     void insertIntoCardList(CardDTO card) throws AuthenticationException, ExistingEntityException;
-    void removeFromCardList(CardDTO card) throws AuthenticationException;
+    void removeFromCardList(CardDTO card) throws AuthenticationException, ExistingEntityException;
     List<CardList> searchCardList(String cardListName, int page);
 }
