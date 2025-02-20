@@ -212,7 +212,10 @@ public class UserServiceImpl implements UserService {
         if(postReactionDTO.getReaction() == null) {
             throw new ExistingEntityException("Reaction not valid");
         }
-        postNodeRepository.react(postReactionDTO.getAuth().getUsername(), postReactionDTO.getTitle(), postReactionDTO.getOwner(), postReactionDTO.getReaction());
+        boolean ok = postNodeRepository.react(postReactionDTO.getAuth().getUsername(), postReactionDTO.getTitle(), postReactionDTO.getOwner(), postReactionDTO.getReaction());
+        if(!ok){
+            throw new ExistingEntityException("post does not exist");
+        }
     }
 
     @Override
