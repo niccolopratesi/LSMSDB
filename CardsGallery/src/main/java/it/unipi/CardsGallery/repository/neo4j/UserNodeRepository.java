@@ -2,6 +2,7 @@ package it.unipi.CardsGallery.repository.neo4j;
 
 import it.unipi.CardsGallery.DTO.statistics.MostActiveUsersDTO;
 import it.unipi.CardsGallery.model.neo4j.UserNode;
+import it.unipi.CardsGallery.pendingRequests.PendingReactions;
 import org.springframework.data.neo4j.repository.Neo4jRepository;
 import org.springframework.data.neo4j.repository.query.Query;
 import org.springframework.stereotype.Repository;
@@ -13,9 +14,12 @@ public interface UserNodeRepository extends Neo4jRepository<UserNode,Long> {
 
     @Query("MATCH (u:User {username: $username}) " +
            "OPTIONAL MATCH (u)-[:CREATED]->(p:Post) " +
-           //"WHERE u.username = $username " +
            "DETACH DELETE u, p")
     void delete(String username);
+
+    @Query("MATCH (u:User {username: $username})-[r:REACTED]->(c:Card) " +
+            "RETURN r.reaction AS reaction, c.identifier AS id, c.tcg AS tcg")
+    List<PendingReactions> getAllUserCardReactions(String username);
 
     @Query("MATCH (u:User) " +
            "WHERE u.username = $oldUsername " +

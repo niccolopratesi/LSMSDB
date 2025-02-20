@@ -1,6 +1,7 @@
 package it.unipi.CardsGallery.service.impl;
 
 import it.unipi.CardsGallery.DTO.*;
+import it.unipi.CardsGallery.model.enums.TCG;
 import it.unipi.CardsGallery.model.mongo.*;
 import it.unipi.CardsGallery.repository.mongo.CardListRepository;
 import it.unipi.CardsGallery.repository.mongo.MagicCardMongoRepository;
@@ -146,6 +147,9 @@ public class CardListServiceImpl implements CardListService {
 
     @Override
     public void removeFromCardList(CardDTO card) throws AuthenticationException, ExistingEntityException {
+        if(card.getTcg() == TCG.UNDEFINED) {
+            throw new ExistingEntityException("Please enter card's Tcg correctly");
+        }
         auth.authenticate(card.getAuth());
         auth.listOwnership(card.getAuth().getId(), card.getCardListId());
         if(cardListRepository.removeCardFromCardList(card.getCardListId(),card.getCardId(), card.getTcg()) == 0) {

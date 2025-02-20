@@ -21,6 +21,11 @@ public class PendingRequests {
             if(reactionRequestData == null) {
                 return;
             }
+            if(action) {
+                reactionRequestData.incrementReaction(reaction);
+            } else {
+                reactionRequestData.decrementReaction(reaction);
+            }
             pendingReactions.put(reactionRequest, reactionRequestData);
         }
     }

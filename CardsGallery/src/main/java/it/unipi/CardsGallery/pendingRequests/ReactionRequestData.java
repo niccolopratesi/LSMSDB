@@ -18,7 +18,7 @@ public class ReactionRequestData {
         loveCount = 0;
         laughCount = 0;
 
-        incrementReaction(reaction);
+        //incrementReaction(reaction);
     }
 
     private void incLike() {
