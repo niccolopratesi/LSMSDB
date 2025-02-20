@@ -175,7 +175,7 @@ public class UserServiceImpl implements UserService {
         auth.authenticate(userDTO.getAuth());
         Boolean result = userNodeRepository.unfollow(userDTO.getAuth().getUsername(), userDTO.getUsername());
         if(result == null || !result) {
-            throw new ExistingEntityException("You were not following " + userDTO.getUsername());
+            throw new ExistingEntityException("Could not unfollow " + userDTO.getUsername());
         }
     }
 
@@ -187,7 +187,7 @@ public class UserServiceImpl implements UserService {
         auth.authenticate(cardReactionDTO.getAuth());
         OldUserReact oldUserReact = cardNodeRepository.react(cardReactionDTO.getAuth().getUsername(), cardReactionDTO.getCardId(), cardReactionDTO.getType(), cardReactionDTO.getReaction());
         if(oldUserReact == null || !oldUserReact.isResult()) {
-            throw new ExistingEntityException("Card id: " + cardReactionDTO.getCardId() + " not found");
+            throw new ExistingEntityException("Could not react card");
         }
 
         ReactionRequest reactionRequest = new ReactionRequest(cardReactionDTO.getCardId(), cardReactionDTO.getType());
@@ -207,7 +207,7 @@ public class UserServiceImpl implements UserService {
         auth.authenticate(cardReactionDTO.getAuth());
         boolean ok = cardNodeRepository.reactDelete(cardReactionDTO.getAuth().getUsername(), cardReactionDTO.getCardId(), cardReactionDTO.getType(), cardReactionDTO.getReaction());
         if(!ok) {
-            throw new ExistingEntityException("Reaction does not exist");
+            throw new ExistingEntityException("Could not delete reaction card");
         }
 
         ReactionRequest reactionRequest = new ReactionRequest(cardReactionDTO.getCardId(), cardReactionDTO.getType());
@@ -222,7 +222,7 @@ public class UserServiceImpl implements UserService {
         auth.authenticate(postReactionDTO.getAuth());
         boolean ok = postNodeRepository.react(postReactionDTO.getAuth().getUsername(), postReactionDTO.getTitle(), postReactionDTO.getOwner(), postReactionDTO.getReaction());
         if(!ok){
-            throw new ExistingEntityException("post does not exist");
+            throw new ExistingEntityException("Could not react post");
         }
     }
 
@@ -231,7 +231,7 @@ public class UserServiceImpl implements UserService {
         auth.authenticate(postReactionDTO.getAuth());
         boolean ok = postNodeRepository.reactDelete(postReactionDTO.getAuth().getUsername(), postReactionDTO.getTitle(), postReactionDTO.getOwner(), postReactionDTO.getReaction());
         if(!ok){
-            throw new ExistingEntityException("Reaction does not exist");
+            throw new ExistingEntityException("Could not delete the reaction");
         }
     }
 
