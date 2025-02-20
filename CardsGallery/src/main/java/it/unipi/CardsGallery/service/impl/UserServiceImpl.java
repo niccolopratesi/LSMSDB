@@ -181,6 +181,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void reactCard(CardReactionDTO cardReactionDTO) throws AuthenticationException, ExistingEntityException {
+        if(cardReactionDTO.getReaction() == null) {
+            throw new ExistingEntityException("Reaction not valid");
+        }
         auth.authenticate(cardReactionDTO.getAuth());
         OldUserReact oldUserReact = cardNodeRepository.react(cardReactionDTO.getAuth().getUsername(), cardReactionDTO.getCardId(), cardReactionDTO.getType(), cardReactionDTO.getReaction());
         if(!oldUserReact.isResult()) {
@@ -198,6 +201,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void deleteReactCard(CardReactionDTO cardReactionDTO) throws AuthenticationException, ExistingEntityException {
+        if(cardReactionDTO.getReaction() == null) {
+            throw new ExistingEntityException("Reaction not valid");
+        }
         auth.authenticate(cardReactionDTO.getAuth());
         boolean ok = cardNodeRepository.reactDelete(cardReactionDTO.getAuth().getUsername(), cardReactionDTO.getCardId(), cardReactionDTO.getType(), cardReactionDTO.getReaction());
         if(!ok) {
@@ -210,10 +216,10 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void reactPost(PostReactionDTO postReactionDTO) throws AuthenticationException, ExistingEntityException {
-        auth.authenticate(postReactionDTO.getAuth());
         if(postReactionDTO.getReaction() == null) {
             throw new ExistingEntityException("Reaction not valid");
         }
+        auth.authenticate(postReactionDTO.getAuth());
         boolean ok = postNodeRepository.react(postReactionDTO.getAuth().getUsername(), postReactionDTO.getTitle(), postReactionDTO.getOwner(), postReactionDTO.getReaction());
         if(!ok){
             throw new ExistingEntityException("post does not exist");
