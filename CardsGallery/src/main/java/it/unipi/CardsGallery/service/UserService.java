@@ -18,9 +18,9 @@ public interface UserService {
     User profileUser(String username) throws ExistingEntityException;
     void followUser(UserDTO userDTO) throws AuthenticationException, ParametersException, ExistingEntityException;
     void unfollowUser(UserDTO userDTO) throws AuthenticationException, ExistingEntityException;
-    void reactCard(CardReactionDTO cardReactionDTO) throws AuthenticationException;
+    void reactCard(CardReactionDTO cardReactionDTO) throws AuthenticationException, ExistingEntityException;
     void deleteReactCard(CardReactionDTO cardReactionDTO) throws AuthenticationException;
-    void reactPost(PostReactionDTO postReactionDTO) throws AuthenticationException;
+    void reactPost(PostReactionDTO postReactionDTO) throws AuthenticationException, ExistingEntityException;
     void deleteReactPost(PostReactionDTO postReactionDTO) throws AuthenticationException;
     Reaction getCardReact(String username, String cardId, TCG tcg);
     ResultPostReactionDTO getPostReact(String username, String owner, String title);
