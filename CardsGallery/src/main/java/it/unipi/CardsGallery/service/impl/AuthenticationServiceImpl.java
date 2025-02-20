@@ -27,7 +27,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     @Override
     public String authenticate(AuthDTO authDTO) throws AuthenticationException {
         String password = authDTO.getPassword();
-        if(authDTO.getPassword() == null || authDTO.getPassword().trim().equals("")) {
+        if(authDTO.getPassword().trim().equals("")) {
             throw new AuthenticationException("No password provided");
         }
 
@@ -66,7 +66,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     @Override
     public void authenticateAdmin(AuthDTO authDTO) throws AuthenticationException, NoAdminException {
-        if(authDTO.getPassword() == null || authDTO.getPassword().trim().equals("")) {
+        if(authDTO.getPassword().trim().equals("")) {
             throw new AuthenticationException("No password provided");
         }
         String password = authDTO.getPassword();
