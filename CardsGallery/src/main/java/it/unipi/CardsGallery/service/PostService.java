@@ -12,5 +12,5 @@ import java.util.List;
 public interface PostService {
     List<Post> getPostsByUser(String username, int page);
     void createPost(PostDTO postDTO) throws AuthenticationException, ExistingEntityException;
-    void deletePostMember(DeletePostDTO dpDTO) throws AuthenticationException, OwnershipException;
+    void deletePostMember(DeletePostDTO dpDTO) throws AuthenticationException, ExistingEntityException;
 }

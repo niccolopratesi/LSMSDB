@@ -43,8 +43,10 @@ public class PostController {
         try{
             postService.createPost(postDTO);
             return ResponseEntity.ok(new ResponseWrapper<>("post created",null));
-        } catch(AuthenticationException | ExistingEntityException e){
+        } catch(AuthenticationException e){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseWrapper<>(e.getMessage(),null));
+        }catch(ExistingEntityException e){
+            return ResponseEntity.ok(new ResponseWrapper<>(e.getMessage(),null));
         }
     }
 
@@ -54,8 +56,10 @@ public class PostController {
         try {
             postService.deletePostMember(deletePostDTO);
             return ResponseEntity.ok(new ResponseWrapper<>("post deleted successfully",null));
-        } catch (OwnershipException | AuthenticationException e) {
+        } catch (AuthenticationException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseWrapper<>(e.getMessage(),null));
+        }catch(ExistingEntityException e){
+            return ResponseEntity.ok(new ResponseWrapper<>(e.getMessage(),null));
         }
     }
 }

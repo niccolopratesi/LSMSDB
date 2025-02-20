@@ -27,7 +27,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -52,8 +51,6 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private AuthenticationService auth;
-
-    public UserServiceImpl() {}
 
     @Override
     public void insertUser(User user) throws AuthenticationException, ExistingEntityException{
@@ -90,10 +87,10 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public String loginUser(LoginDTO loginDTO) throws AuthenticationException, ExistingEntityException{
-        if(loginDTO.getUsername() == null || loginDTO.getUsername().trim().equals("")) {
+        if(loginDTO.getUsername().trim().equals("")) {
             throw new ExistingEntityException("Please enter a username");
         }
-        if(loginDTO.getPassword() == null || loginDTO.getPassword().trim().equals("")) {
+        if(loginDTO.getPassword().trim().equals("")) {
             throw new ExistingEntityException("Please enter a password");
         }
         return authenticationService.authenticate(new AuthDTO(loginDTO.getUsername(), loginDTO.getPassword()));
@@ -159,10 +156,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void followUser(UserDTO userDTO) throws AuthenticationException, ParametersException, ExistingEntityException{
-        if(
-                userDTO.getUsername() == null
-                || userDTO.getUsername().trim().equals("")
-        ) {
+        if(userDTO.getUsername().trim().equals("")) {
             throw new ExistingEntityException("Insert a valid username to follow");
         }
         if(userDTO.getUsername().equals(userDTO.getAuth().getUsername())) {
@@ -171,7 +165,7 @@ public class UserServiceImpl implements UserService {
         auth.authenticate(userDTO.getAuth());
         Boolean result = userNodeRepository.follow(userDTO.getAuth().getUsername(), userDTO.getUsername());
         if(result == null || !result) {
-            throw new ExistingEntityException(userDTO.getUsername() + " not found");
+            throw new ExistingEntityException("User not found");
         }
     }
 
@@ -188,8 +182,10 @@ public class UserServiceImpl implements UserService {
     public void reactCard(CardReactionDTO cardReactionDTO) throws AuthenticationException, ExistingEntityException {
         auth.authenticate(cardReactionDTO.getAuth());
         boolean ok = cardNodeRepository.react(cardReactionDTO.getAuth().getUsername(), cardReactionDTO.getCardId(), cardReactionDTO.getType(), cardReactionDTO.getReaction());
-        if(!ok)
-            throw new ExistingEntityException("card id: " + cardReactionDTO.getCardId() + " not found");
+        if(!ok) {
+            throw new ExistingEntityException("Card id: " + cardReactionDTO.getCardId() + " not found");
+        }
+
         ReactionRequest reactionRequest = new ReactionRequest(cardReactionDTO.getCardId(), cardReactionDTO.getType());
         ReactionRequestData reactionRequestData = new ReactionRequestData(cardReactionDTO.getReaction());
         PendingRequests.addOrUpdateReaction(reactionRequest, reactionRequestData, cardReactionDTO.getReaction(), Constants.INCREMENT);
@@ -199,9 +195,10 @@ public class UserServiceImpl implements UserService {
     public void deleteReactCard(CardReactionDTO cardReactionDTO) throws AuthenticationException, ExistingEntityException {
         auth.authenticate(cardReactionDTO.getAuth());
         boolean ok = cardNodeRepository.reactDelete(cardReactionDTO.getAuth().getUsername(), cardReactionDTO.getCardId(), cardReactionDTO.getType(), cardReactionDTO.getReaction());
-        if(!ok){
-            throw new ExistingEntityException("reaction does not exist");
+        if(!ok) {
+            throw new ExistingEntityException("Reaction does not exist");
         }
+
         ReactionRequest reactionRequest = new ReactionRequest(cardReactionDTO.getCardId(), cardReactionDTO.getType());
         PendingRequests.addOrUpdateReaction(reactionRequest, null, cardReactionDTO.getReaction(), Constants.DECREMENT);
     }
@@ -223,7 +220,7 @@ public class UserServiceImpl implements UserService {
         auth.authenticate(postReactionDTO.getAuth());
         boolean ok = postNodeRepository.reactDelete(postReactionDTO.getAuth().getUsername(), postReactionDTO.getTitle(), postReactionDTO.getOwner(), postReactionDTO.getReaction());
         if(!ok){
-            throw new ExistingEntityException("reaction does not exist");
+            throw new ExistingEntityException("Reaction does not exist");
         }
     }
 

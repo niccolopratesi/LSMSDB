@@ -56,7 +56,7 @@ public class PostServiceImpl implements PostService {
             throw new ExistingEntityException("Please enter a title");
         }
         if(userRepository.existsByUsernameAndPostsTitle(postDTO.getAuth().getUsername(), postDTO.getPost().getTitle())) {
-            throw new ExistingEntityException("post already exists");
+            throw new ExistingEntityException("Post already exists");
         }
 
         Boolean result;
@@ -80,7 +80,6 @@ public class PostServiceImpl implements PostService {
         }
 
         post.createCreationDate();
-
         userRepository.addPostToUser(id, post);
 
         PostNode postNode = new PostNode(post.getTitle());
@@ -88,12 +87,14 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public void deletePostMember(DeletePostDTO dpDTO) throws AuthenticationException, OwnershipException {
+    public void deletePostMember(DeletePostDTO dpDTO) throws AuthenticationException, ExistingEntityException {
         authenticationService.authenticate(dpDTO.getAuth());
-        if(!userRepository.existsByUsernameAndPostsTitle(dpDTO.getAuth().getUsername(), dpDTO.getPostTitle())){
-            throw new OwnershipException("post not found");
+        /*if(!userRepository.existsByUsernameAndPostsTitle(dpDTO.getAuth().getUsername(), dpDTO.getPostTitle())){
+            throw new OwnershipException("Post not found");
+        }*/
+        if(userRepository.deletePostFromUser(dpDTO.getAuth().getUsername(), dpDTO.getPostTitle()) == 0) {
+            throw new ExistingEntityException("Post not found");
         }
-        userRepository.deletePostFromUser(dpDTO.getAuth().getUsername(), dpDTO.getPostTitle());
         PostNode postNode = new PostNode(dpDTO.getPostTitle());
         PendingRequests.pendingRequests.add(new Request(RequestType.DELETE, postNode, dpDTO.getAuth().getUsername()));
     }
