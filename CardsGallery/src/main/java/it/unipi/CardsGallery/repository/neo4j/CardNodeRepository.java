@@ -23,8 +23,10 @@ public interface CardNodeRepository  extends Neo4jRepository<CardNode,Long> {
 
     @Query("MATCH (u:User {username: $username}), (c:Card {identifier: $identifier, type: $type}) " +
             "MERGE (u)-[r:REACTED]->(c) " +
-            "SET r.reaction = $reaction")
-    void react(String username, String identifier, TCG type, Reaction reaction);
+            "SET r.reaction = $reaction " +
+            "RETURN COUNT(r) > 0"
+    )
+    boolean react(String username, String identifier, TCG type, Reaction reaction);
 
     @Query("MATCH (u:User {username: $username}), (c:Card {identifier: $identifier, type: $type}) " +
             "AND EXISTS((u)-[r:REACTED {reaction: $reaction}]-(c)) " +

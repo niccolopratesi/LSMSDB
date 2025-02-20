@@ -41,10 +41,8 @@ public class ReactionController {
         try{
             userService.reactCard(cardReactionDTO);
             return ResponseEntity.ok(new ResponseWrapper<>("React added",null));
-        }catch(AuthenticationException e){
+        }catch(AuthenticationException | ExistingEntityException e){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseWrapper<>(e.getMessage(),null));
-        }catch(ExistingEntityException e){
-            return ResponseEntity.ok(new ResponseWrapper<>(e.getMessage(),null));
         }
     }
 
