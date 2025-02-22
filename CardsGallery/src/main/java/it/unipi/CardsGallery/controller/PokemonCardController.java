@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/Pokemon")
+@RequestMapping("/pokemon")
 public class PokemonCardController {
 
     @Autowired
