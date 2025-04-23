@@ -30,6 +30,7 @@ public class Request {
         this.postOwner = null;
     }
 
+    // DELETE
     public Request(RequestType type, Object data, String username, Reaction reaction) {
         this.type = type;
         this.data = data;
@@ -38,6 +39,7 @@ public class Request {
         this.postOwner = null;
     }
 
+    // DELETE
     public Request(RequestType type, Object data, String username, Reaction reaction, String postOwner) {
         this.type = type;
         this.data = data;

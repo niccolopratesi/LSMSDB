@@ -7,20 +7,32 @@ import lombok.Setter;
 @Getter
 @Setter
 public class ReactionRequestData {
+    // DELETE
     private int likeCount;
     private int dislikeCount;
     private int loveCount;
     private int laughCount;
+    // DELETE
+
+    private int[] reactionCount;
 
     public ReactionRequestData(Reaction reaction) {
+        // DELETE
         likeCount = 0;
         dislikeCount = 0;
         loveCount = 0;
         laughCount = 0;
+        // DELETE
 
+        for(int i = 0; i < reactionCount.length; i++) {
+            reactionCount[i] = 0;
+        }
+
+        // DELETE
         //incrementReaction(reaction);
     }
 
+    // DELETE
     private void incLike() {
         likeCount++;
     }
@@ -45,8 +57,13 @@ public class ReactionRequestData {
     private void decLaugh() {
         laughCount--;
     }
+    // DELETE
 
     public void incrementReaction(Reaction reaction) {
+
+        reactionCount[reaction.ordinal()]++;
+
+        // DELETE
         switch (reaction) {
             case LIKE:
                 this.incLike();
@@ -66,6 +83,10 @@ public class ReactionRequestData {
     }
 
     public void decrementReaction(Reaction reaction) {
+
+        reactionCount[reaction.ordinal()]--;
+
+        // DELETE
         switch (reaction) {
             case LIKE:
                 this.decLike();
@@ -82,5 +103,6 @@ public class ReactionRequestData {
             default:
                 break;
         }
+        // DELETE
     }
 }

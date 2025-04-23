@@ -97,7 +97,7 @@ public class AdminController {
 
     @DeleteMapping("/user")
     @ResponseBody
-    public ResponseEntity<ResponseWrapper<Void>> deleteUser(@Valid @RequestBody UserDTO dto) {
+    public ResponseEntity<ResponseWrapper<Void>> deleteUser(@Valid @RequestBody AdminDeleteUserDTO dto) {
         try {
             adminService.deleteUser(dto);
             return ResponseEntity.ok(new ResponseWrapper<Void>("user deleted successfully", null));

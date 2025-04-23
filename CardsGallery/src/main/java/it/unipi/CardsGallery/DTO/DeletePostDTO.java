@@ -12,7 +12,7 @@ import static it.unipi.CardsGallery.utilities.Constants.NOT_NULL_MSG;
 @AllArgsConstructor
 public class DeletePostDTO {
     @NotNull(message = NOT_NULL_MSG)
-    private AuthDTO auth;
+    private LoginDTO login;
 
     @NotNull(message = NOT_NULL_MSG)
     private String postTitle;

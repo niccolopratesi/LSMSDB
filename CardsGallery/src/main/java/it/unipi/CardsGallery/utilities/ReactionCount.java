@@ -1,4 +1,4 @@
-package it.unipi.CardsGallery.DTO;
+package it.unipi.CardsGallery.utilities;
 
 import it.unipi.CardsGallery.model.enums.Reaction;
 import lombok.AllArgsConstructor;

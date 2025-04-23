@@ -23,6 +23,7 @@ import it.unipi.CardsGallery.service.exception.ExistingEntityException;
 import it.unipi.CardsGallery.service.exception.ParametersException;
 import it.unipi.CardsGallery.utilities.Constants;
 import it.unipi.CardsGallery.utilities.OldUserReact;
+import it.unipi.CardsGallery.utilities.ReactionCount;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -73,7 +74,7 @@ public class UserServiceImpl implements UserService {
         userRepository.save(user);
 
         UserNode userNode = new UserNode(user.getUsername());
-        PendingRequests.pendingRequests.add(new Request(RequestType.CREATE, userNode));
+        PendingRequests.pendingRequests.add(new Request(RequestType.CREATE_USER, userNode));
     }
 
     @Override
@@ -83,7 +84,7 @@ public class UserServiceImpl implements UserService {
         userRepository.deleteById(authDTO.getId());
 
         UserNode userNode = new UserNode(authDTO.getUsername());
-        PendingRequests.pendingRequests.add(new Request(RequestType.DELETE, userNode));
+        PendingRequests.pendingRequests.add(new Request(RequestType.DELETE_USER, userNode));
     }
 
     @Override
@@ -94,7 +95,7 @@ public class UserServiceImpl implements UserService {
         if(loginDTO.getPassword().trim().equals("")) {
             throw new ExistingEntityException("Please enter a password");
         }
-        return authenticationService.authenticate(new AuthDTO(loginDTO.getUsername(), loginDTO.getPassword()));
+        return authenticationService.authenticate(loginDTO.getUsername(), loginDTO.getPassword());
     }
 
     @Override
@@ -138,7 +139,7 @@ public class UserServiceImpl implements UserService {
             cardListRepository.updateUsername(user.getUsername(), userDTO.getNewUsername());
             user.setUsername(userDTO.getNewUsername());
 
-            PendingRequests.pendingRequests.add(new Request(RequestType.UPDATE, userNode, userDTO.getNewUsername()));
+            PendingRequests.pendingRequests.add(new Request(RequestType.UPDATE_USER, userNode, userDTO.getNewUsername()));
         }
 
         if(userDTO.getNewPassword() != null && !userDTO.getNewPassword().trim().equals("")){
@@ -160,11 +161,11 @@ public class UserServiceImpl implements UserService {
         if(userDTO.getUsername().trim().equals("")) {
             throw new ExistingEntityException("Insert a valid username to follow");
         }
-        if(userDTO.getUsername().equals(userDTO.getAuth().getUsername())) {
+        if(userDTO.getUsername().equals(userDTO.getLogin().getUsername())) {
             throw new ParametersException("You cannot follow yourself");
         }
-        auth.authenticate(userDTO.getAuth());
-        Boolean result = userNodeRepository.follow(userDTO.getAuth().getUsername(), userDTO.getUsername());
+        auth.authenticate(userDTO.getLogin().getUsername(), userDTO.getLogin().getPassword());
+        Boolean result = userNodeRepository.follow(userDTO.getLogin().getUsername(), userDTO.getUsername());
         if(result == null || !result) {
             throw new ExistingEntityException("User not found");
         }
@@ -172,8 +173,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void unfollowUser(UserDTO userDTO) throws AuthenticationException, ExistingEntityException{
-        auth.authenticate(userDTO.getAuth());
-        Boolean result = userNodeRepository.unfollow(userDTO.getAuth().getUsername(), userDTO.getUsername());
+        auth.authenticate(userDTO.getLogin().getUsername(), userDTO.getLogin().getPassword());
+        Boolean result = userNodeRepository.unfollow(userDTO.getLogin().getUsername(), userDTO.getUsername());
         if(result == null || !result) {
             throw new ExistingEntityException("Could not unfollow " + userDTO.getUsername());
         }
@@ -184,8 +185,8 @@ public class UserServiceImpl implements UserService {
         if(cardReactionDTO.getReaction() == null) {
             throw new ExistingEntityException("Reaction not valid");
         }
-        auth.authenticate(cardReactionDTO.getAuth());
-        OldUserReact oldUserReact = cardNodeRepository.react(cardReactionDTO.getAuth().getUsername(), cardReactionDTO.getCardId(), cardReactionDTO.getType(), cardReactionDTO.getReaction());
+        auth.authenticate(cardReactionDTO.getLogin().getUsername(), cardReactionDTO.getLogin().getPassword());
+        OldUserReact oldUserReact = cardNodeRepository.react(cardReactionDTO.getLogin().getUsername(), cardReactionDTO.getCardId(), cardReactionDTO.getType(), cardReactionDTO.getReaction());
         if(oldUserReact == null || !oldUserReact.isResult()) {
             throw new ExistingEntityException("Could not react card");
         }
@@ -204,8 +205,8 @@ public class UserServiceImpl implements UserService {
         if(cardReactionDTO.getReaction() == null) {
             throw new ExistingEntityException("Reaction not valid");
         }
-        auth.authenticate(cardReactionDTO.getAuth());
-        boolean ok = cardNodeRepository.reactDelete(cardReactionDTO.getAuth().getUsername(), cardReactionDTO.getCardId(), cardReactionDTO.getType(), cardReactionDTO.getReaction());
+        auth.authenticate(cardReactionDTO.getLogin().getUsername(), cardReactionDTO.getLogin().getPassword());
+        boolean ok = cardNodeRepository.reactDelete(cardReactionDTO.getLogin().getUsername(), cardReactionDTO.getCardId(), cardReactionDTO.getType(), cardReactionDTO.getReaction());
         if(!ok) {
             throw new ExistingEntityException("Could not delete reaction card");
         }
@@ -219,8 +220,8 @@ public class UserServiceImpl implements UserService {
         if(postReactionDTO.getReaction() == null) {
             throw new ExistingEntityException("Reaction not valid");
         }
-        auth.authenticate(postReactionDTO.getAuth());
-        boolean ok = postNodeRepository.react(postReactionDTO.getAuth().getUsername(), postReactionDTO.getTitle(), postReactionDTO.getOwner(), postReactionDTO.getReaction());
+        auth.authenticate(postReactionDTO.getLogin().getUsername(), postReactionDTO.getLogin().getPassword());
+        boolean ok = postNodeRepository.react(postReactionDTO.getLogin().getUsername(), postReactionDTO.getTitle(), postReactionDTO.getOwner(), postReactionDTO.getReaction());
         if(!ok){
             throw new ExistingEntityException("Could not react post");
         }
@@ -228,8 +229,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void deleteReactPost(PostReactionDTO postReactionDTO) throws AuthenticationException, ExistingEntityException {
-        auth.authenticate(postReactionDTO.getAuth());
-        boolean ok = postNodeRepository.reactDelete(postReactionDTO.getAuth().getUsername(), postReactionDTO.getTitle(), postReactionDTO.getOwner(), postReactionDTO.getReaction());
+        auth.authenticate(postReactionDTO.getLogin().getUsername(), postReactionDTO.getLogin().getPassword());
+        boolean ok = postNodeRepository.reactDelete(postReactionDTO.getLogin().getUsername(), postReactionDTO.getTitle(), postReactionDTO.getOwner(), postReactionDTO.getReaction());
         if(!ok){
             throw new ExistingEntityException("Could not delete the reaction");
         }

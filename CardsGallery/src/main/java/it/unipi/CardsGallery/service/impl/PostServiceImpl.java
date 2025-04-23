@@ -15,7 +15,6 @@ import it.unipi.CardsGallery.service.AuthenticationService;
 import it.unipi.CardsGallery.service.PostService;
 import it.unipi.CardsGallery.service.exception.AuthenticationException;
 import it.unipi.CardsGallery.service.exception.ExistingEntityException;
-import it.unipi.CardsGallery.service.exception.OwnershipException;
 import it.unipi.CardsGallery.utilities.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -83,19 +82,16 @@ public class PostServiceImpl implements PostService {
         userRepository.addPostToUser(id, post);
 
         PostNode postNode = new PostNode(post.getTitle());
-        PendingRequests.pendingRequests.add(new Request(RequestType.CREATE, postNode, postDTO.getAuth().getUsername()));
+        PendingRequests.pendingRequests.add(new Request(RequestType.CREATE_POST, postNode, postDTO.getAuth().getUsername()));
     }
 
     @Override
     public void deletePostMember(DeletePostDTO dpDTO) throws AuthenticationException, ExistingEntityException {
-        authenticationService.authenticate(dpDTO.getAuth());
-        /*if(!userRepository.existsByUsernameAndPostsTitle(dpDTO.getAuth().getUsername(), dpDTO.getPostTitle())){
-            throw new OwnershipException("Post not found");
-        }*/
-        if(userRepository.deletePostFromUser(dpDTO.getAuth().getUsername(), dpDTO.getPostTitle()) == 0) {
+        authenticationService.authenticate(dpDTO.getLogin().getUsername(), dpDTO.getLogin().getPassword());
+        if(userRepository.deletePostFromUser(dpDTO.getLogin().getUsername(), dpDTO.getPostTitle()) == 0) {
             throw new ExistingEntityException("Post not found");
         }
         PostNode postNode = new PostNode(dpDTO.getPostTitle());
-        PendingRequests.pendingRequests.add(new Request(RequestType.DELETE, postNode, dpDTO.getAuth().getUsername()));
+        PendingRequests.pendingRequests.add(new Request(RequestType.DELETE_POST, postNode, dpDTO.getLogin().getUsername()));
     }
 }

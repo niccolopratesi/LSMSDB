@@ -16,5 +16,5 @@ public class UserDTO
     private String username;
 
     @NotNull(message = NOT_NULL_MSG)
-    private AuthDTO auth;
+    private LoginDTO login;
 }

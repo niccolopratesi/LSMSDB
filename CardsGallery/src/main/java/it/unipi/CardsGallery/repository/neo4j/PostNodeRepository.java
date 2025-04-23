@@ -1,6 +1,6 @@
 package it.unipi.CardsGallery.repository.neo4j;
 
-import it.unipi.CardsGallery.DTO.ReactionCount;
+import it.unipi.CardsGallery.utilities.ReactionCount;
 import it.unipi.CardsGallery.model.enums.Reaction;
 import it.unipi.CardsGallery.model.neo4j.PostNode;
 import org.springframework.data.neo4j.repository.Neo4jRepository;
@@ -8,7 +8,6 @@ import org.springframework.data.neo4j.repository.query.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.Map;
 
 @Repository
 public interface PostNodeRepository extends Neo4jRepository<PostNode,Long> {

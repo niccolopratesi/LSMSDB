@@ -78,7 +78,7 @@ public class AdminServiceImpl implements AdminService {
         CardNode cardNode = new CardNode();
         cardNode.setIdentifier(id);
         cardNode.setType(type);
-        PendingRequests.pendingRequests.add(new Request(RequestType.DELETE, cardNode));
+        PendingRequests.pendingRequests.add(new Request(RequestType.DELETE_CARD, cardNode));
     }
 
     @Override
@@ -95,7 +95,7 @@ public class AdminServiceImpl implements AdminService {
         cardNode.setName(newMagicCardDTO.getMagic().getName());
         cardNode.setIdentifier(magicCard.getId());
 
-        PendingRequests.pendingRequests.add(new Request(RequestType.CREATE, cardNode));
+        PendingRequests.pendingRequests.add(new Request(RequestType.CREATE_CARD, cardNode));
     }
 
     @Override
@@ -112,7 +112,7 @@ public class AdminServiceImpl implements AdminService {
         cardNode.setName(newPokemonCardDTO.getPokemon().getName());
         cardNode.setIdentifier(pokemonCard.getId());
 
-        PendingRequests.pendingRequests.add(new Request(RequestType.CREATE, cardNode));
+        PendingRequests.pendingRequests.add(new Request(RequestType.CREATE_CARD, cardNode));
     }
 
     @Override
@@ -129,7 +129,7 @@ public class AdminServiceImpl implements AdminService {
         cardNode.setName(newYugiohCardDTO.getYugioh().getName());
         cardNode.setIdentifier(yugiohCard.getId());
 
-        PendingRequests.pendingRequests.add(new Request(RequestType.CREATE, cardNode));
+        PendingRequests.pendingRequests.add(new Request(RequestType.CREATE_CARD, cardNode));
     }
 
     @Override
@@ -155,7 +155,7 @@ public class AdminServiceImpl implements AdminService {
             cardNode.setIdentifier(id);
             cardNode.setName(newName);
 
-            PendingRequests.pendingRequests.add(new Request(RequestType.UPDATE, cardNode));
+            PendingRequests.pendingRequests.add(new Request(RequestType.UPDATE_CARD, cardNode));
         }
 
         magicCard.updateCard(magicCardDTO.getMagic());
@@ -185,7 +185,7 @@ public class AdminServiceImpl implements AdminService {
             cardNode.setIdentifier(id);
             cardNode.setName(newName);
 
-            PendingRequests.pendingRequests.add(new Request(RequestType.UPDATE, cardNode));
+            PendingRequests.pendingRequests.add(new Request(RequestType.UPDATE_CARD, cardNode));
         }
 
         pokemonCard.updateCard(pokemonCardDTO.getPokemon());
@@ -215,7 +215,7 @@ public class AdminServiceImpl implements AdminService {
             cardNode.setIdentifier(id);
             cardNode.setName(newName);
 
-            PendingRequests.pendingRequests.add(new Request(RequestType.UPDATE, cardNode));
+            PendingRequests.pendingRequests.add(new Request(RequestType.UPDATE_CARD, cardNode));
         }
 
         yugiohCard.updateCard(yugiohCardDTO.getYugioh());
@@ -232,11 +232,11 @@ public class AdminServiceImpl implements AdminService {
             throw new ExistingEntityException("Post does not exist");
 
         PostNode postNode = new PostNode(dpDTO.getPostTitle());
-        PendingRequests.pendingRequests.add(new Request(RequestType.DELETE, postNode, dpDTO.getUsername()));
+        PendingRequests.pendingRequests.add(new Request(RequestType.DELETE_POST, postNode, dpDTO.getUsername()));
     }
 
     @Override
-    public void deleteUser(UserDTO dto) throws AuthenticationException, NoAdminException, ExistingEntityException {
+    public void deleteUser(AdminDeleteUserDTO dto) throws AuthenticationException, NoAdminException, ExistingEntityException {
         AuthDTO authDTO = dto.getAuth();
         authenticationService.authenticateAdmin(authDTO);
         if(userRepository.deleteByUsername(dto.getUsername()) == 0) {
@@ -245,6 +245,6 @@ public class AdminServiceImpl implements AdminService {
         cardListRepository.deleteAllByUsername(dto.getUsername());
 
         UserNode userNode = new UserNode(dto.getUsername());
-        PendingRequests.pendingRequests.add(new Request(RequestType.DELETE, userNode));
+        PendingRequests.pendingRequests.add(new Request(RequestType.DELETE_USER, userNode));
     }
 }

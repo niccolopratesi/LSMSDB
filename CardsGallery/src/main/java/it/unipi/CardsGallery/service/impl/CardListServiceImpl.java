@@ -53,14 +53,14 @@ public class CardListServiceImpl implements CardListService {
 
     @Override
     public void updateCardList(UpdateCardListDTO list) throws AuthenticationException {
-        auth.authenticate(list.getAuth());
+        auth.authenticate(list.getAuth().getUsername(), list.getAuth().getPassword());
         auth.listOwnership(list.getAuth().getId(), list.getCardListId());
         cardListRepository.updateCardListStatus(list.getCardListId(),list.isStatus());
     }
 
     @Override
     public void deleteCardList(DeleteCardListDTO list) throws AuthenticationException {
-        auth.authenticate(list.getAuth());
+        auth.authenticate(list.getAuth().getUsername(), list.getAuth().getPassword());
         auth.listOwnership(list.getAuth().getId(), list.getCardListId());
         cardListRepository.deleteById(list.getCardListId());
     }
@@ -84,7 +84,7 @@ public class CardListServiceImpl implements CardListService {
         Page<CardList> result;
 
         if(username != null && password != null && username.equals(owner)) {
-            auth.authenticate(new AuthDTO(username, password));
+            auth.authenticate(username, password);
             result = cardListRepository.findOwnedLists(owner, pageable);
         } else {
             result = cardListRepository.findByOwner(owner, pageable);
@@ -150,7 +150,7 @@ public class CardListServiceImpl implements CardListService {
         if(card.getTcg() == TCG.UNDEFINED) {
             throw new ExistingEntityException("Please enter card's Tcg correctly");
         }
-        auth.authenticate(card.getAuth());
+        auth.authenticate(card.getAuth().getUsername(), card.getAuth().getPassword());
         auth.listOwnership(card.getAuth().getId(), card.getCardListId());
         if(cardListRepository.removeCardFromCardList(card.getCardListId(),card.getCardId(), card.getTcg()) == 0) {
             throw new ExistingEntityException("Card not found in the list");

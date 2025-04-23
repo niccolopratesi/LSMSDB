@@ -1,6 +1,7 @@
 package it.unipi.CardsGallery.DTO;
 
 import it.unipi.CardsGallery.model.enums.Reaction;
+import it.unipi.CardsGallery.utilities.ReactionCount;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

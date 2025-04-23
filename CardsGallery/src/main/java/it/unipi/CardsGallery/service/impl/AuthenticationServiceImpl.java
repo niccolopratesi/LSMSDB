@@ -21,13 +21,12 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     private CardListRepository cardListRepository;
 
     @Override
-    public String authenticate(AuthDTO authDTO) throws AuthenticationException {
-        String password = authDTO.getPassword();
-        if(authDTO.getPassword().trim().equals("")) {
+    public String authenticate(String username, String password) throws AuthenticationException {
+        if(password.trim().equals("")) {
             throw new AuthenticationException("No password provided");
         }
 
-        User u = userRepository.getUserByUsername(authDTO.getUsername());
+        User u = userRepository.getUserByUsername(username);
         if(
                 u == null ||
                 !BCrypt.verifyer().verify(password.toCharArray(), u.getPassword().toCharArray()).verified
