@@ -54,7 +54,7 @@ public class StatisticsServiceImpl implements StatisticsService {
         return cardListRepository.getMagicRatioStatistics();
     }
 
-    public PokemonFirstGenDTO pokemonListsStatistics() {
+    public List<PokemonFirstGenDTO> pokemonListsStatistics() {
         return cardListRepository.getPokemonListsStatistics();
     }
 

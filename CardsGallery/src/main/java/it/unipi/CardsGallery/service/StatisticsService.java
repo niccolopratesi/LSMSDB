@@ -9,7 +9,7 @@ import java.util.List;
 public interface StatisticsService {
     List<YugiohCard> yugiohCardStatistics();
     List<YugiohAttributeListDTO> yugiohListsStatistics();
-    PokemonFirstGenDTO pokemonListsStatistics();
+    List<PokemonFirstGenDTO> pokemonListsStatistics();
     List<MagicCostColorDTO> magicCardStatistics();
     MagicColorRatioDTO magicRatioStatistics();
     UserMostListsDTO userMostListsStatistics();

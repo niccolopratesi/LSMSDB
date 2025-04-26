@@ -113,7 +113,7 @@ public interface CardListRepository extends MongoRepository<CardList, String> {
             "{ $group: { _id: '$cards.printingSet', count: { $sum: 1 } } }",
             "{ $project: { _id: 0, set: '$_id', count: 1 } }"
     })
-    PokemonFirstGenDTO getPokemonListsStatistics();
+    List<PokemonFirstGenDTO> getPokemonListsStatistics();
 
     @Aggregation(pipeline = {
             "{ $match: { 'status': true } }",

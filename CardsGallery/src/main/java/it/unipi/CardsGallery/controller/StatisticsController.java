@@ -49,8 +49,8 @@ public class StatisticsController {
     }
 
     @GetMapping("/pokemon/lists")
-    public ResponseEntity<ResponseWrapper<PokemonFirstGenDTO>> getPokemonListsStatistics() {
-        PokemonFirstGenDTO result = statisticsService.pokemonListsStatistics();
+    public ResponseEntity<ResponseWrapper<List<PokemonFirstGenDTO>>> getPokemonListsStatistics() {
+        List<PokemonFirstGenDTO> result = statisticsService.pokemonListsStatistics();
         return ResponseEntity.ok(new ResponseWrapper<>("Number of First Gen pokemon cards in public lists",result));
     }
 

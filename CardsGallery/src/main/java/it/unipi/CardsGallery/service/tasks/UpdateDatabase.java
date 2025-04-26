@@ -46,15 +46,6 @@ public class UpdateDatabase {
         while(!PendingRequests.pendingRequests.isEmpty()) {
             Request request = PendingRequests.pendingRequests.remove();
             switch(request.getType()) {
-                /*case CREATE:
-                    if(request.getData() instanceof UserNode) {
-                        userNodeRepository.save((UserNode) request.getData());
-                    } else if(request.getData() instanceof PostNode) {
-                        postNodeRepository.createPost(request.getUsername(), ((PostNode) request.getData()).getTitle());
-                    } else if(request.getData() instanceof CardNode) {
-                        cardNodeRepository.save((CardNode) request.getData());
-                    }
-                    break;*/
                 case CREATE_USER:
                     userNodeRepository.save((UserNode) request.getData());
                     break;
@@ -64,35 +55,12 @@ public class UpdateDatabase {
                 case CREATE_CARD:
                     cardNodeRepository.save((CardNode) request.getData());
                     break;
-                /*case UPDATE:
-                    if(request.getData() instanceof UserNode) {
-                        userNodeRepository.update(((UserNode) request.getData()).getUsername(), request.getUsername());
-                    } else if(request.getData() instanceof CardNode) {
-                        cardNodeRepository.update(((CardNode) request.getData()).getIdentifier(), ((CardNode) request.getData()).getType(), ((CardNode) request.getData()).getName());
-                    }
-                    break;*/
                 case UPDATE_USER:
                     userNodeRepository.update(((UserNode) request.getData()).getUsername(), request.getUsername());
                     break;
                 case UPDATE_CARD:
                     cardNodeRepository.update(((CardNode) request.getData()).getIdentifier(), ((CardNode) request.getData()).getType(), ((CardNode) request.getData()).getName());
                     break;
-                /*case DELETE:
-                    if(request.getData() instanceof UserNode) {
-                        List<PendingReactions> pendingReactions = userNodeRepository.getAllUserCardReactions(((UserNode) request.getData()).getUsername());
-                        for(PendingReactions pendingReaction : pendingReactions) {
-                            ReactionRequest reactionRequest = new ReactionRequest(pendingReaction.getCardId(), pendingReaction.getTcg());
-                            ReactionRequestData reactionRequestData = new ReactionRequestData(pendingReaction.getReaction());
-                            PendingRequests.addOrUpdateReaction(reactionRequest, reactionRequestData, pendingReaction.getReaction(), Constants.DECREMENT);
-                        }
-
-                        userNodeRepository.delete(((UserNode) request.getData()).getUsername());
-                    } else if(request.getData() instanceof PostNode) {
-                        postNodeRepository.delete(request.getUsername(), ((PostNode) request.getData()).getTitle());
-                    } else if(request.getData() instanceof CardNode) {
-                        cardNodeRepository.delete(((CardNode) request.getData()).getIdentifier(), ((CardNode) request.getData()).getType());
-                    }
-                    break;*/
                 case DELETE_USER:
                     List<PendingReactions> pendingReactions = userNodeRepository.getAllUserCardReactions(((UserNode) request.getData()).getUsername());
                     for(PendingReactions pendingReaction : pendingReactions) {
@@ -100,7 +68,6 @@ public class UpdateDatabase {
                         ReactionRequestData reactionRequestData = new ReactionRequestData(pendingReaction.getReaction());
                         PendingRequests.addOrUpdateReaction(reactionRequest, reactionRequestData, pendingReaction.getReaction(), Constants.DECREMENT);
                     }
-
                     userNodeRepository.delete(((UserNode) request.getData()).getUsername());
                     break;
                 case DELETE_POST:
@@ -117,25 +84,15 @@ public class UpdateDatabase {
 
     @Scheduled(fixedRate = 15000)
     public void updateReactions() {
-
         Iterator<Map.Entry<ReactionRequest, ReactionRequestData>> iterator = PendingRequests.pendingReactions.entrySet().iterator();
         while (iterator.hasNext()) {
             Map.Entry<ReactionRequest, ReactionRequestData> entry = iterator.next();
             ReactionRequest reactionRequest = entry.getKey();
             ReactionRequestData reactionRequestData = entry.getValue();
-
-            /* DELETE
-            int likeCount = reactionRequestData.getLikeCount();
-            int dislikeCount = reactionRequestData.getDislikeCount();
-            int loveCount = reactionRequestData.getLoveCount();
-            int laughCount = reactionRequestData.getLaughCount();
-               DELETE */
-
             int likeCount = reactionRequestData.getReactionCount()[Reaction.LIKE.ordinal()];
             int dislikeCount = reactionRequestData.getReactionCount()[Reaction.DISLIKE.ordinal()];
             int loveCount = reactionRequestData.getReactionCount()[Reaction.LOVE.ordinal()];
             int laughCount = reactionRequestData.getReactionCount()[Reaction.LAUGH.ordinal()];
-
             switch (reactionRequest.getTcg()) {
                 case MAGIC:
                     magicCardMongoRepository.updateReactions(reactionRequest.getCardId(), likeCount, dislikeCount, loveCount, laughCount);
