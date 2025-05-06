@@ -71,7 +71,7 @@ public interface CardListRepository extends MongoRepository<CardList, String> {
     @Aggregation(pipeline = {
             "{ '$match': { 'status': true } }",
             "{ '$unwind': '$cards' }",
-            "{ '$match': { 'cards.attribute': { '$exists': true, '$ne': null } } }",
+            "{ '$match': { 'cards.tcg': 'YUGIOH', 'cards.attribute': { '$exists': true, '$ne': null } } }",
             "{ '$group': { '_id': '$cards.attribute', 'count': { '$sum': 1 } } }",
             "{ '$sort': { 'count': -1 } }",
             "{ '$project': { '_id': 0, 'attribute': '$_id', 'count': '$count' } }"
@@ -81,7 +81,7 @@ public interface CardListRepository extends MongoRepository<CardList, String> {
     @Aggregation(pipeline = {
             "{'$match': {'status': true} }",
             "{ $unwind: '$cards' }",
-            "{'$match': { 'cards.tcg': 'YUGIOH', 'cards.colors': { '$exists': true, '$ne': [], '$ne': null}}}",
+            "{'$match': { 'cards.tcg': 'MAGIC', 'cards.colors': { '$exists': true, '$ne': [], '$ne': null}}}",
             "{ $group: { " +
                     "    _id: { $cond: { if: { $eq: [ { $size: '$cards.colors' }, 1 ] }, then: 'monocolor', else: 'multicolor' } }, " +
                     "    count: { $sum: 1 } " +
