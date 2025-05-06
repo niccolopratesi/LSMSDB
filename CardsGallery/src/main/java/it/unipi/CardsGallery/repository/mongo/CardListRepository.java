@@ -81,7 +81,7 @@ public interface CardListRepository extends MongoRepository<CardList, String> {
     @Aggregation(pipeline = {
             "{'$match': {'status': true} }",
             "{ $unwind: '$cards' }",
-            "{'$match': { 'cards.colors': { '$exists': true, '$ne': [], '$ne': null}}}",
+            "{'$match': { 'cards.tcg': 'YUGIOH', 'cards.colors': { '$exists': true, '$ne': [], '$ne': null}}}",
             "{ $group: { " +
                     "    _id: { $cond: { if: { $eq: [ { $size: '$cards.colors' }, 1 ] }, then: 'monocolor', else: 'multicolor' } }, " +
                     "    count: { $sum: 1 } " +
