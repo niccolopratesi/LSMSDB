@@ -9,8 +9,8 @@ import java.util.List;
 
 public interface CardListService {
     String createCardList(CardListDTO list) throws AuthenticationException, ExistingEntityException;
-    void updateCardList(UpdateCardListDTO list) throws AuthenticationException;
-    void deleteCardList(DeleteCardListDTO list) throws AuthenticationException;
+    void updateCardList(UpdateCardListDTO list) throws AuthenticationException, ExistingEntityException;
+    void deleteCardList(DeleteCardListDTO list) throws AuthenticationException, ExistingEntityException;
     List<CardList> userCardList(String owner, int page, String username, String password) throws AuthenticationException;
     void insertIntoCardList(CardDTO card) throws AuthenticationException, ExistingEntityException;
     void removeFromCardList(CardDTO card) throws AuthenticationException, ExistingEntityException;

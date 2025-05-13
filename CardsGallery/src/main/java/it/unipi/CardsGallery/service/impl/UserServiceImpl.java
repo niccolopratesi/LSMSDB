@@ -79,9 +79,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void deleteUser(AuthDTO authDTO) throws AuthenticationException {
-        auth.accountOwnership(authDTO);
-        cardListRepository.deleteAllByUserId(authDTO.getId());
-        userRepository.deleteById(authDTO.getId());
+        auth.authenticate(authDTO.getUsername(), authDTO.getPassword());
+        cardListRepository.deleteAllByUsername(authDTO.getUsername());
+        userRepository.deleteByUsername(authDTO.getUsername());
 
         UserNode userNode = new UserNode(authDTO.getUsername());
         PendingRequests.pendingRequests.add(new Request(RequestType.DELETE_USER, userNode));

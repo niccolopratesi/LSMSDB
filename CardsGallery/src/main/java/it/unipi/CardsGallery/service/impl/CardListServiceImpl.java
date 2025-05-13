@@ -45,24 +45,31 @@ public class CardListServiceImpl implements CardListService {
         if(list.getCardListName().trim().equals("")) {
             throw new ExistingEntityException("Please enter card list name");
         }
-        auth.accountOwnership(list.getAuth());
-        CardList cardList = new CardList(list.getCardListName(),list.isStatus(),new ArrayList<>(),list.getAuth().getId(),list.getAuth().getUsername());
+        auth.authenticate((list.getAuth().getUsername()), list.getAuth().getPassword());
+        //auth.accountOwnership(list.getAuth());
+        CardList cardList = new CardList(list.getCardListName(), list.isStatus(), new ArrayList<>(),list.getAuth().getUsername());
         cardList.setId(null);
         return cardListRepository.save(cardList).getId();
     }
 
     @Override
-    public void updateCardList(UpdateCardListDTO list) throws AuthenticationException {
-        auth.accountOwnership(list.getAuth());
-        auth.listOwnership(list.getAuth().getId(), list.getCardListId());
-        cardListRepository.updateCardListStatus(list.getCardListId(),list.isStatus());
+    public void updateCardList(UpdateCardListDTO list) throws AuthenticationException, ExistingEntityException {
+        //auth.accountOwnership(list.getAuth());
+        auth.authenticate((list.getAuth().getUsername()), list.getAuth().getPassword());
+        //auth.listOwnership(list.getAuth().getId(), list.getCardListId());
+        if(cardListRepository.updateCardListStatus(list.getCardListId(), list.getAuth().getUsername(),list.isStatus()) == 0) {
+            throw new ExistingEntityException("You have no lists with such a name");
+        }
     }
 
     @Override
-    public void deleteCardList(DeleteCardListDTO list) throws AuthenticationException {
-        auth.accountOwnership(list.getAuth());
-        auth.listOwnership(list.getAuth().getId(), list.getCardListId());
-        cardListRepository.deleteById(list.getCardListId());
+    public void deleteCardList(DeleteCardListDTO list) throws AuthenticationException, ExistingEntityException {
+        //auth.accountOwnership(list.getAuth());
+        auth.authenticate((list.getAuth().getUsername()), list.getAuth().getPassword());
+        //auth.listOwnership(list.getAuth().getId(), list.getCardListId());
+        if(cardListRepository.deleteByIdAndUsername(list.getCardListId(), list.getAuth().getUsername()) == 0) {
+            throw new ExistingEntityException("You have no lists with such a name");
+        }
     }
 
     @Override
@@ -94,8 +101,9 @@ public class CardListServiceImpl implements CardListService {
 
     @Override
     public void insertIntoCardList(CardDTO card) throws AuthenticationException, ExistingEntityException {
-        auth.accountOwnership(card.getAuth());
-        auth.listOwnership(card.getAuth().getId(), card.getCardListId());
+        auth.authenticate((card.getAuth().getUsername()), card.getAuth().getPassword());
+        //auth.accountOwnership(card.getAuth());
+        //auth.listOwnership(card.getAuth().getId(), card.getCardListId());
         if(cardListRepository.existsByIdAndCardsIdAndCardsTcg(card.getCardListId(), card.getCardId(), card.getTcg())) {
             throw new ExistingEntityException("Card already in the card list");
         }
@@ -142,7 +150,9 @@ public class CardListServiceImpl implements CardListService {
             throw new ExistingEntityException("Card does not exist");
         }
 
-        cardListRepository.insertCardIntoCardList(card.getCardListId(), c);
+        if(cardListRepository.insertCardIntoCardList(card.getCardListId(), c, card.getAuth().getUsername()) == 0) {
+            throw new ExistingEntityException("You are not the owner of this list");
+        }
     }
 
     @Override
@@ -150,10 +160,11 @@ public class CardListServiceImpl implements CardListService {
         if(card.getTcg() == TCG.UNDEFINED) {
             throw new ExistingEntityException("Please enter card's Tcg correctly");
         }
-        auth.accountOwnership(card.getAuth());
-        auth.listOwnership(card.getAuth().getId(), card.getCardListId());
-        if(cardListRepository.removeCardFromCardList(card.getCardListId(),card.getCardId(), card.getTcg()) == 0) {
-            throw new ExistingEntityException("Card not found in the list");
+        auth.authenticate((card.getAuth().getUsername()), card.getAuth().getPassword());
+        //auth.accountOwnership(card.getAuth());
+        //auth.listOwnership(card.getAuth().getId(), card.getCardListId());
+        if(cardListRepository.removeCardFromCardList(card.getCardListId(),card.getCardId(), card.getTcg(), card.getAuth().getUsername()) == 0) {
+            throw new ExistingEntityException("Card not found in the list or the list is not yours");
         }
     }
 }

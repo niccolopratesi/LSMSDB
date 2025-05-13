@@ -71,6 +71,8 @@ public class CardListController {
             return ResponseEntity.ok(new ResponseWrapper<>("Card List deleted successfully",null));
         }catch(AuthenticationException e){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseWrapper<>(e.getMessage(),null));
+        }catch(ExistingEntityException e){
+            return ResponseEntity.ok(new ResponseWrapper<>(e.getMessage(),null));
         }
     }
 
@@ -106,6 +108,8 @@ public class CardListController {
             return ResponseEntity.ok(new ResponseWrapper<>("List set to " + status + " successfully",null));
         }catch(AuthenticationException e){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseWrapper<>(e.getMessage(),null));
+        }catch(ExistingEntityException e){
+            return ResponseEntity.ok(new ResponseWrapper<>(e.getMessage(),null));
         }
     }
 }

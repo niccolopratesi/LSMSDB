@@ -24,14 +24,12 @@ public class CardList {
     private String name;
     private boolean status;
     private List<Card> cards;
-    private String userId;
     private String username;
 
-    public CardList(String name, boolean status, List<Card> cards, String userId, String username) {
+    public CardList(String name, boolean status, List<Card> cards, String username) {
         this.name = name;
         this.status = status;
         this.cards = cards;
-        this.userId = userId;
         this.username = username;
     }
 }

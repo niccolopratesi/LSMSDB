@@ -20,10 +20,12 @@ import java.util.List;
 @Repository
 public interface CardListRepository extends MongoRepository<CardList, String> {
 
-    //@Query(" {'id': ?0, 'userId': ?1} ")
-    boolean existsByIdAndUserId(String id, String userId);
+    int deleteByIdAndUsername(String id, String username);
 
-    //@Query("{ 'id': ?0, 'cards.id': ?1 'cards.tcg': ?2 }")
+    //@Query(" {'id': ?0, 'userId': ?1} ")
+    //boolean existsByIdAndUserId(String id, String userId);
+
+    //@Query("{ 'id': ?0, 'cards.id': ?1, 'cards.tcg': ?2}")
     boolean existsByIdAndCardsIdAndCardsTcg(String id, String cardsId, TCG tcg);
 
     @Query("{'username': ?0}")
@@ -44,23 +46,23 @@ public interface CardListRepository extends MongoRepository<CardList, String> {
             Pageable pageable
     );
 
-    @Query("{ 'id': ?0 }")
-    @Update("{ '$set': {'status': ?1} }")
-    void updateCardListStatus(String id, boolean status);
+    @Query("{ 'id': ?0, 'username': ?1}")
+    @Update("{ '$set': {'status': ?2} }")
+    int updateCardListStatus(String id, String username, boolean status);
 
-    @Query("{ 'id': ?0 }")
+    @Query("{ 'id': ?0, 'username': ?2 }")
     @Update("{ '$push': { 'cards': ?1 } }")
-    void insertCardIntoCardList(String cardListId, Card card);
+    int insertCardIntoCardList(String cardListId, Card card, String username);
 
-    @Query("{ 'id': ?0 }")
+    @Query("{ 'id': ?0, 'username':  ?3}")
     @Update("{ '$pull': { 'cards': {'id': ?1, 'tcg': ?2} } }")
-    int removeCardFromCardList(String cardListId, String cardId, TCG tcg);
+    int removeCardFromCardList(String cardListId, String cardId, TCG tcg, String username);
 
     @Query("{}")
     @Update("{ '$pull': { 'cards': {'id': ?0, 'tcg': ?1} } }")
     void removeCardFromAllCardList(String cardId, TCG type);
 
-    void deleteAllByUserId(String userId);
+    //void deleteAllByUserId(String userId);
 
     @Query("{ 'username': ?0 }")
     @Update("{ '$set': { 'username': ?1} }")

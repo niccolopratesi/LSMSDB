@@ -36,12 +36,12 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         return u.getId();
     }
 
-    @Override
+    /*@Override
     public void listOwnership(String userId, String cardListId) throws AuthenticationException {
         if(!cardListRepository.existsByIdAndUserId(cardListId, userId)) {
             throw new AuthenticationException("You are not the owner of the card list");
         }
-    }
+    }*/
 
     @Override
     public Boolean accountOwnership(AuthDTO authDTO) throws AuthenticationException {
