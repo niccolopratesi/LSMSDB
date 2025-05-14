@@ -100,11 +100,11 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User profileUser(String username) throws ExistingEntityException {
-        List<User> user = userRepository.findUserByUsername(username);
-        if(user.isEmpty()) {
+        User user = userRepository.findUserByUsername(username);
+        if(user == null) {
             throw new ExistingEntityException("User not found");
         }
-        return user.get(0);
+        return user;
     }
 
     @Override
@@ -119,7 +119,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void updateUser(UpdateUserDTO userDTO) throws AuthenticationException, ExistingEntityException {
-        User user = userRepository.findById(userDTO.getAuth().getId()).orElse(null);
+        User user = userRepository.findUserByUsername(userDTO.getAuth().getUsername());
         if(user == null) {
             throw new ExistingEntityException("User not found");
         }

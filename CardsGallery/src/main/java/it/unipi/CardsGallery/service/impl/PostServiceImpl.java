@@ -48,9 +48,9 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public void createPost(PostDTO postDTO) throws AuthenticationException, ExistingEntityException {
-        authenticationService.accountOwnership(postDTO.getAuth());
+        authenticationService.authenticate(postDTO.getAuth().getUsername(), postDTO.getAuth().getPassword());
         Post post = postDTO.getPost();
-        String id = postDTO.getAuth().getId();
+        //String id = postDTO.getAuth().getId();
         if(postDTO.getPost().getTitle() == null || postDTO.getPost().getTitle().trim().equals("")) {
             throw new ExistingEntityException("Please enter a title");
         }
@@ -79,7 +79,7 @@ public class PostServiceImpl implements PostService {
         }
 
         post.createCreationDate();
-        userRepository.addPostToUser(id, post);
+        userRepository.addPostToUser(postDTO.getAuth().getUsername(), post);
 
         PostNode postNode = new PostNode(post.getTitle());
         PendingRequests.pendingRequests.add(new Request(RequestType.CREATE_POST, postNode, postDTO.getAuth().getUsername()));

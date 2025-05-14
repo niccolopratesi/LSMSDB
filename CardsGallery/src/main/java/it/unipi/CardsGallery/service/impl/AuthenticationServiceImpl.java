@@ -43,6 +43,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         }
     }*/
 
+    /*
     @Override
     public Boolean accountOwnership(AuthDTO authDTO) throws AuthenticationException {
         if(authDTO.getPassword().trim().equals("")) {
@@ -58,6 +59,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         }
         return u.getAdmin();
     }
+     */
 
     @Override
     public void authenticateAdmin(AuthDTO authDTO) throws AuthenticationException, NoAdminException {
