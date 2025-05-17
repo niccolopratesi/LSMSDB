@@ -58,7 +58,7 @@ public interface UserNodeRepository extends Neo4jRepository<UserNode,Long> {
             "OPTIONAL MATCH (followed)-[:CREATED]->(p:Post) " +
             "OPTIONAL MATCH (other:User)-[r:REACTED]->(p) " +
             "RETURN followed.username AS username, COUNT(DISTINCT p) AS posts, COUNT(DISTINCT r) AS reacts " +
-            "ORDER BY posts + reactions DESC " +
+            "ORDER BY posts + reacts DESC " +
             "LIMIT 5")
     List<MostActiveUsersDTO> getMostActiveUsersStatistics(String username);
 
