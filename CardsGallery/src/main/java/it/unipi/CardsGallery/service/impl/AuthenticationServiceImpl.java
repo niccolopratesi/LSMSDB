@@ -21,7 +21,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     private CardListRepository cardListRepository;
 
     @Override
-    public String authenticate(String username, String password) throws AuthenticationException {
+    public void authenticate(String username, String password) throws AuthenticationException {
         if(password.trim().equals("")) {
             throw new AuthenticationException("No password provided");
         }
@@ -33,7 +33,6 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         ) {
             throw new AuthenticationException("Username or password is incorrect");
         }
-        return u.getId();
     }
 
     /*@Override

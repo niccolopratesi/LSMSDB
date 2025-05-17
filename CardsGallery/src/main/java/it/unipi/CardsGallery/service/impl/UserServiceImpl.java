@@ -88,14 +88,14 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public String loginUser(LoginDTO loginDTO) throws AuthenticationException, ExistingEntityException{
+    public void loginUser(LoginDTO loginDTO) throws AuthenticationException, ExistingEntityException{
         if(loginDTO.getUsername().trim().equals("")) {
             throw new ExistingEntityException("Please enter a username");
         }
         if(loginDTO.getPassword().trim().equals("")) {
             throw new ExistingEntityException("Please enter a password");
         }
-        return authenticationService.authenticate(loginDTO.getUsername(), loginDTO.getPassword());
+        authenticationService.authenticate(loginDTO.getUsername(), loginDTO.getPassword());
     }
 
     @Override

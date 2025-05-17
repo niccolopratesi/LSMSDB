@@ -13,7 +13,7 @@ import java.util.List;
 public interface UserService {
     void insertUser(User user) throws AuthenticationException, ExistingEntityException;
     void deleteUser(AuthDTO authDTO) throws AuthenticationException;
-    String loginUser(LoginDTO loginDTO) throws AuthenticationException, ExistingEntityException;
+    void loginUser(LoginDTO loginDTO) throws AuthenticationException, ExistingEntityException;
     void updateUser(UpdateUserDTO user) throws AuthenticationException, ExistingEntityException;
     User profileUser(String username) throws ExistingEntityException;
     void followUser(UserDTO userDTO) throws AuthenticationException, ParametersException, ExistingEntityException;

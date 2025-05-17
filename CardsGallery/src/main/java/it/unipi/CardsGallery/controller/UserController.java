@@ -37,8 +37,8 @@ public class UserController {
     @PostMapping("/login")
     public ResponseEntity<ResponseWrapper<String>> loginUser(@Valid @RequestBody LoginDTO loginDTO) {
         try{
-            String id = userService.loginUser(loginDTO);
-            return ResponseEntity.ok(new ResponseWrapper<>("Login successful",id));
+            userService.loginUser(loginDTO);
+            return ResponseEntity.ok(new ResponseWrapper<>("Login successful", null));
         }catch(AuthenticationException e){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseWrapper<>("Username or Password wrong",null));
         }catch(ExistingEntityException e){
