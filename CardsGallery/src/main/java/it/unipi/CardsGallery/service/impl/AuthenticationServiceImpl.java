@@ -35,31 +35,6 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         }
     }
 
-    /*@Override
-    public void listOwnership(String userId, String cardListId) throws AuthenticationException {
-        if(!cardListRepository.existsByIdAndUserId(cardListId, userId)) {
-            throw new AuthenticationException("You are not the owner of the card list");
-        }
-    }*/
-
-    /*
-    @Override
-    public Boolean accountOwnership(AuthDTO authDTO) throws AuthenticationException {
-        if(authDTO.getPassword().trim().equals("")) {
-            throw new AuthenticationException("No password provided");
-        }
-        String password = authDTO.getPassword();
-        User u = userRepository.getUserByIdAndUsername(authDTO.getId(), authDTO.getUsername());
-        if(
-                u == null ||
-                !BCrypt.verifyer().verify(password.toCharArray(), u.getPassword().toCharArray()).verified
-        ) {
-            throw new AuthenticationException("You are not the owner of the account");
-        }
-        return u.getAdmin();
-    }
-     */
-
     @Override
     public void authenticateAdmin(AuthDTO authDTO) throws AuthenticationException, NoAdminException {
         if(authDTO.getPassword().trim().equals("")) {
