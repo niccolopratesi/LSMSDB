@@ -11,7 +11,7 @@ import java.util.Arrays;
 public class ReactionRequestData {
     private int[] reactionCount;
 
-    public ReactionRequestData(Reaction reaction) {
+    public ReactionRequestData() {
         reactionCount = new int[4];
         Arrays.fill(reactionCount, 0);
     }

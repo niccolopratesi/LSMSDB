@@ -192,10 +192,10 @@ public class UserServiceImpl implements UserService {
         }
 
         ReactionRequest reactionRequest = new ReactionRequest(cardReactionDTO.getCardId(), cardReactionDTO.getType());
-        ReactionRequestData reactionRequestData = new ReactionRequestData(cardReactionDTO.getReaction());
+        ReactionRequestData reactionRequestData = new ReactionRequestData();
         PendingRequests.addOrUpdateReaction(reactionRequest, reactionRequestData, cardReactionDTO.getReaction(), Constants.INCREMENT);
         if(oldUserReact.getOldReaction() != null) {
-            ReactionRequestData oldReactionRequestData = new ReactionRequestData(oldUserReact.getOldReaction());
+            ReactionRequestData oldReactionRequestData = new ReactionRequestData();
             PendingRequests.addOrUpdateReaction(reactionRequest, oldReactionRequestData, oldUserReact.getOldReaction(), Constants.DECREMENT);
         }
     }
