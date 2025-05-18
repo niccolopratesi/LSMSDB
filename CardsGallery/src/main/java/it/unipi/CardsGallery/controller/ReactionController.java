@@ -64,7 +64,7 @@ public class ReactionController {
     public ResponseEntity<ResponseWrapper<Void>> reactPost (@Valid @RequestBody PostReactionDTO postReactionDTO) {
         try{
             userService.reactPost(postReactionDTO);
-            return ResponseEntity.ok(new ResponseWrapper<>("React added",null));
+            return ResponseEntity.ok(new ResponseWrapper<>("React updated with success",null));
         }catch(AuthenticationException e){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseWrapper<>(e.getMessage(),null));
         } catch(ExistingEntityException e){
