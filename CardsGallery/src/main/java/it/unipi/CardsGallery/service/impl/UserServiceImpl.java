@@ -119,7 +119,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void updateUser(UpdateUserDTO userDTO) throws AuthenticationException, ExistingEntityException {
-        User user = userRepository.findUserByUsername(userDTO.getAuth().getUsername());
+        User user = userRepository.getUserByUsername(userDTO.getAuth().getUsername());
         if(user == null) {
             throw new ExistingEntityException("User not found");
         }
