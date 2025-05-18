@@ -21,6 +21,5 @@ public class UpdateUserDTO {
     private String newLastName;
     private Sex newSex;
     private String newBirthDate;
-    private String newRegistrationDate;
     private String newProfession;
 }
