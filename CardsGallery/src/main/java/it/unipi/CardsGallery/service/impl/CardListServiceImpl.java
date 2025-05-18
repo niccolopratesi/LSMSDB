@@ -58,7 +58,7 @@ public class CardListServiceImpl implements CardListService {
         auth.authenticate((list.getAuth().getUsername()), list.getAuth().getPassword());
         //auth.listOwnership(list.getAuth().getId(), list.getCardListId());
         if(cardListRepository.updateCardListStatus(list.getCardListId(), list.getAuth().getUsername(),list.isStatus()) == 0) {
-            throw new ExistingEntityException("You have no lists with such a name");
+            throw new ExistingEntityException("You have no lists with such id");
         }
     }
 
