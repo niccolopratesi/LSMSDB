@@ -24,6 +24,8 @@ public class ReactionRequestData {
         laughCount = 0;
         // DELETE
 
+        reactionCount = new int[4];
+
         for(int i = 0; i < reactionCount.length; i++) {
             reactionCount[i] = 0;
         }
@@ -60,7 +62,6 @@ public class ReactionRequestData {
     // DELETE
 
     public void incrementReaction(Reaction reaction) {
-
         reactionCount[reaction.ordinal()]++;
 
         // DELETE
