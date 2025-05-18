@@ -90,7 +90,7 @@ public class CardListServiceImpl implements CardListService {
         Pageable pageable = PageRequest.of(page, Constants.CARDLIST_PAGE_SIZE, Sort.by("id").ascending());
         Page<CardList> result;
 
-        if(username != null && password != null && username.equals(owner)) {
+        if(username != null && password != null && username.equals(owner)){
             auth.authenticate(username, password);
             result = cardListRepository.findOwnedLists(owner, pageable);
         } else {

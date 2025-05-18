@@ -34,11 +34,11 @@ public interface PostNodeRepository extends Neo4jRepository<PostNode,Long> {
 
     @Query("MATCH (u:User {username: $username}), (p:Post {title: $title}), (o:User {username: $postOwner}) " +
             "WHERE EXISTS((o)-[:CREATED]->(p)) " +
-            "MATCH (u)-[r:REACTED {reaction: $reaction}]-(p) " +
+            "MATCH (u)-[r:REACTED]-(p) " +
             "DELETE r " +
             "RETURN COUNT(r) > 0"
     )
-    boolean reactDelete(String username, String title, String postOwner, Reaction reaction);
+    boolean reactDelete(String username, String title, String postOwner);
 
     @Query("MATCH (p:Post)<-[r:REACTED]-(u:User), (o:User)-[:CREATED]->(p) " +
             "WHERE p.title = $title AND o.username = $owner " +

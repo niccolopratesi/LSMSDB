@@ -230,7 +230,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public void deleteReactPost(PostReactionDTO postReactionDTO) throws AuthenticationException, ExistingEntityException {
         auth.authenticate(postReactionDTO.getLogin().getUsername(), postReactionDTO.getLogin().getPassword());
-        boolean ok = postNodeRepository.reactDelete(postReactionDTO.getLogin().getUsername(), postReactionDTO.getTitle(), postReactionDTO.getOwner(), postReactionDTO.getReaction());
+        boolean ok = postNodeRepository.reactDelete(postReactionDTO.getLogin().getUsername(), postReactionDTO.getTitle(), postReactionDTO.getOwner());
         if(!ok){
             throw new ExistingEntityException("Could not delete the reaction");
         }
