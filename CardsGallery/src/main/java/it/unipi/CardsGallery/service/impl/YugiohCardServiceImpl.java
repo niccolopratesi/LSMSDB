@@ -12,6 +12,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.regex.Pattern;
 
 @Service
 public class YugiohCardServiceImpl implements YugiohCardService {
@@ -37,6 +38,10 @@ public class YugiohCardServiceImpl implements YugiohCardService {
         Pageable pageable = PageRequest.of(page, Constants.PAGE_SIZE, Sort.by("name").ascending());
 
         try {
+            Pattern.compile(name);
+            Pattern.compile(attribute);
+            Pattern.compile(race);
+            Pattern.compile(printing);
             Page<YugiohCard> result = yugiohCardMongoRepository.findByParameters(name, attribute, race, printing, pageable);
             return result.getContent();
         } catch (Exception e){

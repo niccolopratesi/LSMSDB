@@ -21,6 +21,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
 
 @Service
 public class CardListServiceImpl implements CardListService {
@@ -78,8 +79,13 @@ public class CardListServiceImpl implements CardListService {
             page = 0;
         }
         Pageable pageable = PageRequest.of(page, Constants.CARDLIST_PAGE_SIZE, Sort.by("id").ascending());
-        Page<CardList> result = cardListRepository.findByName(cardListName, pageable);
-        return result.getContent();
+        try {
+            Pattern.compile(cardListName);
+            Page<CardList> result = cardListRepository.findByName(cardListName, pageable);
+            return result.getContent();
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     @Override

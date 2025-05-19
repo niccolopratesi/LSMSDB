@@ -12,6 +12,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.regex.Pattern;
 
 @Service
 public class PokemonCardServiceImpl implements PokemonCardService {
@@ -36,6 +37,10 @@ public class PokemonCardServiceImpl implements PokemonCardService {
         Pageable pageable = PageRequest.of(page, Constants.PAGE_SIZE, Sort.by("name").ascending());
 
         try {
+            Pattern.compile(name);
+            Pattern.compile(rarity);
+            Pattern.compile(set);
+            Pattern.compile(artist);
             Page<PokemonCard> result = pokemonCardMongoRepository.findByParameters(name, rarity, set, artist, pageable);
             return result.getContent();
         } catch (Exception e){
