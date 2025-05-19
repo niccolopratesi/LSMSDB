@@ -57,19 +57,19 @@ public class StatisticsController {
     @GetMapping("/user/lists")
     public ResponseEntity<ResponseWrapper<UserMostListsDTO>> getUserMostListsStatistics() {
         UserMostListsDTO result = statisticsService.userMostListsStatistics();
-        return ResponseEntity.ok(new ResponseWrapper<>("User with the most number of public lists",result));
+        return ResponseEntity.ok(new ResponseWrapper<>("User with the highest number of public lists",result));
     }
 
     @GetMapping("/user/posts")
     public ResponseEntity<ResponseWrapper<UserMostPostsDTO>> getUserMostPostsStatistics() {
         UserMostPostsDTO result = statisticsService.userMostPostsStatistics();
-        return ResponseEntity.ok(new ResponseWrapper<>("User with the most number of posts",result));
+        return ResponseEntity.ok(new ResponseWrapper<>("User with the highest number of posts",result));
     }
 
     @GetMapping("/card/friend/react")
     public ResponseEntity<ResponseWrapper<List<CardNode>>> getCardFriendReactStatistics(@RequestParam("username") String username) {
         List<CardNode> result = statisticsService.cardFriendReactStatistics(username);
-        return ResponseEntity.ok(new ResponseWrapper<>("Cards with the most number of reacts from friends",result));
+        return ResponseEntity.ok(new ResponseWrapper<>("Cards with the highest number of reacts from friends",result));
     }
 
     @GetMapping("/user/active")

@@ -120,7 +120,7 @@ public interface CardListRepository extends MongoRepository<CardList, String> {
     @Aggregation(pipeline = {
             "{ $match: { 'status': true } }",
             "{ $group: { _id: '$username', lists: { $sum: 1 } } }",
-            "{ $sort: { lists: -1 } }",
+            "{ $sort: { lists: -1, _id: 1 } }",
             "{ $limit: 1 }",
             "{ $project: { _id: 0, username: '$_id', lists: 1 } }"
     })
