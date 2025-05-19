@@ -1,5 +1,6 @@
 package it.unipi.CardsGallery.model.neo4j;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import it.unipi.CardsGallery.model.enums.TCG;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -18,9 +19,11 @@ import java.util.UUID;
 @AllArgsConstructor
 public class CardNode {
     @Id
+    @JsonIgnore
     private Long id;
 
     @Version
+    @JsonIgnore
     private Long version;
 
     private String name;

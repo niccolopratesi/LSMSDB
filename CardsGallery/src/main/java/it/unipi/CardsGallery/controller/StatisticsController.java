@@ -80,7 +80,9 @@ public class StatisticsController {
 
     @GetMapping("/user/common/react")
     public ResponseEntity<ResponseWrapper<List<String>>> getUsersCommonReactStatistics(@RequestParam("username") String username) {
-        String response = (username == null) ? ("Users with most number of react to cards in common with "+ username) : "No username input";
+        String response = (username != null) ? ("Users with most number of react to cards in common with "+ username) : "No username input";
+        if(username == null)
+            return ResponseEntity.ok(new ResponseWrapper<>(response,null));
         List<String> result = statisticsService.usersCommonReactStatistics(username);
         return ResponseEntity.ok(new ResponseWrapper<>(response,result));
     }

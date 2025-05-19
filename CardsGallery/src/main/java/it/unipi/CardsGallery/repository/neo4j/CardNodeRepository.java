@@ -39,7 +39,7 @@ public interface CardNodeRepository  extends Neo4jRepository<CardNode,Long> {
             "RETURN r.reaction")
     Optional<Reaction> getReact(String username, String identifier, TCG tcg);
 
-    @Query("MATCH (user:User {username: $username})-[:FOLLOW]->(friend:User)-[:FOLLOW]->(user) " +
+    @Query("MATCH (user:User {username: $username})-[:FOLLOWS]->(friend:User)-[:FOLLOWS]->(user) " +
             "MATCH (friend)-[:REACTED]->(card:Card) " +
             "RETURN card, COUNT(friend) AS reactions_count " +
             "ORDER BY reactions_count DESC " +
