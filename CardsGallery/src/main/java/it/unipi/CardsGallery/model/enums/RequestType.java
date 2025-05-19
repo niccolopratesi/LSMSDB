@@ -1,10 +1,6 @@
 package it.unipi.CardsGallery.model.enums;
 
 public enum RequestType {
-    /*CREATE,
-    UPDATE,
-    DELETE,*/
-
     CREATE_USER,
     CREATE_POST,
     CREATE_CARD,

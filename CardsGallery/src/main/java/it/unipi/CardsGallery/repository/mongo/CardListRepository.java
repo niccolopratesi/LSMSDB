@@ -22,10 +22,6 @@ public interface CardListRepository extends MongoRepository<CardList, String> {
 
     int deleteByIdAndUsername(String id, String username);
 
-    //@Query(" {'id': ?0, 'userId': ?1} ")
-    //boolean existsByIdAndUserId(String id, String userId);
-
-    //@Query("{ 'id': ?0, 'cards.id': ?1, 'cards.tcg': ?2}")
     boolean existsByIdAndCardsIdAndCardsTcg(String id, String cardsId, TCG tcg);
 
     @Query("{'username': ?0}")
@@ -61,8 +57,6 @@ public interface CardListRepository extends MongoRepository<CardList, String> {
     @Query("{}")
     @Update("{ '$pull': { 'cards': {'id': ?0, 'tcg': ?1} } }")
     void removeCardFromAllCardList(String cardId, TCG type);
-
-    //void deleteAllByUserId(String userId);
 
     @Query("{ 'username': ?0 }")
     @Update("{ '$set': { 'username': ?1} }")

@@ -23,14 +23,6 @@ public class PostNode {
     @Version
     private Long version;
 
-    /*@Relationship(type = "CREATED_BY", direction = Relationship.Direction.INCOMING)
-    private UserNode createdBy;
-
-    public PostNode(String title, UserNode createdBy) {
-        this.title = title;
-        this.createdBy = createdBy;
-    }*/
-
     public PostNode(String title) {
         this.title = title;
     }

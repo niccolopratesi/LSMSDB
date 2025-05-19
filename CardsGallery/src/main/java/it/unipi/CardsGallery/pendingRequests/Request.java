@@ -29,22 +29,4 @@ public class Request {
         this.reaction = null;
         this.postOwner = null;
     }
-
-    // DELETE
-    public Request(RequestType type, Object data, String username, Reaction reaction) {
-        this.type = type;
-        this.data = data;
-        this.username = username;
-        this.reaction = reaction;
-        this.postOwner = null;
-    }
-
-    // DELETE
-    public Request(RequestType type, Object data, String username, Reaction reaction, String postOwner) {
-        this.type = type;
-        this.data = data;
-        this.username = username;
-        this.reaction = reaction;
-        this.postOwner = postOwner;
-    }
 }

@@ -16,6 +16,4 @@ public class AuthDTO {
 
     @NotNull(message = NOT_NULL_MSG)
     private String password;
-
-    //private String id;
 }

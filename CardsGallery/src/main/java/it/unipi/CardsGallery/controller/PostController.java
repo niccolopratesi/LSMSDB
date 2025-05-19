@@ -8,7 +8,6 @@ import it.unipi.CardsGallery.model.mongo.Post;
 import it.unipi.CardsGallery.service.PostService;
 import it.unipi.CardsGallery.service.exception.AuthenticationException;
 import it.unipi.CardsGallery.service.exception.ExistingEntityException;
-import it.unipi.CardsGallery.service.exception.OwnershipException;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

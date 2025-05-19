@@ -1,6 +1,5 @@
 package it.unipi.CardsGallery.model.neo4j;
 
-import it.unipi.CardsGallery.model.mongo.User;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -23,9 +22,5 @@ public class UserNode {
 
     public UserNode(String username) {
         this.username = username;
-    }
-
-    public UserNode(User user) {
-        this.username = user.getUsername();
     }
 }

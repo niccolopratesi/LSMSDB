@@ -5,7 +5,6 @@ import it.unipi.CardsGallery.DTO.PostDTO;
 import it.unipi.CardsGallery.model.mongo.Post;
 import it.unipi.CardsGallery.service.exception.AuthenticationException;
 import it.unipi.CardsGallery.service.exception.ExistingEntityException;
-import it.unipi.CardsGallery.service.exception.OwnershipException;
 
 import java.util.List;
 

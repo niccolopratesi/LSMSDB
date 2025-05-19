@@ -45,9 +45,6 @@ public interface UserRepository extends MongoRepository<User, String> {
     @Query(value = "{ 'username': ?0 }" , fields = "{'username': 1, 'password': 1, 'admin': 1, 'id': 1}")
     User getUserByUsername(String username);
 
-    @Query("{ '_id': ?0, 'username': ?1 }")
-    User getUserByIdAndUsername(String id, String username);
-
     @Aggregation(pipeline = {
             "{ $project: { username: 1, posts: { $size: '$posts' } } }",
             "{ $sort: { posts: -1 } }",

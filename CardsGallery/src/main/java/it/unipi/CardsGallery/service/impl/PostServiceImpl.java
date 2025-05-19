@@ -50,7 +50,6 @@ public class PostServiceImpl implements PostService {
     public void createPost(PostDTO postDTO) throws AuthenticationException, ExistingEntityException {
         authenticationService.authenticate(postDTO.getAuth().getUsername(), postDTO.getAuth().getPassword());
         Post post = postDTO.getPost();
-        //String id = postDTO.getAuth().getId();
         if(postDTO.getPost().getTitle() == null || postDTO.getPost().getTitle().trim().equals("")) {
             throw new ExistingEntityException("Please enter a title");
         }
