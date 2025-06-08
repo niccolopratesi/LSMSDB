@@ -19,7 +19,7 @@ public class Card {
     private TCG tcg;
     private String printingSet;
 
-    //  useful data for queries
+    //useful data for queries
     private int[] pokedexNumber;
 
     private List<String> colors;

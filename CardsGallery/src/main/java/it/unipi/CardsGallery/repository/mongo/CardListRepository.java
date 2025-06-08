@@ -64,6 +64,14 @@ public interface CardListRepository extends MongoRepository<CardList, String> {
 
     void deleteAllByUsername(String username);
 
+    @Query("{ 'cards.id': ?0, 'cards.tcg': 'YUGIOH' }")
+    @Update("{ '$set': { 'cards.$.type': ?1, 'cards.$.attribute': ?2} }")
+    void updateYgoCardInAllLists(String id, String type, String attribute);
+
+    void updatePkmCardInAllLists(String id, int[] getNationalPokedexNumbers);
+
+    void updateMgcCardInAllLists(String id, String[] colors);
+
     @Aggregation(pipeline = {
             "{ '$match': { 'status': true } }",
             "{ '$unwind': '$cards' }",

@@ -20,6 +20,7 @@ import it.unipi.CardsGallery.model.enums.TCG;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.Optional;
 
 @Service
@@ -158,6 +159,10 @@ public class AdminServiceImpl implements AdminService {
             PendingRequests.pendingRequests.add(new Request(RequestType.UPDATE_CARD, cardNode));
         }
 
+        if(!Arrays.equals(magicCard.getColors(), magicCardDTO.getMagic().getColors())) {
+            cardListRepository.updateMgcCardInAllLists(magicCard.getId(), magicCardDTO.getMagic().getColors());
+        }
+
         magicCard.updateCard(magicCardDTO.getMagic());
         magicCardMongoRepository.save(magicCard);
     }
@@ -188,6 +193,10 @@ public class AdminServiceImpl implements AdminService {
             PendingRequests.pendingRequests.add(new Request(RequestType.UPDATE_CARD, cardNode));
         }
 
+        if(!Arrays.equals(pokemonCard.getNationalPokedexNumbers(), pokemonCardDTO.getPokemon().getNationalPokedexNumbers())) {
+            cardListRepository.updatePkmCardInAllLists(pokemonCard.getId(), pokemonCardDTO.getPokemon().getNationalPokedexNumbers());
+        }
+
         pokemonCard.updateCard(pokemonCardDTO.getPokemon());
         pokemonCardMongoRepository.save(pokemonCard);
     }
@@ -216,6 +225,10 @@ public class AdminServiceImpl implements AdminService {
             cardNode.setName(newName);
 
             PendingRequests.pendingRequests.add(new Request(RequestType.UPDATE_CARD, cardNode));
+        }
+
+        if(!yugiohCard.getType().equals(yugiohCardDTO.getYugioh().getType()) || !yugiohCard.getAttribute().equals(yugiohCardDTO.getYugioh().getAttribute())) {
+            cardListRepository.updateYgoCardInAllLists(yugiohCard.getId(), yugiohCardDTO.getYugioh().getType(), yugiohCardDTO.getYugioh().getAttribute());
         }
 
         yugiohCard.updateCard(yugiohCardDTO.getYugioh());
