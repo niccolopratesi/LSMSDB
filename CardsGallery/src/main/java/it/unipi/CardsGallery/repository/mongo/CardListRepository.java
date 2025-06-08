@@ -70,8 +70,12 @@ public interface CardListRepository extends MongoRepository<CardList, String> {
     @Update("{ '$set': { 'cards.$.type': ?1, 'cards.$.attribute': ?2} }")
     void updateYgoCardInAllLists(String id, String type, String attribute);
 
-    void updatePkmCardInAllLists(String id, int[] getNationalPokedexNumbers);
+    @Query("{ 'cards.id': ?0, 'cards.tcg': 'POKEMON' }")
+    @Update("{ '$set': { 'cards.$.pokedexNumbers': ?1 } }")
+    void updatePkmCardInAllLists(String id, int[] pokedexNumbers);
 
+    @Query("{ 'cards.id': ?0, 'cards.tcg': 'MAGIC' }")
+    @Update("{ '$set': { 'cards.$.colors': ?1 } }")
     void updateMgcCardInAllLists(String id, String[] colors);
 
     @Aggregation(pipeline = {
