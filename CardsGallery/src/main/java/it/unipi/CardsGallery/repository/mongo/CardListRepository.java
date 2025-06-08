@@ -24,6 +24,8 @@ public interface CardListRepository extends MongoRepository<CardList, String> {
 
     boolean existsByIdAndCardsIdAndCardsTcg(String id, String cardsId, TCG tcg);
 
+    boolean existsByUsernameAndName(String username, String name);
+
     @Query("{'username': ?0}")
     Page<CardList> findOwnedLists(
             String username,

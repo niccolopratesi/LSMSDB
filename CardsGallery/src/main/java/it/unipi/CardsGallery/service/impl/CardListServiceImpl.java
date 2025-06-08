@@ -46,6 +46,9 @@ public class CardListServiceImpl implements CardListService {
         if(list.getCardListName().trim().equals("")) {
             throw new ExistingEntityException("Please enter card list name");
         }
+        if(cardListRepository.existsByUsernameAndName(list.getAuth().getUsername(), list.getCardListName())) {
+            throw new ExistingEntityException("List already exists");
+        }
         auth.authenticate((list.getAuth().getUsername()), list.getAuth().getPassword());
         CardList cardList = new CardList(list.getCardListName(), list.isStatus(), new ArrayList<>(),list.getAuth().getUsername());
         cardList.setId(null);
