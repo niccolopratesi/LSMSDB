@@ -71,7 +71,7 @@ public interface CardListRepository extends MongoRepository<CardList, String> {
     void updateYgoCardInAllLists(String id, String type, String attribute);
 
     @Query("{ 'cards.id': ?0, 'cards.tcg': 'POKEMON' }")
-    @Update("{ '$set': { 'cards.$.pokedexNumbers': ?1 } }")
+    @Update("{ '$set': { 'cards.$.pokedexNumber': ?1 } }")
     void updatePkmCardInAllLists(String id, int[] pokedexNumbers);
 
     @Query("{ 'cards.id': ?0, 'cards.tcg': 'MAGIC' }")
